@@ -11,8 +11,8 @@ LDFLAGS = -melf_i386
 QEMU = qemu-system-i386
 
 # 编译目标：src目录下的所有.c和.S文件
-CFILES = $(shell find src/ -name "*.c")
-SFILES = $(shell find src/ -name "*.S")
+CFILES = $(shell find kernel/ -name "*.c")
+SFILES = $(shell find kernel/ -name "*.S")
 OBJS = $(CFILES:.c=.o) $(SFILES:.S=.o)
 
 game.img: game
