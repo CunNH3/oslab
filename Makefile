@@ -2,12 +2,11 @@
 # ************ 遇到不明白的地方请google以及阅读手册 *************
 
 # 编译器设定和编译选项
-CC = gcc
-LD = ld
-CFLAGS = -m32 -static -MD -std=gnu89 -ggdb \
-		 -fno-builtin -fno-stack-protector -fno-omit-frame-pointer \
-		 -Wall -Werror -O2 -I./include
-ASFLAGS = -m32 -MD
+CC      = gcc
+LD      = ld
+CFLAGS  = -Wno-main -m32 -static -ggdb -MD -Wall -Werror -I./include -O0 \
+		 -fno-builtin -fno-stack-protector -fno-omit-frame-pointer
+ASFLAGS = -m32 -MD -I./include
 LDFLAGS = -melf_i386
 QEMU = qemu-system-i386
 
