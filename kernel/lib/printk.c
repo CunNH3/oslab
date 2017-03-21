@@ -66,6 +66,7 @@ void vfprintf(void (*printer)(char), const char *ctl, void **args)
 					temp++;
 				}
 				args++;
+
 			}
 			else
 			if (*ctl == 'c')
