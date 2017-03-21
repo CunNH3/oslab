@@ -1,11 +1,6 @@
 #include "common.h"
 #include "string.h"
 
-/* 注意！itoa只有一个缓冲，因此
- * char *p = itoa(100);
- * char *q = itoa(200);
- * 后p和q所指内容都是"200"。
- */
 char *itoa(int a) {
 	static char buf[30];
 	char *p = buf + sizeof(buf) - 1;

@@ -48,14 +48,12 @@ void vec13();
 
 void irq_empty();
 
-void init_idt() {
+void init_idt()
+{
 	int i;
-	/* 为了防止系统异常终止，所有irq都有处理函数(irq_empty)。 */
-	for (i = 0; i < NR_IRQ; i ++) {
+	for (i = 0;i < NR_IRQ;i++) 
 		set_trap(idt + i, SEG_KERNEL_CODE, (uint32_t)irq_empty, DPL_KERNEL);
-	}
 
-	/* 设置异常的中断处理 */
 	set_trap(idt + 0, SEG_KERNEL_CODE, (uint32_t)vec0, DPL_KERNEL);
 	set_trap(idt + 1, SEG_KERNEL_CODE, (uint32_t)vec1, DPL_KERNEL);
 	set_trap(idt + 2, SEG_KERNEL_CODE, (uint32_t)vec2, DPL_KERNEL);
@@ -71,10 +69,9 @@ void init_idt() {
 	set_trap(idt + 12, SEG_KERNEL_CODE, (uint32_t)vec12, DPL_KERNEL);
 	set_trap(idt + 13, SEG_KERNEL_CODE, (uint32_t)vec13, DPL_KERNEL);
 
-	/* 设置外部中断的处理 */
 	set_intr(idt + 32, SEG_KERNEL_CODE, (uint32_t)irq0, DPL_KERNEL);
 	set_intr(idt + 32 + 1, SEG_KERNEL_CODE, (uint32_t)irq1, DPL_KERNEL);
-	/* 写入IDT */
+
 	save_idt(idt, sizeof(idt));
 }
 
