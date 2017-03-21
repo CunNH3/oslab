@@ -12,8 +12,8 @@
 
 void readseg(unsigned char *, int, int);
 
-void
-bootmain(void) {
+void bootmain(void)
+{
 	struct ELFHeader *elf;
 	struct ProgramHeader *ph, *eph;
 	unsigned char* pa, *i;
@@ -28,23 +28,24 @@ bootmain(void) {
 	/* 把每个program segement依次读入内存 */
 	ph = (struct ProgramHeader*)((char *)elf + elf->phoff);
 	eph = ph + elf->phnum;
-	for(; ph < eph; ph ++) {
+	for(;ph < eph;ph++)
+	{
 		pa = (unsigned char*)ph->paddr; /* 获取物理地址 */
 		readseg(pa, ph->filesz, ph->off); /* 读入数据 */
-		for (i = pa + ph->filesz; i < pa + ph->memsz; *i ++ = 0);
+		for (i = pa + ph->filesz;i < pa + ph->memsz;*i ++ = 0);
 	}
 
 	((void(*)(void))elf->entry)();
 }
 
-void
-waitdisk(void) {
+void waitdisk(void)
+{
 	while((in_byte(0x1F7) & 0xC0) != 0x40); /* 等待磁盘完毕 */
 }
 
 /* 读磁盘的一个扇区 */
-void
-readsect(void *dst, int offset) {
+void readsect(void *dst, int offset)
+{
 	int i;
 	waitdisk();
 	out_byte(0x1F2, 1);
@@ -55,14 +56,13 @@ readsect(void *dst, int offset) {
 	out_byte(0x1F7, 0x20);
 
 	waitdisk();
-	for (i = 0; i < SECTSIZE / 4; i ++) {
+	for (i = 0; i < SECTSIZE / 4; i ++)
 		((int *)dst)[i] = in_long(0x1F0);
-	}
 }
 
 /* 将位于磁盘offset位置的count字节数据读入物理地址pa */
-void
-readseg(unsigned char *pa, int count, int offset) {
+void readseg(unsigned char *pa, int count, int offset)
+{
 	unsigned char *epa;
 	epa = pa + count;
 	pa -= offset % SECTSIZE;

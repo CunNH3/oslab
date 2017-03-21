@@ -1,16 +1,14 @@
 #include "x86/x86.h"
 #include "common.h"
 
-/* some ports */
 #define VGA_DAC_READ_INDEX 0x3C7
 #define VGA_DAC_WRITE_INDEX 0x3C8
 #define VGA_DAC_DATA 0x3C9
 
-/* This is the number of entries in the palette. You may change this value to fit your palette. */
 #define NR_PALETTE_ENTRY 256
 
-/* This is an example. Change it to your palette if you like. */
-static uint8_t palette[NR_PALETTE_ENTRY][3] = {
+static uint8_t palette[NR_PALETTE_ENTRY][3] =
+{
 	{  0,  0,  0},
 	{128,  0,  0},
 	{  0,128,  0},
@@ -273,10 +271,12 @@ static uint8_t palette[NR_PALETTE_ENTRY][3] = {
  * If you want to use your own palette, replace the above palette with yours, then call this function in game_init(). 
  * But the blue screen may not be "blue" any longer. ^_^
  */
-void write_palette() {
+void write_palette() 
+{
 	int i;
-	out_byte(VGA_DAC_WRITE_INDEX, 0);
-	for(i = 0; i < NR_PALETTE_ENTRY; i ++) {
+	out_byte(VGA_DAC_WRITE_INDEX,0);
+	for(i = 0;i < NR_PALETTE_ENTRY;i++)
+	{
 		out_byte(VGA_DAC_DATA, palette[i][0] >> 2);	// red
 		out_byte(VGA_DAC_DATA, palette[i][1] >> 2);	// green
 		out_byte(VGA_DAC_DATA, palette[i][2] >> 2);	// blue
@@ -284,14 +284,16 @@ void write_palette() {
 }
 
 /* Print the palette in use. */
-void read_palette() {
+void read_palette()
+{
 	int i;
 	uint8_t r,g,b;
-	out_byte(VGA_DAC_READ_INDEX, 0);
-	for(i = 0; i < NR_PALETTE_ENTRY; i ++) {
+	out_byte(VGA_DAC_READ_INDEX,0);
+	for(i = 0;i < NR_PALETTE_ENTRY;i++)
+	{
 		r = in_byte(VGA_DAC_DATA);
 		g = in_byte(VGA_DAC_DATA);
 		b = in_byte(VGA_DAC_DATA);
-		printk("r = %x, g = %x, b = %x\n", r, g, b);
+		printk("r = %x, g = %x, b = %x\n",r,g,b);
 	}
 }
