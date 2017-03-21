@@ -22,7 +22,7 @@ game.img: game
 	cat boot/bootblock game > game.img
 
 game: $(OBJS)
-	$(call git_commit, "game", $(GITFLAGS))
+	$(call git_commit, "compile game", $(GITFLAGS))
 	$(LD) $(LDFLAGS) -e game_init -Ttext 0x00100000 -o game $(OBJS)
 
 -include $(patsubst %.o, %.d, $(OBJS))
