@@ -3,12 +3,10 @@
 #define INTERRUPT_GATE_32   0xE
 #define TRAP_GATE_32        0xF
 
-/* IDT表的内容 */
 struct GateDescriptor idt[NR_IRQ];
 
-/* 初始化一个中断门(interrupt gate) */
-static void
-set_intr(struct GateDescriptor *ptr, uint32_t selector, uint32_t offset, uint32_t dpl) {
+static void set_intr(struct GateDescriptor *ptr,uint32_t selector,uint32_t offset,uint32_t dpl)
+{
 	ptr->offset_15_0 = offset & 0xFFFF;
 	ptr->segment = selector << 3;
 	ptr->pad0 = 0;
@@ -19,9 +17,8 @@ set_intr(struct GateDescriptor *ptr, uint32_t selector, uint32_t offset, uint32_
 	ptr->offset_31_16 = (offset >> 16) & 0xFFFF;
 }
 
-/* 初始化一个陷阱门(trap gate) */
-static void
-set_trap(struct GateDescriptor *ptr, uint32_t selector, uint32_t offset, uint32_t dpl) {
+static void set_trap(struct GateDescriptor *ptr,uint32_t selector,uint32_t offset,uint32_t dpl)
+{
 	ptr->offset_15_0 = offset & 0xFFFF;
 	ptr->segment = selector << 3;
 	ptr->pad0 = 0;
@@ -32,7 +29,6 @@ set_trap(struct GateDescriptor *ptr, uint32_t selector, uint32_t offset, uint32_
 	ptr->offset_31_16 = (offset >> 16) & 0xFFFF;
 }
 
-/* 这些函数是汇编代码 */
 void irq0();
 void irq1();
 void vec0();
