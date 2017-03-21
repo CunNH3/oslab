@@ -10,6 +10,8 @@ ASFLAGS = -m32 -MD -I./include
 LDFLAGS = -melf_i386
 QEMU = qemu-system-i386
 
+include config/Makefile.git
+include config/Makefile.build
 # 编译目标：src目录下的所有.c和.S文件
 CFILES = $(shell find kernel/ -name "*.c")
 SFILES = $(shell find kernel/ -name "*.S")
