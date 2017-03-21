@@ -5,6 +5,8 @@
 #include "device/palette.h"
 #include "assert.h"
 
+void testprintk();
+
 void
 game_init(void) {
 	init_serial();
@@ -15,6 +17,7 @@ game_init(void) {
 	set_keyboard_intr_handler(keyboard_event);
 
 	printk("game start!\n");
+	testprintk();
 	enable_interrupt();
 	main_loop();
 	assert(0); /* main_loop是死循环，永远无法返回这里 */
