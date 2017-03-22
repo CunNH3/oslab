@@ -16,7 +16,8 @@ void GetStr(char *str,int n,int base)
 	while (number != 0)
 	{
 		int modulo = number % base;
-		if (modulo < 10) *temp = '0' + modulo; else *temp = 'a' + modulo - 10;
+		if (modulo < 10) *temp = '0' + modulo; 
+			else *temp = 'a' + modulo - 10;
 		number = number / base;
 		temp++;
 	}
