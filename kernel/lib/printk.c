@@ -1,7 +1,7 @@
 #include "common.h"
 
 /* implement this function to support printk */
-void GetStr(char *str,int base,int n)
+void GetStr(char *str,int n,int base)
 {
 	uint32_t number;
 	number = (uint32_t)n;
@@ -41,7 +41,7 @@ void vfprintf(void (*printer)(char), const char *ctl, void **args)
 			char str[150];
 			if (*ctl == 'd')
 			{
-				GetStr(str,10,*(int*)args);
+				GetStr(str,*(int*)args,10);
 				char *cha;
 				for (cha = str;*cha != '\0';cha++)
 					printer(*cha);
@@ -50,7 +50,7 @@ void vfprintf(void (*printer)(char), const char *ctl, void **args)
 			else
 			if (*ctl == 'x')
 			{
-				GetStr(str,16,*(int*)args);
+				GetStr(str,*(int*)args,16);
 				char *cha;
 				for (cha = str;*cha != '\0';cha++)
 					printer(*cha);
