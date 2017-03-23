@@ -12,7 +12,7 @@ void redraw_screen()
 		static char buf[2];
 		buf[0] = it->text + 'A';
 		buf[1] = 0;
-		draw_string(buf,it->x,it->y,15);
+		draw_string(buf,it->x,it->y,10);
 	}
 	draw_string(itoa(last_key_code()),SCR_HEIGHT - 8,0,48);
 	hit = itoa(get_hit());
