@@ -36,7 +36,7 @@ create_new_letter(void)
 		fly_insert(NULL,head,now);
 		head = now;
 	}
-	head->x = 0;
+	head->x = rand() % (SCR_HEIGHT / 8 - 2) * 8 + 8;;
 	head->y = rand() % (SCR_WIDTH / 8 - 2) * 8 + 8;
 	head->v = (rand() % 1000 / 1000.0 + 1) / 2.0;
 	head->text = rand() % 26;
@@ -53,6 +53,13 @@ void update_letter_pos(void)
 		if ((it->x < 0) || (it->x + 7.9 > SCR_HEIGHT))
 		{
 			if (it->x < 0) hit ++; else miss ++;
+			fly_remove(it);
+			fly_free(it);
+			if (it == head) head = next;
+		}
+		if ((it->y < 0) || (it->y + 7.9 > SCR_HEIGHT))
+		{
+			if (it->y < 0) hit ++; else miss ++;
 			fly_remove(it);
 			fly_free(it);
 			if (it == head) head = next;
