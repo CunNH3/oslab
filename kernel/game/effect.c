@@ -57,28 +57,13 @@ void update_letter_pos(void)
 	for (it = head;it != NULL;)
 	{
 		fly_t next = it->_next;
-		int choose = rand() % 2;
-		if (choose)
+		it->y += it->v;
+		if ((it->y < 0) || (it->y + 7.9 > SCR_WIDTH))
 		{
-			it->y += it->v;
-			if ((it->y < 0) || (it->y + 7.9 > SCR_WIDTH))
-			{
-				if (it->y < 0) hit ++; else miss ++;
-				fly_remove(it);
-				fly_free(it);
-				if (it == head) head = next;
-			}
-		}
-		else
-		{
-			it->x += it->v;
-			if ((it->x < 0) || (it->x + 7.9 > SCR_HEIGHT))
-			{
-				if (it->x < 0) hit ++; else miss ++;
-				fly_remove(it);
-				fly_free(it);
-				if (it == head) head = next;
-			}
+			if (it->y < 0) hit ++; else miss ++;
+			fly_remove(it);
+			fly_free(it);
+			if (it == head) head = next;
 		}
 		it = next;
 	}
@@ -92,22 +77,10 @@ bool update_keypress(void)
 	for (it = head;it != NULL;it = it->_next)
 	{
 		assert((it->text >= 0) && (it->text < 26));
-		int choose = rand() % 2;
-		if (choose)
+		if ((it->v > 0) && (it->y > min) && (query_key(it->text)))
 		{
-			if ((it->v > 0) && (it->y > min) && (query_key(it->text)))
-			{
-				min = it->y;
-				target = it;
-			}
-		}
-		else
-		{
-			if ((it->v > 0) && (it->x > min) && (query_key(it->text)))
-			{
-				min = it->x;
-				target = it;
-			}
+			min = it->y;
+			target = it;
 		}
 	}
 	if (target != NULL)
