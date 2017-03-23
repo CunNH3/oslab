@@ -14,7 +14,7 @@ void redraw_screen()
 		buf[1] = 0;
 		draw_string(buf,it->x,it->y,15);
 	}
-	draw_string(itoa(last_key_code()),SCR_HEIGHT - 8,0,48);
+	draw_string(itoa(last_key_code()),SCR_HEIGHT - 8,0,10);
 	hit = itoa(get_hit());
 	draw_string(hit,0,SCR_WIDTH - strlen(hit) * 8,10);
 	miss = itoa(get_miss());
