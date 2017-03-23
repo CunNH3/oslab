@@ -2,7 +2,6 @@
 #include "x86/x86.h"
 #include "device/timer.h"
 
-/* 8253输入频率为1.193182MHz */
 #define TIMER_PORT 0x40
 #define FREQ_8253 1193182
 

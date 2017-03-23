@@ -79,7 +79,10 @@ void draw_string(const char *str, int x, int y, int color)
 			y = 0;
 		}
 		else
+		{
 			y += 8;
+			x = 0;
+		}
 	}
 }
 
