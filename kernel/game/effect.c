@@ -27,7 +27,7 @@ fly_t characters(void)
 
 void create_new_fly1()
 {
-	head->x = 0;
+	head->x = rand() % (SCR_HEIGHT / 8 - 2) * 8 + 8;
 	head->y = rand() % (SCR_WIDTH / 8 - 2) * 8 + 8;
 }
 
