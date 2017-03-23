@@ -25,12 +25,6 @@ fly_t characters(void)
 	return head;
 }
 
-void create_new_fly1()
-{
-	head->x = rand() % (SCR_HEIGHT / 8 - 2) * 8 + 8;
-	head->y = 0;
-}
-
 void create_new_letter(void)
 {
 	if (head == NULL)
@@ -41,7 +35,17 @@ void create_new_letter(void)
 		fly_insert(NULL,head,now);
 		head = now;
 	}
-	create_new_fly1();
+	int choose = rand() % 1;
+	if (choose) 
+	{
+		head->x = rand() % (SCR_HEIGHT / 8 - 2) * 8 + 8;
+		head->y = 0;
+	}
+	else
+	{
+		head->x = 0;
+		head->y = rand() % (SCR_WIDTH / 8 - 2) * 8 + 8;
+	}
 	head->v = (rand() % 1000 / 1000.0 + 1) / 2.0;
 	head->text = rand() % 26;
 	release_key(head->text);
@@ -53,13 +57,28 @@ void update_letter_pos(void)
 	for (it = head;it != NULL;)
 	{
 		fly_t next = it->_next;
-		it->y += it->v;
-		if ((it->y < 0) || (it->y + 7.9 > SCR_WIDTH))
+		int choose = rand() % 1;
+		if (choose)
 		{
-			if (it->y < 0) hit ++; else miss ++;
-			fly_remove(it);
-			fly_free(it);
-			if (it == head) head = next;
+			it->y += it->v;
+			if ((it->y < 0) || (it->y + 7.9 > SCR_WIDTH))
+			{
+				if (it->y < 0) hit ++; else miss ++;
+				fly_remove(it);
+				fly_free(it);
+				if (it == head) head = next;
+			}
+		}
+		else
+		{
+			it->x += it->v;
+			if ((it->x < 0) || (it->x + 7.9 > SCR_HEIGHT))
+			{
+				if (it->x < 0) hit ++; else miss ++;
+				fly_remove(it);
+				fly_free(it);
+				if (it == head) head = next;
+			}
 		}
 		it = next;
 	}
@@ -73,16 +92,28 @@ bool update_keypress(void)
 	for (it = head;it != NULL;it = it->_next)
 	{
 		assert((it->text >= 0) && (it->text < 26));
-		if ((it->v > 0) && (it->y > min) && (query_key(it->text)))
+		int choose = rand() % 1;
+		if (choose)
 		{
-			min = it->y;
-			target = it;
+			if ((it->v > 0) && (it->y > min) && (query_key(it->text)))
+			{
+				min = it->y;
+				target = it;
+			}
+		}
+		else
+		{
+			if ((it->v > 0) && (it->x > min) && (query_key(it->text)))
+			{
+				min = it->x;
+				target = it;
+			}
 		}
 	}
 	if (target != NULL)
 	{
 		release_key(target->text);
-		target->v = -5;
+		target->v = -10;
 		return TRUE;
 	}
 	enable_interrupt();
