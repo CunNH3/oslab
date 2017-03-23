@@ -25,6 +25,12 @@ fly_t characters(void)
 	return head;
 }
 
+void create_new_fly1()
+{
+	head->x = rand() % (SCR_HEIGHT / 8 - 2) * 8 + 8;
+	head->y = 0;
+}
+
 void create_new_letter(void)
 {
 	if (head == NULL)
@@ -35,17 +41,7 @@ void create_new_letter(void)
 		fly_insert(NULL,head,now);
 		head = now;
 	}
-	int choose = rand() % 2;
-	if (choose) 
-	{
-		head->x = rand() % (SCR_HEIGHT / 8 - 2) * 8 + 8;
-		head->y = 0;
-	}
-	else
-	{
-		head->x = 0;
-		head->y = rand() % (SCR_WIDTH / 8 - 2) * 8 + 8;
-	}
+	create_new_fly1();
 	head->v = (rand() % 1000 / 1000.0 + 1) / 2.0;
 	head->text = rand() % 26;
 	release_key(head->text);
@@ -86,7 +82,7 @@ bool update_keypress(void)
 	if (target != NULL)
 	{
 		release_key(target->text);
-		target->v = -10;
+		target->v = -5;
 		return TRUE;
 	}
 	enable_interrupt();
