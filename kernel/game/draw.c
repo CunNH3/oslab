@@ -1,6 +1,9 @@
 #include "game.h"
+#include "common.h"
 #include "string.h"
+#include "adt/linklist.h"
 #include "device/video.h"
+#include "x86/x86.h"
 
 void redraw_screen()
 {
@@ -12,7 +15,8 @@ void redraw_screen()
 		static char buf[2];
 		buf[0] = it->text + 'A';
 		buf[1] = 0;
-		draw_string(buf,it->x,it->y,11);
+		int color = rand() % 20;
+		draw_string(buf,it->x,it->y,color);
 	}
 	draw_string(itoa(last_key_code()),SCR_HEIGHT - 8,0,48);
 	hit = itoa(get_hit());
