@@ -28,7 +28,7 @@ fly_t characters(void)
 void create_new_fly1()
 {
 	head->x = rand() % (SCR_HEIGHT / 8 - 2) * 8 + 8;
-	head->y = rand() % (SCR_WIDTH / 8 - 2) * 8 + 8;
+	head->y = 0;
 }
 
 void create_new_letter(void)
@@ -53,10 +53,10 @@ void update_letter_pos(void)
 	for (it = head;it != NULL;)
 	{
 		fly_t next = it->_next;
-		it->x += it->v;
-		if ((it->x < 0) || (it->x + 7.9 > SCR_HEIGHT))
+		it->y += it->v;
+		if ((it->y < 0) || (it->y + 7.9 > SCR_WIDTH))
 		{
-			if (it->x < 0) hit ++; else miss ++;
+			if (it->y < 0) hit ++; else miss ++;
 			fly_remove(it);
 			fly_free(it);
 			if (it == head) head = next;
@@ -73,9 +73,9 @@ bool update_keypress(void)
 	for (it = head;it != NULL;it = it->_next)
 	{
 		assert((it->text >= 0) && (it->text < 26));
-		if ((it->v > 0) && (it->x > min) && (query_key(it->text)))
+		if ((it->v > 0) && (it->y > min) && (query_key(it->text)))
 		{
-			min = it->x;
+			min = it->y;
 			target = it;
 		}
 	}
