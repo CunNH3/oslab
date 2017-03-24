@@ -8,7 +8,8 @@
 #define SEG_KERNEL_CODE         1 
 #define SEG_KERNEL_DATA         2
 
-struct GateDescriptor {
+struct GateDescriptor
+{
 	uint32_t offset_15_0      : 16;
 	uint32_t segment          : 16;
 	uint32_t pad0             : 8;
@@ -19,7 +20,8 @@ struct GateDescriptor {
 	uint32_t offset_31_16     : 16;
 };
 
-struct TrapFrame {
+struct TrapFrame
+{
 	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;
 	int32_t irq;
 };

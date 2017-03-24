@@ -1,5 +1,5 @@
-/* ELF32二进制文件头 */
-struct ELFHeader {
+struct ELFHeader
+{
 	unsigned int   magic;
 	unsigned char  elf[12];
 	unsigned short type;
@@ -17,8 +17,8 @@ struct ELFHeader {
 	unsigned short shstrndx;
 };
 
-/* ELF32 Program header */
-struct ProgramHeader {
+struct ProgramHeader
+{
 	unsigned int type;
 	unsigned int off;
 	unsigned int vaddr;
@@ -29,20 +29,20 @@ struct ProgramHeader {
 	unsigned int align;
 };
 
-/* I/O处理函数 */
-static inline char
-in_byte(short port) {
+static inline char in_byte(short port)
+{
 	char data;
 	asm volatile("in %1,%0" : "=a" (data) : "d" (port));
 	return data;
 }
-static inline int 
-in_long(short port) {
+
+static inline int in_long(short port)
+{
 	int data;
 	asm volatile("in %1, %0" : "=a" (data) : "d" (port));
 	return data;
 }
-static inline void
-out_byte(short port, char data) {
+static inline void out_byte(short port, char data)
+{
 	asm volatile("out %0,%1" : : "a" (data), "d" (port));
 }
