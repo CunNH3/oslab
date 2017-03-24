@@ -1,6 +1,3 @@
-# 中断和异常处理函数的入口
-# 中断处理函数会在IDT中为相应的中断/异常设置处理程序
-# 中断/异常的行为参见i386手册
 .globl vec0; vec0: pushl $0; jmp asm_do_irq
 .globl vec1; vec1: pushl $1; jmp asm_do_irq
 .globl vec2; vec2: pushl $2; jmp asm_do_irq
@@ -20,7 +17,6 @@
 .globl irq1; irq1: pushl $1001; jmp asm_do_irq
 .globl irq_empty; irq_empty: pushl $-1; jmp asm_do_irq
 
-# ！调用C编写的中断处理程序(见irq/irq_handle.c)！
 .globl asm_do_irq
 .extern irq_handle
 asm_do_irq:
