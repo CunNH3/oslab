@@ -4,9 +4,12 @@
 start:
 	cli                       # 关闭外部中断
 
-	movw    $0x13, %ax        # 切换到图形模式
-	int     $0x10             # 使用BIOS中断切换比较容易。在实现OS时不需此步骤
-
+//	movw    $0x13, %ax        # 切换到图形模式
+//	int     $0x10             # 使用BIOS中断切换比较容易。在实现OS时不需此步骤
+# Real color mode
+	movw    $0x4f02, %ax
+	movw	$0x0115, %bx
+	int $0x10
 	# 设置正确的段寄存器
 	xorw    %ax, %ax          # %AX = 0
 	movw    %ax, %ds          # %DS = AX (data segment)
