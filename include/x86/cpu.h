@@ -1,7 +1,7 @@
 #ifndef __X86_CPU_H__
 #define __X86_CPU_H__
 
-#include "common.h"
+#include "../common.h"
 
 static inline void wait_for_interrupt()
 {

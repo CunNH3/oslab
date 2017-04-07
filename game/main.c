@@ -21,6 +21,6 @@ void game_init(void)
 	testprintk();
 	enable_interrupt();
 	main_loop();
-	printk("game test!\n");
+	//printk("game test!\n");
 	assert(0);
 }
