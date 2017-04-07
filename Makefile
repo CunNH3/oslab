@@ -43,11 +43,11 @@ include config/Makefile.build
 
 include boot/Makefile.part
 
-game.img: game
-	cat boot/bootblock game > game.img
+game.img: game bootblock
+	cat obj/boot/bootblock obj/game/game > obj/game.img
 
 game: $(OBJS)
-	#@mkdir -p obj/game
+	@mkdir -p obj/game
 	$(LD) $(LDFLAGS) -e game_init -Ttext 0x00100000 -o obj/game/game $(OBJS)
 	$(call git_commit, "compile game", $(GITFLAGS))
 
