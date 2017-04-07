@@ -1,7 +1,6 @@
 #ifndef INC_STDIO_H
 #define INC_STDIO_H
 
-#include "include/stdarg.h""
 
 #ifndef NULL
 #define NULL	((void *) 0)
