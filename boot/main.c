@@ -1,4 +1,5 @@
-#include "boot.h"
+#include "include/x86.h"
+#include "include/elf.h"
 
 #define SECTSIZE 512
 
@@ -10,7 +11,7 @@ void bootmain(void)
 	struct ProgramHeader *ph, *eph;
 	unsigned char* pa, *i;
 
-	elf = (struct ELFHeader*)0x8000;
+	elf = (struct ELFHeader*)0x10000;
 
 
 	readseg((unsigned char*)elf, 4096, 0);
@@ -26,28 +27,32 @@ void bootmain(void)
 	}
 
 	((void(*)(void))elf->entry)();
+bad:
+	outw(0x8A00, 0x8A00);
+	outw(0x8A00, 0x8E00);
+	while(1);
 }
 
 void waitdisk(void)
 {
-	while((in_byte(0x1F7) & 0xC0) != 0x40); 
+	while((inb(0x1F7) & 0xC0) != 0x40); 
 }
 
-void readsect(void *dst, int offset)
+void readsect(void *dst, int offset) 
 {
 	int i;
 	waitdisk();
-	out_byte(0x1F2, 1);
-	out_byte(0x1F3, offset);
-	out_byte(0x1F4, offset >> 8);
-	out_byte(0x1F5, offset >> 16);
-	out_byte(0x1F6, (offset >> 24) | 0xE0);
-	out_byte(0x1F7, 0x20);
+	outb(0x1F2, 1);
+	outb(0x1F3, offset);
+	outb(0x1F4, offset >> 8);
+	outb(0x1F5, offset >> 16);
+	outb(0x1F6, (offset >> 24) | 0xE0);
+	outb(0x1F7, 0x20);
 
 	waitdisk();
-	for (i = 0; i < SECTSIZE / 4; i ++)
-		((int *)dst)[i] = in_long(0x1F0);
+	insl(0x1F0, dst, SECTSIZE/4);
 }
+
 
 void readseg(unsigned char *pa, int count, int offset)
 {
