@@ -63,7 +63,7 @@ $(OBJ_KERNEL_DIR)/%.o : $(KERNEL_DIR)/%.[cS]
 #-include $(patsubst %.o, %.d, $(OBJS))
 IMAGES	:= $(OBJ_DIR)/game.img
 GDBPORT := $(shell expr `id -u` % 5000 + 25000)
-QEMUOPTS = $(OBJ_DIR)/os.img -serial mon:stdio
+QEMUOPTS = $(OBJ_DIR)/game.img -serial mon:stdio
 QEMUOPTS += $(shell if $(QEMU) -nographic -help | grep -q '^-D '; then echo '-D qemu.log'; fi)
 
 .PHONY: clean debug gdb display submit commit log
