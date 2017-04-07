@@ -7,17 +7,17 @@ QEMU    := qemu-system-i386
 GDB     := gdb
 
 OBJ_DIR        := obj
-#LIB_DIR        := lib
+LIB_DIR        := lib
 BOOT_DIR       := boot
 KERNEL_DIR     := kernel
 GAME_DIR	   := game
-#OBJ_LIB_DIR    := $(OBJ_DIR)/$(LIB_DIR)
+OBJ_LIB_DIR    := $(OBJ_DIR)/$(LIB_DIR)
 OBJ_BOOT_DIR   := $(OBJ_DIR)/$(BOOT_DIR)
 OBJ_KERNEL_DIR := $(OBJ_DIR)/$(KERNEL_DIR)
 OBJ_GAME_DIR := $(OBJ_DIR)/$(GAME_DIR)
 
-#LIB_C := $(shell find $(LIB_DIR) -name "*.c")
-#LIB_O := $(LIB_C:%.c=$(OBJ_DIR)/%.o)
+LIB_C := $(shell find $(LIB_DIR) -name "*.c")
+LIB_O := $(LIB_C:%.c=$(OBJ_DIR)/%.o)
 
 GAME_C := $(shell find $(GAME_DIR) -name "*.c")
 GAME_O := $(GAME_C:%.c=$(OBJ_DIR)/%.o)
@@ -36,7 +36,7 @@ QEMU    := qemu-system-i386
 
 CFILES = $(shell find src/ -name "*.c")
 SFILES = $(shell find src/ -name "*.S")
-OBJS 	:= $(GAME_O) $(KERNEL_O)
+OBJS 	:= $(LIB_O) $(GAME_O) $(KERNEL_O)
 
 include config/Makefile.git
 include config/Makefile.build
@@ -51,9 +51,9 @@ game: $(OBJS)
 	$(LD) $(LDFLAGS) -e game_init -Ttext 0x00100000 -o obj/game/game $(OBJS)
 	$(call git_commit, "compile game", $(GITFLAGS))
 
-#$(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
-#	@mkdir -p $(OBJ_DIR)/$(dir $<)
-#	$(CC) $(CFLAGS) $< -o $@
+$(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)/$(dir $<)
+	$(CC) $(CFLAGS) $< -o $@
 
 $(OBJ_GAME_DIR)/%.o : $(GAME_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)/$(dir $<)

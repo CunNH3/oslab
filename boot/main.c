@@ -11,7 +11,7 @@ void bootmain(void)
 	struct ProgramHeader *ph, *eph;
 	unsigned char* pa, *i;
 
-	elf = (struct ELFHeader*)0x10000;
+	elf = (struct ELFHeader*)0x8000;
 
 
 	readseg((unsigned char*)elf, 4096, 0);
@@ -27,9 +27,7 @@ void bootmain(void)
 	}
 
 	((void(*)(void))elf->entry)();
-bad:
-	outw(0x8A00, 0x8A00);
-	outw(0x8A00, 0x8E00);
+
 	while(1);
 }
 

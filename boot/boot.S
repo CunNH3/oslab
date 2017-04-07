@@ -64,4 +64,3 @@ gdt:
 gdtdesc:
 	.word   (gdtdesc - gdt - 1)
 	.long   gdt
-
