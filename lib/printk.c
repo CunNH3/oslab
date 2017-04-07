@@ -1,4 +1,4 @@
-#include "common.h"
+#include "../include/common.h"
 
 /* implement this function to support printk */
 void GetStr(char *str,int n,int base)
