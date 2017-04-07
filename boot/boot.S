@@ -7,12 +7,7 @@ start:
 	movw    $0x13, %ax
 	int     $0x10
 	
-	# Real color mode
-//	movw    $0x4f02, %ax
-//	movw	$0x0115, %bx
-//	movw    $0x13, %ax
-//	int     $0x10
-	
+
 	xorw    %ax, %ax
 	movw    %ax, %ds
 	movw    %ax, %es
