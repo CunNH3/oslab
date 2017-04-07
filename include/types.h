@@ -2,7 +2,7 @@
 #define _TYPES_H
 
 #ifndef NULL
-#define NULL ((void*) 0)
+
 #endif
 
 // Represents true-or-false values

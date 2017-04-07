@@ -1,5 +1,5 @@
-#ifndef INC_STDIO_H
-#define INC_STDIO_H
+#ifndef _STDIO_H
+#define _STDIO_H
 
 
 #ifndef NULL

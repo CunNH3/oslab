@@ -1,7 +1,7 @@
-#include "x86/x86.h"
-#include "game.h"
-#include "string.h"
-#include "device/timer.h"
+#include "../include/x86/x86.h"
+#include "../include/game.h"
+#include "../include/string.h"
+#include "../include/device/timer.h"
 
 #define FPS 30
 #define CHARACTER_PER_SECOND 5
