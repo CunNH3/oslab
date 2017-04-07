@@ -1,9 +1,9 @@
-#include "game.h"
-#include "common.h"
-#include "string.h"
-#include "adt/linklist.h"
-#include "device/video.h"
-#include "x86/x86.h"
+#include "../include/game.h"
+#include "../include/common.h"
+#include "../include/string.h"
+#include "../include/adt/linklist.h"
+#include "../include/device/video.h"
+#include "../include/x86/x86.h"
 
 LINKLIST_IMPL(fly,10000)
 

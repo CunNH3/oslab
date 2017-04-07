@@ -1,4 +1,4 @@
-#include "include/mmu.h"
+#include "../include/mmu.h"
 .code16
 .globl start
 start:
