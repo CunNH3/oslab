@@ -1,7 +1,7 @@
 #ifndef __IRQ_H__
 #define __IRQ_H__
 
-#include "../../include/types.h"
+#include "../include/types.h"
 
 typedef struct TrapFrame {
 	uint32_t edi, esi, ebp, old_esp, ebx, edx, ecx, eax;
