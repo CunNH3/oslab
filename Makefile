@@ -7,7 +7,7 @@ QEMU    := qemu-system-i386
 GDB     := gdb
 
 OBJ_DIR        := obj
-LIB_DIR        := lib
+#LIB_DIR        := lib
 BOOT_DIR       := boot
 KERNEL_DIR     := kernel
 GAME_DIR	   := game
