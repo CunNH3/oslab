@@ -6,6 +6,12 @@
 #include "../include/assert.h"
 
 void testprintk();
+void init_serial();
+void init_timer();
+void init_idt();
+void init_intr();
+void set_timer_intr_handler(void (*ptr)(void));
+void set_keyboard_intr_handler(void (*ptr)(int));
 
 void game_init(void)
 {
@@ -19,6 +25,7 @@ void game_init(void)
 
 	printk("game start!\n");
 	testprintk();
+	asm volatile("sti");
 	enable_interrupt();
 	main_loop();
 	//printk("game test!\n");
