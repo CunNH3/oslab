@@ -1,9 +1,9 @@
-#include "game.h"
-#include "irq.h"
-#include "x86/x86.h"
-#include "device/timer.h"
-#include "device/palette.h"
-#include "assert.h"
+#include "../include/game.h"
+#include "../include/irq.h"
+#include "../include/x86/x86.h"
+#include "../include/device/timer.h"
+#include "../include/device/palette.h"
+#include "../include/assert.h"
 
 void testprintk();
 
