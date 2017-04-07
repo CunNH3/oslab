@@ -1,3 +1,6 @@
+TOP = .
+all: game.img
+
 CC      := gcc
 LD      := ld
 QEMU    := qemu-system-i386
@@ -25,28 +28,28 @@ KERNEL_O := $(KERNEL_C:%.c=$(OBJ_DIR)/%.o)
 KERNEL_O += $(KERNEL_S:%.S=$(OBJ_DIR)/%.o)
 
 
-CFLAGS  = -Wno-main -std=gnu11 -m32 -c -ggdb3 -MD -Wall -Werror -I./include -O0 \
-		 -fno-builtin -fno-stack-protector -fno-omit-frame-pointer
-ASFLAGS = -m32 -MD
-LDFLAGS = -melf_i386
+CFLAGS := -Wno-main -std=gnu11 -m32 -c -ggdb3 -MD -Wall -Werror -I./include -O0 \
+		 -fno-builtin -fno-stack-protector
+ASFLAGS := -m32 -MD
+LDFLAGS := -melf_i386
 QEMU    := qemu-system-i386
+
+CFILES = $(shell find src/ -name "*.c")
+SFILES = $(shell find src/ -name "*.S")
+OBJS 	:= $(LIB_O) $(GAME_O) $(KERNEL_O)
 
 include config/Makefile.git
 include config/Makefile.build
 
 include boot/Makefile.part
 
-CFILES = $(shell find src/ -name "*.c")
-SFILES = $(shell find src/ -name "*.S")
-OBJS 	:= $(LIB_O) $(GAME_O) $(KERNEL_O)
-
 game.img: game bootblock
 	cat obj/boot/bootblock obj/game/game > obj/game.img
 
 game: $(OBJS)
 	@mkdir -p obj/game
-	$(call git_commit, "compile game", $(GITFLAGS))
 	$(LD) $(LDFLAGS) -e game_init -Ttext 0x00100000 -o obj/game/game $(OBJS)
+	$(call git_commit, "compile game", $(GITFLAGS))
 
 $(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)/$(dir $<)
