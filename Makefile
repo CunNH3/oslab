@@ -40,8 +40,8 @@ ASFLAGS := -m32 -MD
 LDFLAGS := -melf_i386
 QEMU 	:= qemu-system-i386
 
-CFILES = $(shell find src/ -name "*.c")
-SFILES = $(shell find src/ -name "*.S")
+CFILES 	:= $(shell find game/ lib/ -name "*.c")
+SFILES 	:= $(shell find game/ lib/ -name "*.S")
 OBJS 	:= $(LIB_O) $(GAME_O) $(KERNEL_O)
 
 include config/Makefile.git
