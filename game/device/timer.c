@@ -1,6 +1,6 @@
-#include "../../include/common.h"
-#include "../../include/x86/x86.h"
-#include "../../include/device/timer.h"
+#include "../include/common.h"
+#include "../include/x86/x86.h"
+#include "../include/timer.h"
 
 #define TIMER_PORT 0x40
 #define FREQ_8253 1193182

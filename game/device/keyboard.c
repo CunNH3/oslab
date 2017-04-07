@@ -1,5 +1,5 @@
-#include "../../include/common.h"
-#include "../../include/string.h"
+#include "../include/common.h"
+#include "../include/string.h"
 
 static int letter_code[] =
 {

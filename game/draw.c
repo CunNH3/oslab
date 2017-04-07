@@ -1,9 +1,9 @@
-#include "../include/game.h"
-#include "../include/common.h"
-#include "../include/string.h"
-#include "../include/adt/linklist.h"
-#include "../include/device/video.h"
-#include "../include/x86/x86.h"
+#include "include/game.h"
+#include "include/common.h"
+#include "include/string.h"
+#include "include/adt/linklist.h"
+#include "include/video.h"
+#include "include/x86/x86.h"
 
 void redraw_screen()
 {
