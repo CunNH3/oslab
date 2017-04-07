@@ -1,7 +1,7 @@
-#include "common.h"
-#include "string.h"
-#include "device/video.h"
-#include "device/font.h"
+#include "../../include/common.h"
+#include "../../include/string.h"
+#include "../../include/device/video.h"
+#include "../../include/device/font.h"
 
 #define SLOW
 
