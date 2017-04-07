@@ -1,4 +1,4 @@
-#include "../include/common.h"
+//#include "../include/common.h"
 #include "../include/string.h"
 
 char *itoa(int a)

@@ -21,4 +21,4 @@ void init_intr(void)
 	outb(PORT_PIC_SLAVE, 0x68);
 	outb(PORT_PIC_SLAVE, 0x0A);
 }
-}
+

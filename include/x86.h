@@ -1,7 +1,7 @@
 #ifndef INC_X86_H
 #define INC_X86_H
 
-#include "include/types.h"
+#include "types.h"
 
 static __inline void breakpoint(void) __attribute__((always_inline));
 static __inline uint8_t inb(int port) __attribute__((always_inline));
