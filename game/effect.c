@@ -4,6 +4,7 @@
 #include "../include/adt/linklist.h"
 #include "../include/device/video.h"
 #include "../include/x86/x86.h"
+#include "../include/assert.h"
 
 LINKLIST_IMPL(fly,10000)
 

@@ -3,6 +3,7 @@
 #include "../include/string.h"
 #include "../include/device/timer.h"
 
+
 #define FPS 30
 #define CHARACTER_PER_SECOND 5
 #define UPDATE_PER_SECOND 100
