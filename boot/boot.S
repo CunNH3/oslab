@@ -1,66 +1,54 @@
-#include "../include/mmu.h"
+# 系统启动时，BIOS会完成初始化，然后将磁盘第一个512字节保存到物理内存0x00007C00
+# 位置，然后设置%CS=0000h, %IP=7C00h
+
+#include "asm.h"
+# 从此开始是16位代码
 .code16
 .globl start
 start:
-	cli
-    # Graph mode
-	movw    $0x13, %ax
-	int     $0x10
-	
-	# Real color mode
-	movw    $0x4f02, %ax
-	movw	$0x0115, %bx
-	int     $0x10
-	
-	xorw    %ax, %ax
-	movw    %ax, %ds
-	movw    %ax, %es
-	movw    %ax, %ss
+	cli                       # 关闭外部中断
 
-seta20.1:
-  	inb     $0x64,%al               # Wait for not busy
-    testb   $0x2,%al
-	jnz     seta20.1
+	movw    $0x13, %ax        # 切换到图形模式
+	int     $0x10             # 使用BIOS中断切换比较容易。在实现OS时不需此步骤
 
-	movb    $0xd1,%al               # 0xd1 -> port 0x64
-	outb    %al,$0x64
+	# 设置正确的段寄存器
+	xorw    %ax, %ax          # %AX = 0
+	movw    %ax, %ds          # %DS = AX (data segment)
+	movw    %ax, %es          # %ES = AX (extra segment)
+	movw    %ax, %ss          # %SS = AX (stack segment)
 
-seta20.2:
-	inb     $0x64,%al               # Wait for not busy
-	testb   $0x2,%al
-	jnz     seta20.2
+	# 打开A20地址线
+	movw    $0x2401, %ax
+	int     $0x15
 
-	movb    $0xdf,%al               # 0xdf -> port 0x60
-	outb    %al,$0x60
-
-	movw	$0x4f01, %ax
-	movw	$0x115, %cx
-	movw	$0xa01, %di
-	int 	$0x10
-
-	lgdt    gdtdesc
-	movl    %cr0, %eax
+	lgdt    gdtdesc           # 设置GDT(段描述符表地址为$gdt)
+	movl    %cr0, %eax        # %CR0 |= PROTECT_ENABLE_BIT
 	orl     $0x1, %eax
-	movl    %eax, %cr0
+	movl    %eax, %cr0        # 设置PE bit
 
+	# 长跳转进入保护模式，设置%CS为GDT中的第一项，%EIP为start32所对应地址
 	ljmp    $GDT_ENTRY(1), $start32
 
 .code32
 start32:
+	# 设置数据访问所用的段寄存器(%DS, %ES, %SS)
 	movw    $GDT_ENTRY(2), %ax
-	movw    %ax, %ds
-	movw    %ax, %es
-	movw    %ax, %ss
+	movw    %ax, %ds          # %DS = %AX
+	movw    %ax, %es          # %ES = %AX
+	movw    %ax, %ss          # %SS = %AX
 
-	movl    $0x8000, %esp
-	call    bootmain
+	# 设置栈位置。栈从此没有切换过，请注意栈的大小！
+	movl    $0x8000, %esp     # %ESP = $0x8000
+	call    bootmain          # 跳转到C代码执行，此处不会返回
 
-.p2align 2
+# GDT
+.p2align 2                         # 对齐
 gdt:
-	SEG_NULL
-	SEG(0xA, 0x0, 0xffffffff)
-	SEG(0x2, 0x0, 0xffffffff)
+	SEG_NULLASM                    # GDT第一项必须为空
+	SEG_ASM(0xA, 0x0, 0xffffffff)  # 代码段描述符
+	SEG_ASM(0x2, 0x0, 0xffffffff)  # 数据段描述符
 
-gdtdesc:
-	.word   (gdtdesc - gdt - 1)
-	.long   gdt
+gdtdesc:                           # GDT描述符
+	.word   (gdtdesc - gdt - 1)    # GDT长度，留意地址运算
+	.long   gdt                    # GDT地址
+
