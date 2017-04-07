@@ -74,18 +74,18 @@ QEMUOPTS += $(shell if $(QEMU) -nographic -help | grep -q '^-D '; then echo '-D 
 display:
 	@echo $(OBJS)
 
-#.gdbinit: .gdbinit.tmpl
-#	sed "s/localhost:1234/localhost:$(GDBPORT)/" < $^ > $@
-#pre-qemu: .gdbinit
+.gdbinit: .gdbinit.tmpl
+	sed "s/localhost:1234/localhost:$(GDBPORT)/" < $^ > $@
+pre-qemu: .gdbinit
 
-#gdb:
-#	gdb -x .gdbinit
+gdb:
+	gdb -x .gdbinit
 
-qemu: game.img
+qemu: game.img pre-qemu
 	$(QEMU) $(QEMUOPTS)
 	$(call git_commit, "run qemu", $(GITFLAGS))
 
-debug: $(IMAGES)
+debug: $(IMAGES) pre-qemu
 	$(QEMU) -s $(QEMUOPTS) -S 
 
 clean: clean-mdr
