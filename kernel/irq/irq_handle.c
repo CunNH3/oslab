@@ -1,5 +1,5 @@
-#include "x86/x86.h"
-#include "game.h"
+#include "../../include/x86/x86.h"
+#include "../../include/game.h"
 
 static void (*do_timer)(void);
 static void (*do_keyboard)(int);
