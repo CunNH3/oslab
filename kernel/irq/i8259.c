@@ -1,4 +1,4 @@
-#include "x86/x86.h"
+#include "../../include/x86.h"
 
 #define PORT_PIC_MASTER 0x20
 #define PORT_PIC_SLAVE  0xA0
@@ -6,19 +6,19 @@
 
 void init_intr(void)
 {
-	out_byte(PORT_PIC_MASTER + 1,0xFF);
-	out_byte(PORT_PIC_SLAVE + 1,0xFF);
-	out_byte(PORT_PIC_MASTER,0x11);
-	out_byte(PORT_PIC_MASTER + 1,32);
-	out_byte(PORT_PIC_MASTER + 1,1 << 2);
-	out_byte(PORT_PIC_MASTER + 1,0x3);
-	out_byte(PORT_PIC_SLAVE,0x11);
-	out_byte(PORT_PIC_SLAVE + 1,32 + 8);
-	out_byte(PORT_PIC_SLAVE + 1,2);
-	out_byte(PORT_PIC_SLAVE + 1,0x3);
-
-	out_byte(PORT_PIC_MASTER,0x68);
-	out_byte(PORT_PIC_MASTER,0x0A);
-	out_byte(PORT_PIC_SLAVE,0x68);
-	out_byte(PORT_PIC_SLAVE,0x0A);
+	outb(PORT_PIC_MASTER + 1, 0xFF);
+	outb(PORT_PIC_SLAVE + 1 , 0xFF);
+	outb(PORT_PIC_MASTER, 0x11);
+	outb(PORT_PIC_MASTER + 1, 32);
+	outb(PORT_PIC_MASTER + 1, 1 << 2);
+	outb(PORT_PIC_MASTER + 1, 0x3);
+	outb(PORT_PIC_SLAVE, 0x11);
+	outb(PORT_PIC_SLAVE + 1, 32 + 8);
+	outb(PORT_PIC_SLAVE + 1, 2);
+	outb(PORT_PIC_SLAVE + 1, 0x3);
+	outb(PORT_PIC_MASTER, 0x68);
+	outb(PORT_PIC_MASTER, 0x0A);
+	outb(PORT_PIC_SLAVE, 0x68);
+	outb(PORT_PIC_SLAVE, 0x0A);
+}
 }
