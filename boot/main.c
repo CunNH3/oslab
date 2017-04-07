@@ -1,5 +1,5 @@
-#include "x86.h"
-#include "elf.h"
+#include "include/x86.h"
+#include "include/elf.h"
 
 #define SECTSIZE 512
 
