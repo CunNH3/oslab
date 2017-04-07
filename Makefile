@@ -28,7 +28,7 @@ KERNEL_O := $(KERNEL_C:%.c=$(OBJ_DIR)/%.o)
 KERNEL_O += $(KERNEL_S:%.S=$(OBJ_DIR)/%.o)
 
 
-CFLAGS := -Wno-main -std=gnu11 -m32 -c -ggdb3 -MD -Wall -Werror -I./include -O0 \
+CFLAGS := -Wno-main -std=gnu11 -m32 -c -ggdb -MD -Wall -Werror -I./include -O0 \
 		 -fno-builtin -fno-stack-protector
 ASFLAGS := -m32 -MD
 LDFLAGS := -melf_i386
