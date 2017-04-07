@@ -18,7 +18,7 @@ void redraw_screen()
 		int color = rand() % 11 + 10;
 		draw_string(buf,it->x,it->y,color);
 	}
-	printk("test\n");
+	//printk("test\n");
 	draw_string(itoa(last_key_code()),SCR_HEIGHT - 8,0,48);
 	hit = itoa(get_hit());
 	draw_string(hit,0,SCR_WIDTH - strlen(hit) * 8,10);
