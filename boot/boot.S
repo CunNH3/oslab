@@ -4,8 +4,8 @@
 start:
 	cli
     # Graph mode
-//	movw    $0x13, %ax
-//	int     $0x10
+	movw    $0x13, %ax
+	int     $0x10
 	
 	# Real color mode
 	movw    $0x4f02, %ax
