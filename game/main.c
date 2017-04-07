@@ -25,7 +25,6 @@ void game_init(void)
 
 	printk("game start!\n");
 	testprintk();
-	asm volatile("sti");
 	enable_interrupt();
 	main_loop();
 	//printk("game test!\n");
