@@ -45,7 +45,7 @@ void main_loop(void)
 		enable_interrupt();
 
 		redraw = FALSE;
-		printk("test\n");
+		//printk("test\n");
 		while (update_keypress())
 			;
 
