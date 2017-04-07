@@ -10,11 +10,11 @@ OBJ_DIR        := obj
 LIB_DIR        := lib
 BOOT_DIR       := boot
 KERNEL_DIR     := kernel
-GAME_DIR	   := game
+GAME_DIR       := game
 OBJ_LIB_DIR    := $(OBJ_DIR)/$(LIB_DIR)
 OBJ_BOOT_DIR   := $(OBJ_DIR)/$(BOOT_DIR)
 OBJ_KERNEL_DIR := $(OBJ_DIR)/$(KERNEL_DIR)
-OBJ_GAME_DIR := $(OBJ_DIR)/$(GAME_DIR)
+OBJ_GAME_DIR   := $(OBJ_DIR)/$(GAME_DIR)
 
 LIB_C := $(shell find $(LIB_DIR) -name "*.c")
 LIB_O := $(LIB_C:%.c=$(OBJ_DIR)/%.o)
@@ -72,8 +72,8 @@ $(OBJ_KERNEL_DIR)/%.o : $(KERNEL_DIR)/%.[cS]
 #-include $(patsubst %.o, %.d, $(OBJS))
 IMAGES	:= $(OBJ_DIR)/game.img
 GDBPORT := $(shell expr `id -u` % 5000 + 25000)
-QEMUOPTS = $(OBJ_DIR)/game.img -serial mon:stdio
-QEMUOPTS += $(shell if $(QEMU) -nographic -help | grep -q '^-D '; then echo '-D qemu.log'; fi)
+#QEMUOPTS = $(OBJ_DIR)/game.img -serial mon:stdio
+#QEMUOPTS += $(shell if $(QEMU) -nographic -help | grep -q '^-D '; then echo '-D qemu.log'; fi)
 
 .PHONY: clean debug gdb display submit commit log
 
@@ -88,11 +88,11 @@ gdb:
 	gdb -x .gdbinit
 
 qemu: game.img pre-qemu
-	$(QEMU) $(QEMUOPTS)
+	$(QEMU) 
 	$(call git_commit, "run qemu", $(GITFLAGS))
 
 debug: $(IMAGES) pre-qemu
-	$(QEMU) -s $(QEMUOPTS) -S 
+	$(QEMU) -s 
 
 clean: 
 	rm -rf obj/* data/game qemu.log
