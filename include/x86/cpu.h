@@ -20,6 +20,7 @@ static inline void save_idt(void *addr, uint32_t size)
 static inline void enable_interrupt(void)
 {
 	asm volatile("sti");
+	printk("test!\n");
 }
 
 static inline void disable_interrupt(void)
