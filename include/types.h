@@ -1,9 +1,5 @@
-#ifndef _TYPES_H
-#define _TYPES_H
-
-#ifndef NULL
-
-#endif
+#ifndef __TYPES_H__
+#define __TYPES_H__
 
 // Represents true-or-false values
 typedef _Bool bool;

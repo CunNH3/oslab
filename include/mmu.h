@@ -1,5 +1,5 @@
-#ifndef INC_MMU_H
-#define INC_MMU_H
+#ifndef __MMU_H__
+#define __MMU_H__
 
 /*
  * This file contains definitions for the x86 memory management unit (MMU),

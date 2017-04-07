@@ -1,7 +1,7 @@
 #ifndef __X86_IO_H__
 #define __X86_IO_H__
 
-#include "game.h"
+#include "../game.h"
 
 static inline uint8_t in_byte(uint16_t port)
 {

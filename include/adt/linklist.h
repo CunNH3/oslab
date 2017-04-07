@@ -1,7 +1,7 @@
 #ifndef __LINKLIST_H__
 #define __LINKLIST_H__
 
-#include "assert.h"
+#include "../assert.h"
 
 /* Usage:
  *   my_list.h:

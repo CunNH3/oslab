@@ -1,7 +1,7 @@
-#ifndef INC_STRING_H
-#define INC_STRING_H
+#ifndef __STRING_H__
+#define __STRING_H__
 
-#include "types.h"
+#include "common.h"
 
 char *itoa(int);
 void memcpy(void *, const void *, size_t);

@@ -1,5 +1,5 @@
-#ifndef INC_X86_H
-#define INC_X86_H
+#ifndef __X86_H__
+#define __X86_H__
 
 #include "types.h"
 

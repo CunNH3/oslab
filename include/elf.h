@@ -1,5 +1,5 @@
-#ifndef INC_ELF_H
-#define INC_ELF_H
+#ifndef __ELF_H__
+#define __ELF_H__
 
 #define ELF_MAGIC 0x464C457FU	/* "\x7FELF" in little endian */
 
