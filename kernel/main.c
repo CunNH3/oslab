@@ -18,7 +18,7 @@ int kernel_main()
 	init_timer();
 	init_serial();
 	init_idt();
-	//testprintk();
+	testprintk();
 
 	printk("Hello, kernel!\n");
 

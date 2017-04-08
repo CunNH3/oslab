@@ -85,12 +85,14 @@ void irq_handle(TrapFrame *tf)
 
 	if(irq == 0x80) do_syscall(tf);
 	else if(irq < 1000) {printk("Unhandled exception!\n");assert(0);}
-	else {
+	else
+	{
 		int irq_id = irq - 1000;
 		assert(irq_id < NR_HARD_INTR);
 		struct IRQ_t *f = handles[irq_id];
 
-		while(f != NULL) {
+		while(f != NULL)
+		{
 			f->routine();
 			f = f->next;
 		}
