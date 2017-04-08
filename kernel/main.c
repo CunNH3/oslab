@@ -1,6 +1,11 @@
 #include "include/x86.h"
 #include "include/elf.h"
 #include "include/stdio.h"
+#include "include/const.h"
+#include "include/common.h"
+#include "include/string.h"
+#include "include/device/video.h"
+#include "include/video_mode.h"
 
 #define SECTSIZE 512
 
@@ -11,11 +16,12 @@ void init_timer();
 void init_serial();
 void init_idt();
 void init_vmem();
-//void init_vmem_addr();
+void init_vmem_addr();
 void testprintk();
 
 int kernel_main()
 {
+	init_vmem_addr();
 	init_intr();
 	init_timer();
 	init_serial();

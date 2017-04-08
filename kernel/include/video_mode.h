@@ -11,7 +11,7 @@ struct VbeInfoBlock {
 
 struct ModeInfoBlock {
 	uint16_t attributes;
-    uint8_t winA,winB;
+	uint8_t winA,winB;
 	uint16_t granularity;
 	uint16_t winsize;
 	uint16_t segmentA, segmentB, VBE_FAR, realFctPtr;
