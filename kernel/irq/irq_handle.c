@@ -82,7 +82,7 @@ void irq_handle(TrapFrame *tf)
 {
 
 	int irq = tf->irq;
-
+	printk("irq = %d\n",tf->irq);
 	if(irq == 0x80) do_syscall(tf);
 	else 
 	if(irq < 1000) {printk("Unhandled irq = %d!\n",irq);assert(0);}
