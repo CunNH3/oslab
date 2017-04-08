@@ -5,20 +5,19 @@
 #define IRQ_OFFSET		0x20
 #define IRQ_SLAVE       2
 
-void init_intr(void) {
-	/* mask all interrupts */
+void init_intr(void)
+{
 	outb(PORT_PIC_MASTER + 1, 0xFF);
 	outb(PORT_PIC_SLAVE + 1 , 0xFF);
 	
-	/* start initialization */
 	outb(PORT_PIC_MASTER, 0x11);
 	outb(PORT_PIC_MASTER + 1, IRQ_OFFSET);
 	outb(PORT_PIC_MASTER + 1, 1 << IRQ_SLAVE);
-	outb(PORT_PIC_MASTER + 1, 0x3); // Modified part
+	outb(PORT_PIC_MASTER + 1, 0x3);
 	outb(PORT_PIC_SLAVE, 0x11);
 	outb(PORT_PIC_SLAVE + 1, IRQ_OFFSET + 8);
 	outb(PORT_PIC_SLAVE + 1, IRQ_SLAVE);
-	outb(PORT_PIC_SLAVE + 1, 0x3); // Modified part
+	outb(PORT_PIC_SLAVE + 1, 0x3);
 	outb(PORT_PIC_MASTER, 0x68);
 	outb(PORT_PIC_MASTER, 0x0A);
 	outb(PORT_PIC_SLAVE, 0x68);

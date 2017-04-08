@@ -11,11 +11,11 @@
 void readseg(unsigned char *, int, int);
 
 void init_vmem_addr();
+
+void init_serial();
 void init_intr();
 void init_timer();
-void init_serial();
 void init_idt();
-void init_vmem();
 
 void testprintk();
 void serial_output_test();
@@ -28,8 +28,6 @@ int kernel_main()
 	init_serial();
 	init_idt();
 	init_vmem();
-	//add_irq_handle(0,timer_event);
-	//add_irq_handle(1,keyboard_event);
 
 	testprintk();
 	serial_output_test();
@@ -59,7 +57,7 @@ int kernel_main()
 	((void(*)(void))elf->entry)();
 	
 	//printk("Wrong!\n");
-	while(1);
+	//while(1);
 	return 0;
 }
 
