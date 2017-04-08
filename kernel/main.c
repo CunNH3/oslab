@@ -1,6 +1,5 @@
 #include "include/x86.h"
 #include "include/elf.h"
-#include "include/stdio.h"
 #include "include/common.h"
 #include "include/string.h"
 #include "include/device/video.h"
@@ -20,18 +19,25 @@ void init_idt();
 void testprintk();
 void serial_output_test();
 
-int kernel_main()
+void init()
 {
 	init_vmem_addr();
-	init_intr();
-	init_timer();
 	init_serial();
+	init_intr();
 	init_idt();
+	init_timer();
 	init_vmem();
+}
 
+void test()
+{
 	testprintk();
 	serial_output_test();
 	printk("\n");
+}
+int kernel_main()
+{
+	init();test();
 	printk("Hello, kernel!\n");
 
 	struct ELFHeader *elf;
@@ -56,8 +62,6 @@ int kernel_main()
 	
 	((void(*)(void))elf->entry)();
 	
-	//printk("Wrong!\n");
-	//while(1);
 	return 0;
 }
 
@@ -66,7 +70,7 @@ void waitdisk(void)
 	while((inb(0x1F7) & 0xC0) != 0x40); 
 }
 
-void readsect(void *dst, int offset) 
+void readsect(void *dst, int offset)
 {
 	//int i;
 	waitdisk();
