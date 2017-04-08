@@ -1,44 +1,32 @@
-OUTPUT_FORMAT("elf32-i386", "elf32-i386", "elf32-i386")
+OUTPUT_FORMAT(
+	"elf32-i386",  /* Default       */
+	"elf32-i386",  /* Big endian    */
+	"elf32-i386"   /* Little endian */
+)
 OUTPUT_ARCH(i386)
-/*ENTRY(set_kern_page)*/
-ENTRY(_start)
+ENTRY(main)  /* 入口函数，你可以不定义成 main，只要是代码中的符号即可 */
 
 SECTIONS
 {
-	/* Link the kernel at this address: "." means the current address */
-	. = 0xf0100000;
+	/**
+	 * 可执行程序的地址空间从 1MB (2^20 B) 往上开始
+	 */
+	. = 0x100000;
 
-	/* AT(...) gives the load address of this section, which tells
-	   the boot loader where to load the kernel in physical memory */
-	.text : AT(0x100000) {
-		*(.text .stub .text.* .gnu.linkonce.t.*)
+	PROVIDE(start = .);
+
+	.text : AT(0x100000) {  /* AT 指定物理地址 */
+		*(.text .text.*)
 	}
+
+	PROVIDE(etext = .);  /* 定义符号 etext, 其值为代码段之后的地址 */
 
 	.rodata : {
-		*(.rodata .rodata.* .gnu.linkonce.r.*)
+		*(.rodata .rodata.*)
 	}
 
-	/* Include debugging information in kernel memory */
-	.stab : {
-		PROVIDE(__STAB_BEGIN__ = .);
-		*(.stab);
-		PROVIDE(__STAB_END__ = .);
-		BYTE(0)		/* Force the linker to allocate space
-				   for this section */
-	}
+	. = ALIGN(0x1000);  /* 将数据段按页对齐 */
 
-	.stabstr : {
-		PROVIDE(__STABSTR_BEGIN__ = .);
-		*(.stabstr);
-		PROVIDE(__STABSTR_END__ = .);
-		BYTE(0)		/* Force the linker to allocate space
-				   for this section */
-	}
-
-	/* Adjust the address for the data segment to the next page */
-	. = ALIGN(0x1000);
-
-	/* The data segment */
 	.data : {
 		*(.data)
 	}
@@ -47,7 +35,5 @@ SECTIONS
 		*(.bss)
 	}
 
-	/DISCARD/ : {
-		*(.eh_frame .note.GNU-stack)
-	}
+	PROVIDE(end = .);  /* 定义符号 end, 其值为程序/数据段之后的地址 */
 }
