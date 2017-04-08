@@ -5,6 +5,7 @@ start:
 	cli
     # Graph mode
 	movw    $0x13, %ax
+	movw	$0x7e00, %di
 	int     $0x10
 	
 

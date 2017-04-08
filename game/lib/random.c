@@ -1,14 +1,14 @@
+#include "../include/common.h"
 
-static int seed = 0;
+static uint32_t seed = 0;
 
-void srand(int s)
+void srand(uint32_t s)
 {
 	seed = s;
 }
 
-int rand(void)
+uint32_t rand()
 {
-	seed = 0x015A4E35 * seed + 1;
-	return (seed >> 16) & 0x7FFF;
+	seed = 0x015a4e35 * seed + 1;
+	return (seed >> 16) & 0x7fff;
 }
-
