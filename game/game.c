@@ -2,7 +2,7 @@
 #include "include/game.h"
 #include "include/string.h"
 #include "include/timer.h"
-
+#include "include/assert.h"
 
 #define FPS 30
 #define CHARACTER_PER_SECOND 5

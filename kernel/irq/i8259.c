@@ -8,6 +8,7 @@ void init_intr(void)
 {
 	outb(PORT_PIC_MASTER + 1, 0xFF);
 	outb(PORT_PIC_SLAVE + 1 , 0xFF);
+
 	outb(PORT_PIC_MASTER, 0x11);
 	outb(PORT_PIC_MASTER + 1, 32);
 	outb(PORT_PIC_MASTER + 1, 1 << 2);

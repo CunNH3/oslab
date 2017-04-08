@@ -1,5 +1,5 @@
 #include "../include/common.h"
-//#include "../include/string.h"
+#include "../include/string.h"
 
 char *itoa(int a)
 {

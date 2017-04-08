@@ -1,8 +1,7 @@
-#include "../include/common.h"
-#include "../include/x86/x86.h"
-#include "../include/device/video.h"
-#include "../include/string.h"
-#include "../include/assert.h"
+#include "include/common.h"
+#include "include/x86/x86.h"
+#include "include/video.h"
+#include "include/string.h"
 
 static void append(char **p, const char *str)
 {

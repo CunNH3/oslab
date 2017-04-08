@@ -1,5 +1,5 @@
-KERNEL_DIR := kernel
-OBJ_KERNEL_DIR := $(OBJ_DIR)/$(KERNEL_DIR)
+KERNEL_DIR		:= kernel
+OBJ_KERNEL_DIR	:= $(OBJ_DIR)/$(KERNEL_DIR)
 
 KERNEL_C := $(shell find $(KERNEL_DIR) -name "*.c")
 KERNEL_S := $(shell find $(KERNEL_DIR) -name "*.S")
@@ -10,12 +10,12 @@ KERNEL := $(OBJ_KERNEL_DIR)/kernel
 
 $(OBJ_KERNEL_DIR)/%.o : $(KERNEL_DIR)/%.[cS]
 	@mkdir -p $(OBJ_DIR)/$(dir $<)
-	@$(CC) $(CFLAGS) -I kernel/ $< -o $@
+	@$(CC) $(CFLAGS) $< -o $@
 	@echo +CC $< -o $@
 
 kernel: $(KERNEL_O)
 	@mkdir -p $(OBJ_KERNEL_DIR)
-	@$(LD) $(LDFLAGS) -T kernel/kernel.ld -o $(KERNEL) $(KERNEL_O)
+	@$(LD) $(LDFLAGS) -e kernel_main -Ttext 0x00100000 -o $(KERNEL) $(KERNEL_O)
 	@echo +LD $(KERNEL)
 	@perl ./kernel/genkern.pl $(KERNEL)
 

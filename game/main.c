@@ -6,23 +6,17 @@
 #include "include/assert.h"
 
 void testprintk();
-void init_serial();
-void init_timer();
-void init_idt();
-void init_intr();
-void set_timer_intr_handler(void (*ptr)(void));
-void set_keyboard_intr_handler(void (*ptr)(int));
+
 
 void game_init(void)
 {
-	init_serial();
+/*	init_serial();
 	init_timer();
 	init_idt();
 	init_intr();
 
 	set_timer_intr_handler(timer_event);
-	set_keyboard_intr_handler(keyboard_event);
-
+	set_keyboard_intr_handler(keyboard_event);*/
 	printk("game start!\n");
 	testprintk();
 	enable_interrupt();
