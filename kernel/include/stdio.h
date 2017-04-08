@@ -1,9 +1,9 @@
 #ifndef __STDIO_H__
 #define __STDIO_H__
 
+#include "types.h"
+#include "stdarg.h"
 
- /* !NULL */
+void printk(const char *, ...);
 
-// lib/printf.c
-void	printk(const char *fmt, ...);
-#endif 
+#endif

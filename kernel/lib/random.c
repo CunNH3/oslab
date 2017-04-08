@@ -1,4 +1,3 @@
-
 static int seed = 0;
 
 void srand(int s)

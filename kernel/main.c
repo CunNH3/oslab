@@ -1,11 +1,10 @@
 #include "include/x86.h"
 #include "include/elf.h"
 #include "include/stdio.h"
-#include "include/const.h"
 #include "include/common.h"
 #include "include/string.h"
 #include "include/device/video.h"
-#include "include/video_mode.h"
+#include "include/device/video_mode.h"
 
 #define SECTSIZE 512
 

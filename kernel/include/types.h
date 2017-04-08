@@ -1,6 +1,10 @@
 #ifndef __TYPES_H__
 #define __TYPES_H__
 
+#ifndef NULL
+#define NULL ((void*) 0)
+#endif
+
 // Represents true-or-false values
 typedef _Bool bool;
 enum { false, true };
@@ -33,7 +37,7 @@ typedef uint32_t size_t;
 typedef int32_t ssize_t;
 
 // off_t is used for file offsets and lengths.
-//typedef int32_t off_t;
+typedef int32_t off_t;
 
 // Efficient min and max operations
 #define MIN(_a, _b)						\
@@ -66,4 +70,4 @@ typedef int32_t ssize_t;
 // Return the offset of 'member' relative to the beginning of a struct type
 #define offsetof(type, member)  ((size_t) (&((type*)0)->member))
 
-#endif
+#endif /* !JOS_INC_TYPES_H */

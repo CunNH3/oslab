@@ -1,5 +1,5 @@
 #include "../include/device/video.h"
-#include "../include/video_mode.h"
+#include "../include/device/video_mode.h"
 #include "../include/string.h"
 #include "../include/logo.h"
 uint8_t *vmem;

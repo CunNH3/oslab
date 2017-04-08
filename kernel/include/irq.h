@@ -1,10 +1,12 @@
 #ifndef __IRQ_H__
 #define __IRQ_H__
 
-void init_idt(void);
-void init_intr(void);
+#include "types.h"
 
-void set_timer_intr_handler( void (*ptr)(void) );
-void set_keyboard_intr_handler( void (*ptr)(int) );
+typedef struct TrapFrame {
+	uint32_t edi, esi, ebp, old_esp, ebx, edx, ecx, eax;
+	int32_t irq;
+	uint32_t error_code, eip, cs, eflags;
+} TrapFrame;
 
 #endif
