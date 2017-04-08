@@ -17,6 +17,7 @@ void init_serial();
 void init_idt();
 void init_vmem();
 void init_vmem_addr();
+
 void testprintk();
 
 int kernel_main()
