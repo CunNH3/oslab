@@ -38,7 +38,7 @@ void waitdisk(void)
 
 void readsect(void *dst, int offset) 
 {
-	int i;
+	//int i;
 	waitdisk();
 	outb(0x1F2, 1);
 	outb(0x1F3, offset);
