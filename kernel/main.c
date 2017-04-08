@@ -37,6 +37,7 @@ int kernel_main()
 		for (i = pa + ph->filesz;i < pa + ph->memsz;*i ++ = 0);
 	}
 	printk("Start to play!\n");
+	
 	((void(*)(void))elf->entry)();
 
 	while(1);
