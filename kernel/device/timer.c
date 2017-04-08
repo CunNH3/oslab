@@ -34,20 +34,11 @@ void init_timer()
 	outb(PORT_CH_0, (counter >> 8) & 0xFF);  // access high byte
 }
 
-volatile int tick = 0;
+volatile int time_tick = 0;
 
-void do_timer(void)
+void timer_event(void)
 {
-	tick ++;
+	time_tick ++;
 }
 
-int Get_time()
-{
-	return tick;
-}
 
-void Delay(int t)
-{
-	int i = tick;
-	while(i + t > tick);
-}

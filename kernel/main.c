@@ -13,11 +13,11 @@ void init_idt();
 
 int kernel_main()
 {
-	void init_intr();
-	void init_timer();
-	void init_serial();
-	void init_idt();
-
+	init_intr();
+	init_timer();
+	init_serial();
+	init_idt();
+	//printk
 	struct ELFHeader *elf;
 	struct ProgramHeader *ph, *eph;
 	unsigned char* pa, *i;

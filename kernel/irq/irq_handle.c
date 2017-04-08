@@ -34,7 +34,7 @@ void irq_handle(struct TrapFrame *tf)
 	}
 	else
 	if (tf->irq == 1000)
-		do_timer();
+		timer_event();
 	else
 	if (tf->irq == 1001)
 	{
