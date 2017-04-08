@@ -2,7 +2,7 @@
 #include "include/x86.h"
 #include "include/video.h"
 
-bool process_keys();
+//bool process_keys();
 
 void init_effect();
 void game_loop();
@@ -24,7 +24,7 @@ void game_main()
 	while(1)
 	{
 		hlt();
-		process_keys();
+		//process_keys();
 		if(reborn)
 		{
 			clear_buffer();
