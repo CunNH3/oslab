@@ -1,5 +1,3 @@
-#TOP = .
-#all: game.img
 BOOT := boot.bin
 KERNEL := kernel.bin
 GAME := game.bin
@@ -108,47 +106,10 @@ $(OBJ_GAME_DIR)/%.o: $(GAME_DIR)/%.c
 
 DEPS := $(shell find -name "*.d")
 -include $(DEPS)
-#ASFLAGS := -m32 -MD
-#LDFLAGS := -melf_i386
-#QEMU 	:= qemu-system-i386
-
-#CFILES 	:= $(shell find game/ lib/ -name "*.c")
-#SFILES 	:= $(shell find game/ lib/ -name "*.S")
-#OBJS 	:= $(LIB_O) $(GAME_O) $(KERNEL_O)
 
 include config/Makefile.git
 include config/Makefile.build
 
-#include boot/Makefile.part
-#include kernel/Makefile.part
-#include game/Makefile.part
-
-#game.img: bootblock kernel game
-#	cat $(BOOT) $(KERNEL) $(GAME) > obj/game.img
-#	$(call git_commit, "compile game", $(GITFLAGS))
-
-#game: $(OBJS)
-#	@mkdir -p obj/game
-#	$(LD) $(LDFLAGS) -e game_init -Ttext 0x00200000 -o obj/game/game $(OBJS)
-	
-
-#$(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
-#	@mkdir -p $(OBJ_DIR)/$(dir $<)
-#	$(CC) $(CFLAGS) $< -o $@
-
-#$(OBJ_GAME_DIR)/%.o : $(GAME_DIR)/%.c
-#	@mkdir -p $(OBJ_DIR)/$(dir $<)
-#	$(CC) $(CFLAGS) $< -o $@
-
-#$(OBJ_KERNEL_DIR)/%.o : $(KERNEL_DIR)/%.[cS]
-#	@mkdir -p $(OBJ_DIR)/$(dir $<)
-#	$(CC) $(CFLAGS) $< -o $@
-
-#-include $(patsubst %.o, %.d, $(OBJS))
-#IMAGES	:= $(OBJ_DIR)/game.img
-#GDBPORT := $(shell expr `id -u` % 5000 + 25000)
-#QEMUOPTS = $(OBJ_DIR)/game.img -serial mon:stdio
-#QEMUOPTS += $(shell if $(QEMU) -nographic -help | grep -q '^-D '; then echo '-D qemu.log'; fi)
 
 .PHONY: clean debug gdb submit qemu commit log
 
