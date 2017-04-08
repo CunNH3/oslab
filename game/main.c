@@ -21,7 +21,7 @@ void game_init(void)
 	printk("game start!\n");
 	//testprintk();
 	enable_interrupt();
-	wait_intr();
+	//wait_intr();
 	main_loop();
 	//printk("game test!\n");
 	assert(0);
