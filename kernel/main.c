@@ -43,7 +43,8 @@ int kernel_main()
 	printk("Start!\n");
 	
 	((void(*)(void))elf->entry)();
-
+	
+	printk("Wrong!\n");
 	while(1);
 	return 0;
 }
