@@ -1,6 +1,9 @@
 #include "../include/common.h"
 #include "../include/string.h"
 
+
+//enum {KEY_STATE_EMPTY, KEY_STATE_WAIT_RELEASE, KEY_STATE_RELEASE, KEY_STATE_PRESS};
+
 static int letter_code[] =
 {
 	30, 48, 46, 32, 18, 33, 34, 35, 23, 36,

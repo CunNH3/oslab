@@ -6,7 +6,7 @@
 void do_timer(void);
 void do_keyboard(int);
 
-void do_syscall(struct TrapFrame *tf);
+//void do_syscall(struct TrapFrame *tf);
 /*
 void set_timer_intr_handler(void (*ptr)(void))
 {
@@ -27,8 +27,8 @@ void irq_handle(struct TrapFrame *tf)
 		if(tf->irq == -1)
 			printk("%s, %d: Unhandled exception!\n", __FUNCTION__, __LINE__);
 		else
-		if (tf->irq == 0x80) do_syscall(tf);
-		else
+		//if (tf->irq == 0x80) do_syscall(tf);
+		//else
 			printk("%s, %d: Unexpected exception #%d!\n", __FUNCTION__, __LINE__, tf->irq);
 		assert(0);
 	}
