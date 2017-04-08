@@ -1,6 +1,7 @@
 #include "include/game.h"
 #include "include/irq.h"
 #include "include/x86/x86.h"
+#include "include/x86.h"
 #include "include/timer.h"
 #include "include/palette.h"
 #include "include/assert.h"
@@ -20,6 +21,7 @@ void game_init(void)
 	printk("game start!\n");
 	//testprintk();
 	enable_interrupt();
+	wait_intr();
 	main_loop();
 	//printk("game test!\n");
 	assert(0);
