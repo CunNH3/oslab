@@ -32,11 +32,12 @@ int kernel_main()
 
 	testprintk();
 	serial_output_test();
+	printk("\n");
 	printk("Hello, kernel!\n");
 
 	struct ELFHeader *elf;
 	struct ProgramHeader *ph, *eph;
-	unsigned char* pa, *i;
+	unsigned char *pa, *i;
 
 	elf = (struct ELFHeader*)0x190000;
 
