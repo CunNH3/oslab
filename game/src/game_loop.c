@@ -2,6 +2,7 @@
 #include "../include/x86.h"
 #include "../include/keyboard.h"
 #include "../include/video.h"
+#include "../include/syscall.h"
 
 uint32_t time_tick;
 
@@ -11,25 +12,26 @@ bool generate_bullet();
 bool update_bullet();
 void update_player();
 void draw_screen();
-
+//bool process_keys();
 void game_loop()
 {
 	bool dead_flag = false;
-	uint32_t now = time_tick, target;
+	uint32_t now = get_time();
+	uint32_t target;
 	while(1)
 	{
 		hlt();
 		cli();
-		if(now == time_tick)
+		if(now == get_time())
 		{
 			sti();
 			continue;
 		}
 
-		target = time_tick;
+		target = get_time();
 		sti();
 
-		process_keys();
+		while(process_keys());
 
 		while(now < target)
 		{

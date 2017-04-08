@@ -10,11 +10,16 @@ void init_vmem_addr()
 	vmem = (uint8_t *) MIB->physbase;
 }
 
-inline void init_vmem()
+void init_vmem()
 {
 	memcpy(vmem, gImage_PARK, SCR_SIZE);
 }
 
+int load_vmem(uint8_t *buffer)
+{
+	memcpy(vmem, buffer, SCR_SIZE);
+	return 1;
+}
 
 
 

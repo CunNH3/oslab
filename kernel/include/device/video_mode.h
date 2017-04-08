@@ -1,4 +1,4 @@
-#include "types.h"
+#include "../types.h"
 
 struct VbeInfoBlock {
 	char VbeSignature[4];             // == "VESA"

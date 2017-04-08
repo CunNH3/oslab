@@ -15,6 +15,9 @@ void init_serial();
 void init_intr();
 void init_timer();
 void init_idt();
+void add_irq_handle(int,void (*)(void));
+void timer_event();
+void keyboard_event();
 
 void testprintk();
 void serial_output_test();
@@ -27,6 +30,9 @@ void init()
 	init_idt();
 	init_timer();
 	init_vmem();
+
+	add_irq_handle(0, timer_event);
+	add_irq_handle(1, keyboard_event);
 }
 
 void test()
@@ -44,8 +50,9 @@ int kernel_main()
 	struct ProgramHeader *ph, *eph;
 	unsigned char *pa, *i;
 
-	elf = (struct ELFHeader*)0x190000;
-
+	//elf = (struct ELFHeader*)0x190000;
+	uint8_t buf[4096];
+	elf = (struct ELFHeader*)buf;
 
 	readseg((unsigned char*)elf, 4096, 10 * 1024 * 1024);
 
@@ -55,13 +62,13 @@ int kernel_main()
 	for(;ph < eph;ph++)
 	{
 		pa = (unsigned char*)ph->paddr; 
-		readseg(pa, ph->filesz, ph->off);
+		readseg(pa, ph->filesz,10 * 1024 * 1024 + ph->off);
 		for (i = pa + ph->filesz;i < pa + ph->memsz;*i ++ = 0);
 	}
 	printk("Start!\n");
 	
 	((void(*)(void))elf->entry)();
-	
+	while(1);
 	return 0;
 }
 

@@ -1,36 +1,36 @@
 #include "../include/x86.h"
 
-#define SERIAL_PORT  0x3F8
+#define PORT 0x3f8
 
-void init_serial(void)
+void init_serial()
 {
-	outb(SERIAL_PORT + 1, 0x00);
-	outb(SERIAL_PORT + 3, 0x80);
-	outb(SERIAL_PORT + 0, 0x01);
-	outb(SERIAL_PORT + 1, 0x00);
-	outb(SERIAL_PORT + 3, 0x03);
-	outb(SERIAL_PORT + 2, 0xC7);
-	outb(SERIAL_PORT + 4, 0x0B);
+	outb(PORT + 1, 0x00);
+	outb(PORT + 3, 0x80);
+	outb(PORT + 0, 0x03);
+	outb(PORT + 1, 0x00);
+	outb(PORT + 3, 0x03);
+	outb(PORT + 2, 0xC7);
+	outb(PORT + 4, 0x0B);
 }
 
-static inline int serial_idle(void)
+int is_serial_idle()
 {
-	return (inb(SERIAL_PORT + 5) & 0x20) != 0;
+	return inb(PORT + 5) & 0x20;
 }
 
-void serial_printc(char ch)
+void serial_printc(char a)
 {
-	while (serial_idle() != true);
-	outb(SERIAL_PORT, ch);
+	while(!is_serial_idle());
+	outb(PORT, a);
 }
 
 void serial_output_test()
 {
-	outb(SERIAL_PORT + 0, 'A');
-	outb(SERIAL_PORT + 0, 'B');
-	outb(SERIAL_PORT + 0, 'C');
-	outb(SERIAL_PORT + 0, 'D');
-	outb(SERIAL_PORT + 0, 'E');
-	outb(SERIAL_PORT + 0, 'F');
-	outb(SERIAL_PORT + 0, 'G');
+	outb(PORT + 0, 'A');
+	outb(PORT + 0, 'B');
+	outb(PORT + 0, 'C');
+	outb(PORT + 0, 'D');
+	outb(PORT + 0, 'E');
+	outb(PORT + 0, 'F');
+	outb(PORT + 0, 'G');
 }

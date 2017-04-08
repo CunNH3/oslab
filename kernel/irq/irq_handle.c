@@ -16,13 +16,13 @@ static int handle_count = 0;
 
 void do_syscall(TrapFrame *);
 
-void add_irq_handle(int irq, void (*func)(void) )
+void add_irq_handle(int irq, void (*func)(void))
 {
 	assert(irq < NR_HARD_INTR);
 	assert(handle_count <= NR_IRQ_HANDLE);
 
 	struct IRQ_t *ptr;
-	ptr = &handle_pool[handle_count ++];
+	ptr = &handle_pool[handle_count++];
 	ptr->routine = func;
 	ptr->next = handles[irq];
 	handles[irq] = ptr;
@@ -30,16 +30,24 @@ void add_irq_handle(int irq, void (*func)(void) )
 
 void irq_handle(TrapFrame *tf) 
 {
+	printk("irq_handle(), irq=%d, eip=0x%x\n", tf->irq, tf->eip);
 	int irq = tf->irq;
 	//panic("irq = %d\n",irq);
 	if(irq == 0x80) do_syscall(tf);
-	else if(irq < 1000) panic("Unhandled exception!\n");
-	else {
+	else 
+	if(irq < 1000) 
+	{
+		if (irq == 6) printk("irq = 6\n");
+		else panic("The unhandled irq = %d\n");
+	}
+	else
+	{
 		int irq_id = irq - 1000;
 		assert(irq_id < NR_HARD_INTR);
 		struct IRQ_t *f = handles[irq_id];
 
-		while(f != NULL) {
+		while(f != NULL)
+		{
 			f->routine();
 			f = f->next;
 		}
