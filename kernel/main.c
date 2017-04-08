@@ -11,15 +11,12 @@
 
 void readseg(unsigned char *, int, int);
 
+void init_vmem_addr();
 void init_intr();
 void init_timer();
 void init_serial();
 void init_idt();
 void init_vmem();
-void init_vmem_addr();
-void add_irq_handle(int,void (*)(void));
-void timer_event();
-void keyboard_event();
 
 void testprintk();
 void serial_output_test();
