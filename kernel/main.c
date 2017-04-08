@@ -17,6 +17,9 @@ void init_serial();
 void init_idt();
 void init_vmem();
 void init_vmem_addr();
+void add_irq_handle(int,void (*)(void));
+void timer_event();
+void keyboard_event();
 
 void testprintk();
 void serial_output_test();
@@ -29,6 +32,8 @@ int kernel_main()
 	init_serial();
 	init_idt();
 	init_vmem();
+	add_irq_handle(0,timer_event);
+	add_irq_handle(1,keyboard_event);
 
 	testprintk();
 	serial_output_test();
