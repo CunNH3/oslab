@@ -5,7 +5,7 @@
 #include "include/palette.h"
 #include "include/assert.h"
 
-void testprintk();
+//void testprintk();
 
 
 void game_init(void)
@@ -18,7 +18,7 @@ void game_init(void)
 	set_timer_intr_handler(timer_event);
 	set_keyboard_intr_handler(keyboard_event);*/
 	printk("game start!\n");
-	testprintk();
+	//testprintk();
 	enable_interrupt();
 	main_loop();
 	//printk("game test!\n");

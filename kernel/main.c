@@ -10,6 +10,7 @@ void init_intr();
 void init_timer();
 void init_serial();
 void init_idt();
+void testprintk();
 
 int kernel_main()
 {
@@ -17,7 +18,10 @@ int kernel_main()
 	init_timer();
 	init_serial();
 	init_idt();
-	//printk
+	//testprintk();
+
+	printk("Hello, kernel!\n");
+
 	struct ELFHeader *elf;
 	struct ProgramHeader *ph, *eph;
 	unsigned char* pa, *i;
@@ -25,7 +29,7 @@ int kernel_main()
 	elf = (struct ELFHeader*)0x19000;
 
 
-	readseg((unsigned char*)elf, 4096, 0x19000);
+	readseg((unsigned char*)elf, 4096, 10 * 1024 * 1024);
 
 
 	ph = (struct ProgramHeader*)((char *)elf + elf->phoff);
@@ -36,7 +40,7 @@ int kernel_main()
 		readseg(pa, ph->filesz, ph->off);
 		for (i = pa + ph->filesz;i < pa + ph->memsz;*i ++ = 0);
 	}
-	printk("Start to play!\n");
+	printk("Start!\n");
 	
 	((void(*)(void))elf->entry)();
 
