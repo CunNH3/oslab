@@ -26,7 +26,7 @@ int kernel_main()
 	struct ProgramHeader *ph, *eph;
 	unsigned char* pa, *i;
 
-	elf = (struct ELFHeader*)0x19000;
+	elf = (struct ELFHeader*)0x190000;
 
 
 	readseg((unsigned char*)elf, 4096, 10 * 1024 * 1024);
@@ -44,7 +44,7 @@ int kernel_main()
 	
 	((void(*)(void))elf->entry)();
 	
-	printk("Wrong!\n");
+	//printk("Wrong!\n");
 	while(1);
 	return 0;
 }
