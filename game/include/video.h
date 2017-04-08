@@ -19,8 +19,10 @@
 #define BT_HEIGHT		20
 #define BT_WIDTH_SIZE	(BT_WIDTH * SCR_DEPTH)
 
-union Pixels {
-	struct {
+union Pixels
+{
+	struct
+	{
 		uint8_t blue;
 		uint8_t green;
 		uint8_t red;
@@ -29,7 +31,8 @@ union Pixels {
 	uint32_t RGB_value : 24;
 };
 
-struct Surface {
+struct Surface
+{
 	int x, y;
 	int w, h;
 	uint8_t *pixels;
@@ -40,12 +43,5 @@ void display_buffer();
 void drawRect_buffer(const uint8_t*,int,int,int,int);
 void flyying_logo();
 void show_police();
-
-/*
-static inline void
-draw_pixel(int x, int y, int color) {
-	assert(x >= 0 && y >= 0 && x < SCR_HEIGHT && y < SCR_WIDTH);
-	vmem[(x << 9) + (x << 8) + (x << 5) + y] = color;
-} */
 
 #endif

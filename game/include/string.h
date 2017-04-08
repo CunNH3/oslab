@@ -22,4 +22,4 @@ void *	memfind(const void *s, int c, size_t len);
 
 long	strtol(const char *s, char **endptr, int base);
 
-#endif /* not __STRING_H__ */
+#endif 

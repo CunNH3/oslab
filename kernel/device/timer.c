@@ -1,5 +1,6 @@
-#include "include/types.h"
-#include "include/x86.h"
+#include "../include/types.h"
+#include "../include/x86.h"
+#include "../include/common.h"
 
 #define PORT_CH_0 0x40
 #define PORT_CMD 0x43
@@ -34,11 +35,11 @@ void init_timer()
 	outb(PORT_CH_0, (counter >> 8) & 0xFF);  // access high byte
 }
 
-volatile int tick = 0;
+volatile int time_tick = 0;
 
 void timer_event(void)
 {
-	tick++;
+	time_tick++;
 }
 
 
