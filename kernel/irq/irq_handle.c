@@ -2,35 +2,36 @@
 #include "../include/irq.h"
 
 #define NR_IRQ_HANDLE 32
-#define NR_HARD_INTR 16 /* At most 16 kinds of hardware interrupts. */
+#define NR_HARD_INTR 16
 
-struct IRQ_t {
+struct IRQ_t
+{
 	void (*routine)(void);
 	struct IRQ_t *next;
 };
 
 static struct IRQ_t handle_pool[NR_IRQ_HANDLE];
-static struct IRQ_t *handles[NR_HARD_INTR]; // handles is an array of lists
+static struct IRQ_t *handles[NR_HARD_INTR]; 
 static int handle_count = 0;
 
 void do_syscall(TrapFrame *);
 
-void add_irq_handle(int irq, void (*func)(void) ) {
+void add_irq_handle(int irq, void (*func)(void) )
+{
 	assert(irq < NR_HARD_INTR);
 	assert(handle_count <= NR_IRQ_HANDLE);
 
 	struct IRQ_t *ptr;
-	ptr = &handle_pool[handle_count ++]; // get a free handler
+	ptr = &handle_pool[handle_count ++];
 	ptr->routine = func;
-	ptr->next = handles[irq]; // insert into the linked list
+	ptr->next = handles[irq];
 	handles[irq] = ptr;
 }
 
-void irq_handle(TrapFrame *tf) {
-	//printk("irq_handle()\n");
-
+void irq_handle(TrapFrame *tf) 
+{
 	int irq = tf->irq;
-	//panic("irq = %d\n",irq);
+	panic("irq = %d\n",irq);
 	if(irq == 0x80) do_syscall(tf);
 	else if(irq < 1000) panic("Unhandled exception!\n");
 	else {
