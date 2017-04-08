@@ -1,44 +1,31 @@
-OUTPUT_FORMAT("elf32-i386", "elf32-i386", "elf32-i386")
+OUTPUT_FORMAT(
+	"elf32-i386",  /* Default       */
+	"elf32-i386",  /* Big endian    */
+	"elf32-i386"   /* Little endian */
+)
 OUTPUT_ARCH(i386)
-ENTRY(game_init)
+ENTRY(game_init)  /* 入口函数，你可以不定义成 main，只要是代码中的符号即可 */
 
 SECTIONS
 {
-/*	. = 0x2000000;*/
-	. = 0x8048000;
+	/**
+	 * 可执行程序的地址空间从 20MB (20*2^20 B) 往上开始
+	 */
+	. = 0x2000000;
 
-	.text : {
-		*(.text .stub .text.* .gnu.linkonce.t.*)
+	PROVIDE(start = .);
+
+	.text : AT(0x2000000) {  /* AT 指定物理地址 */
+		*(.text .text.*)
 	}
 
-}
-SECTIONS
-{
-	/*. = 0x2000000;*/
+	PROVIDE(etext = .);  /* 定义符号 etext, 其值为代码段之后的地址 */
 
-	. = ALIGN(0x1000);
-/*	. += 0x2000;*/
 	.rodata : {
-		*(.rodata .rodata.* .gnu.linkonce.r.*)
+		*(.rodata .rodata.*)
 	}
 
-	.stab : {
-		PROVIDE(__STAB_BEGIN__ = .);
-		*(.stab);
-		PROVIDE(__STAB_END__ = .);
-		BYTE(0)		/* Force the linker to allocate space
-				   for this section */
-	}
-
-	.stabstr : {
-		PROVIDE(__STABSTR_BEGIN__ = .);
-		*(.stabstr);
-		PROVIDE(__STABSTR_END__ = .);
-		BYTE(0)		/* Force the linker to allocate space
-				   for this section */
-	}
-
-	. = ALIGN(0x1000);
+	. = ALIGN(0x1000);  /* 将数据段按页对齐 */
 
 	.data : {
 		*(.data)
@@ -48,7 +35,5 @@ SECTIONS
 		*(.bss)
 	}
 
-	/DISCARD/ : {
-		*(.eh_frame .note.GNU-stack)
-	}
-} 
+	PROVIDE(end = .);  /* 定义符号 end, 其值为程序/数据段之后的地址 */
+}
