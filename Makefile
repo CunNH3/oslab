@@ -67,7 +67,7 @@ $(IMAGE): $(BOOT) $(PROGRAM)
 	@$(DD) if=$(PROGRAM) of=$(IMAGE) seek=1 conv=notrunc > /dev/null # 填充 kernel, 跨过 mbr
 
 $(BOOT): $(BOOT_O)
-	$(LD) -e start -Ttext=0x7C00 -m elf_i386 -nostdlib -o $@.out $^
+	$(LD) -e boot -Ttext=0x7C00 -m elf_i386 -nostdlib -o $@.out $^
 	$(OBJCOPY) --strip-all --only-section=.text --output-target=binary $@.out $@
 	@rm $@.out
 	perl ./boot/genboot.pl $@
