@@ -10,6 +10,8 @@ void init_intr();
 void init_timer();
 void init_serial();
 void init_idt();
+void init_vmem();
+//void init_vmem_addr();
 void testprintk();
 
 int kernel_main()
@@ -18,6 +20,7 @@ int kernel_main()
 	init_timer();
 	init_serial();
 	init_idt();
+	init_vmem();
 	testprintk();
 
 	printk("Hello, kernel!\n");
