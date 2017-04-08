@@ -31,7 +31,7 @@ void add_irq_handle(int irq, void (*func)(void) )
 void irq_handle(TrapFrame *tf) 
 {
 	int irq = tf->irq;
-	panic("irq = %d\n",irq);
+	//panic("irq = %d\n",irq);
 	if(irq == 0x80) do_syscall(tf);
 	else if(irq < 1000) panic("Unhandled exception!\n");
 	else {
