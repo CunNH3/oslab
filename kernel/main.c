@@ -19,6 +19,7 @@ void init_vmem();
 void init_vmem_addr();
 
 void testprintk();
+void serial_output_test();
 
 int kernel_main()
 {
@@ -28,8 +29,9 @@ int kernel_main()
 	init_serial();
 	init_idt();
 	init_vmem();
-	testprintk();
 
+	testprintk();
+	serial_output_test();
 	printk("Hello, kernel!\n");
 
 	struct ELFHeader *elf;

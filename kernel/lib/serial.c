@@ -23,3 +23,14 @@ void serial_printc(char ch)
 	while (serial_idle() != TRUE);
 	out_byte(SERIAL_PORT, ch);
 }
+
+void serial_output_test()
+{
+	out_byte(SERIAL_PORT + 0, 'A');
+	out_byte(SERIAL_PORT + 0, 'B');
+	out_byte(SERIAL_PORT + 0, 'C');
+	out_byte(SERIAL_PORT + 0, 'D');
+	out_byte(SERIAL_PORT + 0, 'E');
+	out_byte(SERIAL_PORT + 0, 'F');
+	out_byte(SERIAL_PORT + 0, 'G');
+}
