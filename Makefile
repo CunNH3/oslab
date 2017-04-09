@@ -97,6 +97,7 @@ $(OBJ_KERNEL_DIR)/%.o: $(KERNEL_DIR)/%.[cS]
 $(GAME): $(GAME_LD_SCRIPT)
 $(GAME): $(GAME_O) $(LIB_O)
 	$(LD) -m elf_i386 -T $(GAME_LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
+	$(call git_commit, "compile game", $(GITFLAGS))
 
 $(OBJ_GAME_DIR)/%.o: $(GAME_DIR)/%.c
 	mkdir -p $(OBJ_DIR)/$(dir $<)
@@ -109,6 +110,7 @@ DEPS := $(shell find -name "*.d")
 
 qemu: $(IMAGE)
 	$(QEMU) $(QEMU_OPTIONS) $(IMAGE)
+	$(call git_commit, "run qemu", $(GITFLAGS))
 
 # Faster, but not suitable for debugging
 qemu-kvm: $(IMAGE)
@@ -116,9 +118,11 @@ qemu-kvm: $(IMAGE)
 
 debug: $(IMAGE)
 	$(QEMU) $(QEMU_DEBUG_OPTIONS) $(QEMU_OPTIONS) $(IMAGE)
+	$(call git_commit, "debug", $(GITFLAGS))
 
 gdb:
 	$(GDB) $(GDB_OPTIONS)
+	$(call git_commit, "run gdb", $(GITFLAGS))
 
 clean:
 	@rm -rf $(OBJ_DIR) 2> /dev/null
