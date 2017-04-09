@@ -14,16 +14,16 @@ static const char * const error_string[MAXERROR] =
 	[E_FAULT]	= "segmentation fault",
 };
 
-static void printnum(void (*putch)(int, void*), void *putdat, unsigned long long num, unsigned base, int width, int padc)
+static void print_number(void (*putch)(int, void*), void *putdat, unsigned long long num, unsigned base, int width, int padc)
 {
 	if (num >= base)
-		printnum(putch, putdat, num / base, base, width - 1, padc);
+		print_number(putch, putdat, num / base, base, width - 1, padc);
 	else
 		while (--width > 0) putch(padc, putdat);
 	putch("0123456789abcdef"[num % base], putdat);
 }
 
-static unsigned long long getuint(va_list *ap, int lflag)
+static unsigned long long get_unsigned(va_list *ap, int lflag)
 {
 	if (lflag >= 2)
 		return va_arg(*ap, unsigned long long);
@@ -34,7 +34,7 @@ static unsigned long long getuint(va_list *ap, int lflag)
 		return va_arg(*ap, unsigned int);
 }
 
-static long long getint(va_list *ap, int lflag)
+static long long get_integer(va_list *ap, int lflag)
 {
 	if (lflag >= 2)
 		return va_arg(*ap, long long);
@@ -45,14 +45,14 @@ static long long getint(va_list *ap, int lflag)
 		return va_arg(*ap, int);
 }
 
-void printfmt(void (*putch)(int, void*), void *putdat, const char *fmt, ...);
+void print_format(void (*putch)(int, void*), void *putdat, const char *fmt, ...);
 
-void vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
+void vprint_format(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
 {
 	register const char *p;
 	register int ch, err;
 	unsigned long long num;
-	int base, lflag, width, precision, altflag;
+	int base, lflag, width, pre, altflag;
 	char padc;
 
 	while (1) {
@@ -64,19 +64,19 @@ void vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list
 
 		padc = ' ';
 		width = -1;
-		precision = -1;
+		pre = -1;
 		lflag = 0;
 		altflag = 0;
-	reswitch:
+	reset_switch:
 		switch (ch = *(unsigned char *) fmt++) 
 		{
 			case '-':
 				padc = '-';
-				goto reswitch;
+				goto reset_switch;
 
 			case '0':
 				padc = '0';
-				goto reswitch;
+				goto reset_switch;
 
 			case '1':
 			case '2':
@@ -87,33 +87,33 @@ void vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list
 			case '7':
 			case '8':
 			case '9':
-				for (precision = 0; ; ++fmt) 
+				for (pre = 0; ; ++fmt) 
 				{
-					precision = precision * 10 + ch - '0';
+					pre = pre * 10 + ch - '0';
 					ch = *fmt;
 					if (ch < '0' || ch > '9') break;
 				}
-				goto process_precision;
+				goto process_pre;
 
 			case '*':
-				precision = va_arg(ap, int);
-				goto process_precision;
+				pre = va_arg(ap, int);
+				goto process_pre;
 
 			case '.':
 				if (width < 0) width = 0;
-				goto reswitch;
+				goto reset_switch;
 
 			case '#':
 				altflag = 1;
-				goto reswitch;
+				goto reset_switch;
 
-			process_precision:
-				if (width < 0) width = precision, precision = -1;
-				goto reswitch;
+			process_pre:
+				if (width < 0) width = pre, pre = -1;
+				goto reset_switch;
 
 			case 'l':
 				lflag++;
-				goto reswitch;
+				goto reset_switch;
 
 			case 'c':
 				putch(va_arg(ap, int), putdat);
@@ -123,17 +123,17 @@ void vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list
 				err = va_arg(ap, int);
 				if (err < 0) err = -err;
 				if (err >= MAXERROR || (p = error_string[err]) == NULL)
-					printfmt(putch, putdat, "error %d", err);
+					print_format(putch, putdat, "error %d", err);
 				else
-					printfmt(putch, putdat, "%s", p);
+					print_format(putch, putdat, "%s", p);
 				break;
 
 			case 's':
 				if ((p = va_arg(ap, char *)) == NULL) p = "(null)";
 				if (width > 0 && padc != '-')
-					for (width -= strnlen(p, precision); width > 0; width--)
+					for (width -= strnlen(p, pre); width > 0; width--)
 						putch(padc, putdat);
-				for (; (ch = *p++) != '\0' && (precision < 0 || --precision >= 0); width--)
+				for (; (ch = *p++) != '\0' && (pre < 0 || --pre >= 0); width--)
 					if (altflag && (ch < ' ' || ch > '~'))
 						putch('?', putdat);
 					else
@@ -144,7 +144,7 @@ void vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list
 
 
 			case 'd':
-				num = getint(&ap, lflag);
+				num = get_integer(&ap, lflag);
 				if ((long long) num < 0)
 				{
 					putch('-', putdat);
@@ -154,12 +154,12 @@ void vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list
 				goto number;
 
 			case 'u':
-				num = getuint(&ap, lflag);
+				num = get_unsigned(&ap, lflag);
 				base = 10;
 				goto number;
 
 			case 'o':
-				num = getuint(&ap, lflag);
+				num = get_unsigned(&ap, lflag);
 				base = 8;
 				goto number;
 
@@ -172,10 +172,10 @@ void vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list
 				goto number;
 
 			case 'x':
-				num = getuint(&ap, lflag);
+				num = get_unsigned(&ap, lflag);
 				base = 16;
 			number:
-				printnum(putch, putdat, num, base, width, padc);
+				print_number(putch, putdat, num, base, width, padc);
 				break;
 
 			case '%':
@@ -191,11 +191,11 @@ void vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list
 	}
 }
 
-void printfmt(void (*putch)(int, void*), void *putdat, const char *fmt, ...)
+void print_format(void (*putch)(int, void*), void *putdat, const char *fmt, ...)
 {
 	va_list ap;
 	va_start(ap, fmt);
-	vprintfmt(putch, putdat, fmt, ap);
+	vprint_format(putch, putdat, fmt, ap);
 	va_end(ap);
 }
 
@@ -217,7 +217,7 @@ int vsnprintf(char *buf, int n, const char *fmt, va_list ap)
 	struct sprintbuf b = {buf, buf + n - 1, 0};
 	if (buf == NULL || n < 1)
 		return -E_INVAL;
-	vprintfmt((void*)sprintputch, &b, fmt, ap);
+	vprint_format((void*)sprintputch, &b, fmt, ap);
 	*b.buf = '\0';
 	return b.cnt;
 }
