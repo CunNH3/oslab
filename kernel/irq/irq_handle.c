@@ -6,7 +6,7 @@
 
 struct IRQ_t
 {
-	void (*routine)(void);
+	void (*irq_temp)(void);
 	struct IRQ_t *next;
 };
 
@@ -23,7 +23,7 @@ void add_irq_handle(int irq, void (*func)(void) )
 
 	struct IRQ_t *ptr;
 	ptr = &handle_pool[handle_count ++];
-	ptr->routine = func;
+	ptr->irq_temp = func;
 	ptr->next = handles[irq];
 	handles[irq] = ptr;
 }
@@ -43,7 +43,7 @@ void irq_handle(TrapFrame *tf)
 
 		while(f != NULL)
 		{
-			f->routine();
+			f->irq_temp();
 			f = f->next;
 		}
 	}

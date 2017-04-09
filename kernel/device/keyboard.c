@@ -28,7 +28,7 @@ void keyboard_event(void)
 				case STATE_RELEASE:
 				case STATE_PRESS: state[i] = STATE_PRESS; break;
 				case STATE_WAIT_RELEASE: state[i] = STATE_WAIT_RELEASE; break;
-				default: /*assert(0);*/ break;
+				default: break;
 			}
 			break;
 		}
@@ -41,7 +41,7 @@ void keyboard_event(void)
 	}
 }
 
-int handle_keys()
+int pro_keyboard()
 {
 	cli();
 	int i;
