@@ -4,38 +4,38 @@
 
 #define NR_KEYS 6
 
-enum {KEY_STATE_EMPTY, KEY_STATE_WAIT_RELEASE, KEY_STATE_RELEASE, KEY_STATE_PRESS};
+enum {STATE_EMPTY, STATE_WAIT_RELEASE, STATE_RELEASE, STATE_PRESS};
 
 static const int keycode_array[] =
 {
-	K_UP, K_DOWN, K_LEFT, K_RIGHT, K_Z, K_ENTER
+	K_W, K_S, K_A, K_D, K_SPACE, K_ENTER
 };
 
-static int key_state[NR_KEYS];
+static int state[NR_KEYS];
 
 void keyboard_event(void)
 {
-	int key_code = inb(0x60);
-	printk("the keycode = 0x%x\n",key_code);
+	int code = inb(0x60);
+	printk("the keycode = 0x%x\n",code);
 	int i;
 	for (i = 0; i < NR_KEYS;i++)
 	{
-		if (key_code == keycode_array[i])
+		if (code == keycode_array[i])
 		{
-			switch(key_state[i])
+			switch(state[i])
 			{
-				case KEY_STATE_EMPTY:
-				case KEY_STATE_RELEASE:
-				case KEY_STATE_PRESS: key_state[i] = KEY_STATE_PRESS; break;
-				case KEY_STATE_WAIT_RELEASE: key_state[i] = KEY_STATE_WAIT_RELEASE; break;
+				case STATE_EMPTY:
+				case STATE_RELEASE:
+				case STATE_PRESS: state[i] = STATE_PRESS; break;
+				case STATE_WAIT_RELEASE: state[i] = STATE_WAIT_RELEASE; break;
 				default: /*assert(0);*/ break;
 			}
 			break;
 		}
 		else 
-		if(key_code == keycode_array[i] + 0x80)
+		if(code == keycode_array[i] + 0x80)
 		{
-			key_state[i] = KEY_STATE_RELEASE;
+			state[i] = STATE_RELEASE;
 			break;
 		}
 	}
@@ -47,16 +47,16 @@ int handle_keys()
 	int i;
 	for(i = 0; i < NR_KEYS; ++i)
 	{
-		if(key_state[i] == KEY_STATE_PRESS)
+		if(state[i] == STATE_PRESS)
 		{
-			key_state[i] = KEY_STATE_WAIT_RELEASE;
+			state[i] = STATE_WAIT_RELEASE;
 			sti(); 
 			return keycode_array[i];
 		}
 		else
-		if(key_state[i] == KEY_STATE_RELEASE)
+		if(state[i] == STATE_RELEASE)
 		{
-			key_state[i] = KEY_STATE_EMPTY;
+			state[i] = STATE_EMPTY;
 			sti();
 			return keycode_array[i] + 0x80;
 		}

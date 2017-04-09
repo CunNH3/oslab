@@ -26,11 +26,11 @@ void serial_printc(char a)
 
 void serial_output_test()
 {
-	outb(PORT + 0, 'A');
-	outb(PORT + 0, 'B');
-	outb(PORT + 0, 'C');
-	outb(PORT + 0, 'D');
-	outb(PORT + 0, 'E');
-	outb(PORT + 0, 'F');
 	outb(PORT + 0, 'G');
+	outb(PORT + 0, 'O');
+	outb(PORT + 0, 'O');
+	outb(PORT + 0, 'D');
+	outb(PORT + 0, 'J');
+	outb(PORT + 0, 'O');
+	outb(PORT + 0, 'B');
 }

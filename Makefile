@@ -130,6 +130,7 @@ clean:
 	@rm -rf $(KERNEL)  2> /dev/null
 	@rm -rf $(GAME)	   2> /dev/null
 	@rm -rf $(PROGRAM) 2> /dev/null
+	@rm -rf $(IMAGE)   2> /dev/null
 
 submit: clean
 	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2

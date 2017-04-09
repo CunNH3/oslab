@@ -2,8 +2,8 @@
 
 void serial_printc(char);
 
-void out_num(unsigned, unsigned, bool);
-void out_string(char*);
+void print_num(unsigned, unsigned, bool);
+void print_string(char*);
 
 int printk(const char *fmt, ...)
 {
@@ -19,10 +19,10 @@ int printk(const char *fmt, ...)
 			fmt++;
 			switch(*fmt)
 			{
-				case 'd': out_num(va_arg(ap, int), 10, 1); break;
-				case 'x': out_num(va_arg(ap, unsigned int), 16, 0); break;
+				case 'd': print_num(va_arg(ap, int), 10, 1); break;
+				case 'x': print_num(va_arg(ap, unsigned int), 16, 0); break;
 				case 'c': serial_printc(va_arg(ap, unsigned int)); break;
-				case 's': out_string(va_arg(ap, char*)); break;
+				case 's': print_string(va_arg(ap, char*)); break;
 				default: break;
 			}
 		}
@@ -33,23 +33,23 @@ int printk(const char *fmt, ...)
 	return 0;
 }
 
-void rec_out_num(unsigned int x, unsigned int base)
+void rec_print_num(unsigned int x, unsigned int base)
 {
-	if(x >= base) rec_out_num(x/base, base);
+	if(x >= base) rec_print_num(x/base, base);
 	serial_printc("0123456789abcdef"[x%base]);
 }
 
-void out_num(unsigned int x, unsigned int base, bool SIGN)
+void print_num(unsigned int x, unsigned int base, bool SIGN)
 {
 	if(SIGN && ((int)x) < 0)
 	{
 		serial_printc('-');
 		x = ~x;
 	}
-	rec_out_num(x, base);
+	rec_print_num(x, base);
 }
 
-void out_string(char *s)
+void print_string(char *s)
 {
 	while(*s)
 	{

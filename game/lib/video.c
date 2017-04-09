@@ -15,7 +15,7 @@ inline void display_buffer()
 	put_video(v_buffer);
 }
 
-inline void drawRect_buffer(const uint8_t *src, int x, int y, int w, int h)
+inline void draw_buffer(const uint8_t *src, int x, int y, int w, int h)
 {
 	int i;
 	int v_idx = (x + y * SCR_WIDTH) * SCR_DEPTH;

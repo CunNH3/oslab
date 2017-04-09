@@ -11,7 +11,7 @@ int fs_write(int fd, void *buf,int len)
 		ret = len;
 		int i;
 		for (i = 0;i < ret;i++)
-			serial_printc(*(char *)(buf + 1));
+			serial_printc(*(char *)(buf + i));
 	}
 	else assert(0);
 	return ret;

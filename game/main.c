@@ -2,31 +2,33 @@
 #include "include/x86.h"
 #include "include/video.h"
 
-bool process_keys();
+bool keyboard_process();
 void init_effect();
 void game_loop();
+void testprintf();
 
-static bool reborn;
-void enable_reborn()
+static bool restart;
+void enable_restart()
 {
-	reborn = true;
+	restart = true;
 }
-void close_reborn()
+void close_restart()
 {
-	reborn = false;
+	restart = false;
 }
 
 
 void game_main()
 {
+	testprintf();
 	printf("Game Start!\n");
 	sti();
-	reborn = false;
+	restart = false;
 	while(1)
 	{
 		hlt();
-		while(process_keys());
-		if(reborn)
+		while(keyboard_process());
+		if(restart)
 		{
 			clear_buffer();
 			display_buffer();
