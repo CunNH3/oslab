@@ -2,7 +2,7 @@
 #define __KEYBOARD_H__
 
 void keyboard_event();
-void process_keys();
+int handle_keys();
 
 
 

@@ -1,6 +1,7 @@
 #include "../include/types.h"
 #include "../include/x86.h"
 #include "../include/mmu.h"
+#include "../include/common.h"
 
 #define INTERRUPT_GATE_32   0xE
 #define TRAP_GATE_32        0xF
@@ -46,6 +47,7 @@ static void write_idtr(void *addr, uint32_t size)
 void irq0();
 void irq1();
 void irq14();
+
 void vec0();
 void vec1();
 void vec2();
@@ -61,6 +63,7 @@ void vec11();
 void vec12();
 void vec13();
 void vec14();
+
 void vecsys();
 
 void irq_empty();

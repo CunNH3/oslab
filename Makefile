@@ -14,7 +14,7 @@ GDB     := gdb
 CFLAGS := -Wall -Werror -Wfatal-errors -fno-stack-protector#开启所有警告, 视警告为错误, 第一个错误结束编译
 CFLAGS += -MD #生成依赖文件
 CFLAGS += -std=gnu11 -m32 -c #编译标准, 目标架构, 只编译
-CFLAGS += -I . #头文件搜索目录
+CFLAGS += -I ./include #头文件搜索目录
 CFLAGS += -O0 #不开优化, 方便调试
 CFLAGS += -fno-builtin #禁止内置函数
 CFLAGS += -ggdb3 #GDB调试信息
@@ -81,14 +81,14 @@ $(OBJ_BOOT_DIR)/%.o: $(BOOT_DIR)/%.[cS]
 $(PROGRAM): $(KERNEL) $(GAME)
 	cat $(KERNEL) $(GAME) > $(PROGRAM)
 
+$(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
+	@mkdir -p $(OBJ_LIB_DIR)
+	$(CC) $(CFLAGS) $< -o $@
+
 $(KERNEL): $(KERNEL_LD_SCRIPT)
 $(KERNEL): $(KERNEL_O) $(LIB_O)
 	$(LD) -m elf_i386 -T $(KERNEL_LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 	perl ./kernel/genkern.pl $@
-
-$(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
-	@mkdir -p $(OBJ_LIB_DIR)
-	$(CC) $(CFLAGS) $< -o $@
 
 $(OBJ_KERNEL_DIR)/%.o: $(KERNEL_DIR)/%.[cS]
 	mkdir -p $(OBJ_DIR)/$(dir $<)
@@ -97,7 +97,6 @@ $(OBJ_KERNEL_DIR)/%.o: $(KERNEL_DIR)/%.[cS]
 $(GAME): $(GAME_LD_SCRIPT)
 $(GAME): $(GAME_O) $(LIB_O)
 	$(LD) -m elf_i386 -T $(GAME_LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
-	$(call git_commit, "compile", $(GITFLAGS))
 
 $(OBJ_GAME_DIR)/%.o: $(GAME_DIR)/%.c
 	mkdir -p $(OBJ_DIR)/$(dir $<)
@@ -110,7 +109,6 @@ DEPS := $(shell find -name "*.d")
 
 qemu: $(IMAGE)
 	$(QEMU) $(QEMU_OPTIONS) $(IMAGE)
-	$(call git_commit, "run qemu", $(GITFLAGS))
 
 # Faster, but not suitable for debugging
 qemu-kvm: $(IMAGE)
@@ -118,11 +116,9 @@ qemu-kvm: $(IMAGE)
 
 debug: $(IMAGE)
 	$(QEMU) $(QEMU_DEBUG_OPTIONS) $(QEMU_OPTIONS) $(IMAGE)
-	$(call git_commit, "debug", $(GITFLAGS))
 
 gdb:
 	$(GDB) $(GDB_OPTIONS)
-	$(call git_commit, "run gdb", $(GITFLAGS))
 
 clean:
 	@rm -rf $(OBJ_DIR) 2> /dev/null
@@ -130,7 +126,6 @@ clean:
 	@rm -rf $(KERNEL)  2> /dev/null
 	@rm -rf $(GAME)	   2> /dev/null
 	@rm -rf $(PROGRAM) 2> /dev/null
-	@rm -rf $(IMAGE) 2> /dev/null
 
 submit: clean
 	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2

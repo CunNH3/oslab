@@ -16,6 +16,7 @@ static int key_state[NR_KEYS];
 void keyboard_event(void)
 {
 	int key_code = inb(0x60);
+	printk("the keycode = 0x%x\n",key_code);
 	int i;
 	for (i = 0; i < NR_KEYS;i++)
 	{

@@ -54,7 +54,7 @@ bool process_keys()
 	}
 	else
 	{
-		get_release_key(keycode);
+		get_release_key(keycode - 0x80);
 		return true;
 	}
 }

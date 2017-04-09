@@ -3,4 +3,5 @@
 
 #include "types.h"
 
+int printf(const char *,...);
 #endif

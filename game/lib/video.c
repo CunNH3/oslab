@@ -3,7 +3,7 @@
 #include "../include/string.h"
 #include "../include/syscall.h"
 
-extern uint8_t v_buffer[SCR_SIZE];
+uint8_t v_buffer[SCR_SIZE];
 
 inline void clear_buffer()
 {

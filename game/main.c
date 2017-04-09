@@ -2,8 +2,7 @@
 #include "include/x86.h"
 #include "include/video.h"
 
-//bool process_keys();
-
+bool process_keys();
 void init_effect();
 void game_loop();
 
@@ -20,11 +19,13 @@ void close_reborn()
 
 void game_main()
 {
+	printf("Game Start!\n");
+	sti();
 	reborn = false;
 	while(1)
 	{
 		hlt();
-		//process_keys();
+		while(process_keys());
 		if(reborn)
 		{
 			clear_buffer();

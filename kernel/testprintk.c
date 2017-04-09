@@ -1,4 +1,5 @@
-void printk(const char* ctl,...);
+#include "include/common.h"
+int printk(const char* ctl,...);
 
 void testprintk()
 {

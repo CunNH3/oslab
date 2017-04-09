@@ -8,7 +8,7 @@
 #define NR_ENEMY 10
 #define NR_BULLET 100
 
-uint8_t v_buffer[SCR_SIZE];
+extern uint8_t v_buffer[SCR_SIZE];
 int x_player, inc_player;
 bool enable_bullet;
 
@@ -186,11 +186,11 @@ void draw_screen()
 {
 	clear_buffer();
 
-	drawRect_buffer(gImage_LowSing, x_player, SCR_HEIGHT - LS_HEIGHT, LS_WIDTH, LS_HEIGHT);
+	drawRect_buffer(gImage_chino, x_player, SCR_HEIGHT - LS_HEIGHT, LS_WIDTH, LS_HEIGHT);
 	struct Enemy *enemy_temp = enemy_head;
 	while(enemy_temp)
 	{
-		drawRect_buffer(gImage_FeiFan_1, enemy_temp->x, enemy_temp->y, FF_WIDTH, FF_HEIGHT);
+		drawRect_buffer(gImage_tibi, enemy_temp->x, enemy_temp->y, FF_WIDTH, FF_HEIGHT);
 		enemy_temp = enemy_temp->next;
 	}
 	struct Bullet *bullet_temp = bullet_head;

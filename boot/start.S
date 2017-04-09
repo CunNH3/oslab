@@ -73,7 +73,7 @@ start32:
 	movw	%ax, %ss	# Stack Segment
 
 	# Set up the stack pointer and call into C
-	movl	$0x8000, %esp
+	movl	$0x8000000, %esp
 	call	bootmain
 
 

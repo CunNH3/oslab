@@ -1,6 +1,8 @@
 #include "include/x86.h"
 #include "include/elf.h"
+
 #define SECTSIZE 512
+#define KERNEL_OFFSET_IN_DISK 0
 
 void readseg(unsigned char*,int,int);
 
@@ -12,14 +14,14 @@ int bootmain(void)
 
 	elf = (struct ELFHeader*)0x8000;
 
-	readseg((unsigned char*)elf, 4096, 0);
+	readseg((unsigned char*)elf, 4096, KERNEL_OFFSET_IN_DISK);
 
 	ph = (struct ProgramHeader*)((char *)elf + elf->phoff);
 	eph = ph + elf->phnum;
 	for(; ph < eph; ph ++)
 	{
 		pa = (unsigned char*)ph->paddr;
-		readseg(pa, ph->filesz, ph->off);
+		readseg(pa, ph->filesz,KERNEL_OFFSET_IN_DISK + ph->off);
 		for(i = pa + ph->filesz; i < pa + ph->memsz; *i ++ = 0);
 	}
 

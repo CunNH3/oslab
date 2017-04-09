@@ -5,7 +5,7 @@
 #define PORT_CH_0 0x40
 #define PORT_CMD 0x43
 #define PIT_FREQUENCE 1193182
-#define HZ 100
+#define HZ 1000
 
 union CmdByte
 {
@@ -35,7 +35,7 @@ void init_timer()
 	outb(PORT_CH_0, (counter >> 8) & 0xFF);  // access high byte
 }
 
-volatile int time_tick = 0;
+volatile uint32_t time_tick = 0;
 
 void timer_event(void)
 {

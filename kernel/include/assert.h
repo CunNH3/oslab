@@ -2,7 +2,7 @@
 #define __ASSERT_H__
 
 int abort(const char *, int);
-void printk(const char *, ...);
+int printk(const char *, ...);
 
 /*
 #define HIT_GOOD_TRAP \

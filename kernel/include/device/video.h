@@ -40,18 +40,7 @@ struct Surface {
 extern uint8_t *vmem;
 
 void init_vmem();
-void clear_screen();
-void clear_buffer();
-void display_buffer();
-void drawRect_buffer(const uint8_t*,int,int,int,int);
-void flyying_logo();
-void show_police();
-
-/*
-static inline void
-draw_pixel(int x, int y, int color) {
-	assert(x >= 0 && y >= 0 && x < SCR_HEIGHT && y < SCR_WIDTH);
-	vmem[(x << 9) + (x << 8) + (x << 5) + y] = color;
-} */
+void init_vmem_addr();
+int load_vmem(uint8_t*);
 
 #endif
