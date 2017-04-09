@@ -44,7 +44,6 @@ char *strncpy(char *dst, const char *src, size_t size)
 	ret = dst;
 	for (i = 0; i < size; i++) {
 		*dst++ = *src;
-		// If strlen(src) < size, null-pad 'dst' out to 'size' chars
 		if (*src != '\0')
 			src++;
 	}

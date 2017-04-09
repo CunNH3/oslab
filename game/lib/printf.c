@@ -2,7 +2,6 @@
 #include "../include/syscall.h"
 #include "../include/stdio.h"
 
-//int	vsnprintf(char, int , const char *, va_list);
 int __attribute__((__noinline__))
 printf(const char *ctl, ...)
 {
