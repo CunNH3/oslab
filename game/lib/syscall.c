@@ -1,6 +1,6 @@
 #include "../include/common.h"
 
-enum {SYS_write,SYS_time, SYS_keyboard, SYS_video};
+enum {SYS_time, SYS_keyboard,SYS_write, SYS_video};
 
 int __attribute__((__noinline__))
 syscall(int id, ...)
@@ -11,10 +11,6 @@ syscall(int id, ...)
 	return ret;
 }
 
-int write(int fd, char *buf,int len)
-{
-	return syscall(SYS_write,fd,buf,len);
-}
 int get_time()
 {
 	return syscall(SYS_time);
@@ -25,7 +21,12 @@ int get_keyboard()
 	return syscall(SYS_keyboard);
 }
 
-int put_video(uint8_t *buffer)
+int write(int fd, char *buf,int len)
+{
+	return syscall(SYS_write,fd,buf,len);
+}
+
+int display_video(uint8_t *buffer)
 {
 	return syscall(SYS_video, buffer);
 } 

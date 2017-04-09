@@ -21,8 +21,10 @@
 #define BT_HEIGHT		20
 #define BT_WIDTH_SIZE	(BT_WIDTH * SCR_DEPTH)
 
-union Pixels {
-	struct {
+union Pixels
+{
+	struct
+	{
 		uint8_t blue;
 		uint8_t green;
 		uint8_t red;
@@ -31,7 +33,8 @@ union Pixels {
 	uint32_t RGB_value : 24;
 };
 
-struct Surface {
+struct Surface
+{
 	int x, y;
 	int w, h;
 	uint8_t *pixels;
@@ -41,6 +44,6 @@ extern uint8_t *vmem;
 
 void init_vmem();
 void init_vmem_addr();
-int load_vmem(uint8_t*);
+int display(uint8_t*);
 
 #endif

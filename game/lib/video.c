@@ -12,7 +12,7 @@ inline void clear_buffer()
 
 inline void display_buffer()
 {
-	put_video(v_buffer);
+	display_video(v_buffer);
 }
 
 inline void draw_buffer(const uint8_t *src, int x, int y, int w, int h)
