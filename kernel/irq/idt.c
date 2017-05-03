@@ -7,6 +7,10 @@
 #define TRAP_GATE_32        0xF
 #define NR_IRQ              256
 
+#define SEG_KERNEL_CODE 1
+#define DPL_KERNEL 0
+#define DPL_USER 3
+
 Gatedesc idt[NR_IRQ];
 
 static void set_intr(Gatedesc *ptr, uint32_t selector, uint32_t offset, uint32_t dpl)
