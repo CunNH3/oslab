@@ -89,7 +89,7 @@ void irq_handle(TrapFrame *tf)
 				outb(0x61, val);
 				//printk("%s, %d: key code = %x\n", __FUNCTION__, __LINE__, code);
 				keyboard_event(code);
-			case 1013:
+			case 13:
 				break;
 			case 1014:
 				break;
