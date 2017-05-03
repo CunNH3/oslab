@@ -13,11 +13,11 @@ void init_intr(void)
 	
 	/* start initialization */
 	outb(PORT_PIC_MASTER, 0x11);
-	outb(PORT_PIC_MASTER + 1, IRQ_OFFSET);
+	outb(PORT_PIC_MASTER + 1, 32);
 	outb(PORT_PIC_MASTER + 1, 1 << IRQ_SLAVE);
 	outb(PORT_PIC_MASTER + 1, 0x3); // Modified part
 	outb(PORT_PIC_SLAVE, 0x11);
-	outb(PORT_PIC_SLAVE + 1, IRQ_OFFSET + 8);
+	outb(PORT_PIC_SLAVE + 1, 32 + 8);
 	outb(PORT_PIC_SLAVE + 1, IRQ_SLAVE);
 	outb(PORT_PIC_SLAVE + 1, 0x3); // Modified part
 	outb(PORT_PIC_MASTER, 0x68);
