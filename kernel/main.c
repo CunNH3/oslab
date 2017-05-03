@@ -24,10 +24,10 @@ void init_timer();
 void init_idt();
 void init_segment();
 void init_memory();
-void add_irq_handle(int,void (*)(void));
+//void add_irq_handle(int,void (*)(void));
 
-void timer_event();
-void keyboard_event();
+//void timer_event();
+//void keyboard_event();
 
 void testprintk();
 void serial_output_test();
@@ -43,8 +43,8 @@ void init()
 	init_vmem();
 	init_process();
 	init_memory();
-	add_irq_handle(0, timer_event);
-	add_irq_handle(1, keyboard_event);
+	//add_irq_handle(0, timer_event);
+	//add_irq_handle(1, keyboard_event);
 }
 
 void test()
