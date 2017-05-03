@@ -136,16 +136,25 @@
 #define SEG_WRITABLE            0x2
 #define SEG_READABLE            0x2
 #define SEG_EXECUTABLE          0x8
+#define SEG_RW_DATA		0x2 //WRITEBLE
+#define SEG_EXE_CODE		0xa//READABLE|EXECUTABLE
 
-#define NR_SEGMENTS             3
+#define NR_SEGMENTS             512
 #define SEG_KERNEL_NULL         0 
 #define SEG_KERNEL_CODE         1 
 #define SEG_KERNEL_DATA         2
+#define SEG_USER_CODE			0
+#define SEG_USER_DATA	1
+
+#define SEG_TSS		3
+
+#define SEG_SIZE	0x2000000
 
 #define SELECTOR_KERNEL(s)		( (s << 3) | DPL_KERNEL )
 #define SELECTOR_USER(s)		( (s << 3) | DPL_USER )
 
 
+#define SELECTOR_INDEX(s) (((s) >> 3) - 4)
 /*
  *
  *	Part 2.  Segmentation data structures and constants.
@@ -157,6 +166,9 @@
 /*
  * Macros to build GDT entries in assembly.
  */
+
+#define GDT_ENTRY(n) \
+	((n) << 3)
 
 #define SEG_NULL						\
 	.word 0, 0;						\
@@ -172,20 +184,21 @@
 #include "types.h"
 
 // Segment Descriptors
-typedef struct SegmentDescriptor {
-	unsigned sd_lim_15_0 : 16;  // Low bits of segment limit
-	unsigned sd_base_15_0 : 16; // Low bits of segment base address
-	unsigned sd_base_23_16 : 8; // Middle bits of segment base address
-	unsigned sd_type : 4;       // Segment type (see STS_ constants)
-	unsigned sd_s : 1;          // 0 = system, 1 = application
-	unsigned sd_dpl : 2;        // Descriptor Privilege Level
-	unsigned sd_p : 1;          // Present
-	unsigned sd_lim_19_16 : 4;  // High bits of segment limit
-	unsigned sd_avl : 1;        // Unused (available for software use)
-	unsigned sd_rsv1 : 1;       // Reserved
-	unsigned sd_db : 1;         // 0 = 16-bit segment, 1 = 32-bit segment
-	unsigned sd_g : 1;          // Granularity: limit scaled by 4K when set
-	unsigned sd_base_31_24 : 8; // High bits of segment base address
+typedef struct Segdesc
+{
+	unsigned limit_15_0 : 16;  // Low bits of segment limit
+	unsigned base_15_0 : 16; // Low bits of segment base address
+	unsigned base_23_16 : 8; // Middle bits of segment base address
+	unsigned type : 4;       // Segment type (see STS_ constants)
+	unsigned segment_type : 1;          // 0 = system, 1 = application
+	unsigned privilege_level : 2;        // Descriptor Privilege Level
+	unsigned present : 1;          // Present
+	unsigned limit_19_16 : 4;  // High bits of segment limit
+	unsigned soft_use : 1;        // Unused (available for software use)
+	unsigned operation_size : 1;       // Reserved
+	unsigned pad0 : 1;         // 0 = 16-bit segment, 1 = 32-bit segment
+	unsigned granularity : 1;          // Granularity: limit scaled by 4K when set
+	unsigned base_31_24 : 8; // High bits of segment base address
 } Segdesc;
 // Null segment
 #define SEG_NULL	(struct Segdesc){ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
@@ -273,7 +286,14 @@ typedef struct TaskstateSegment {
 	uint16_t ts_padding10;
 	uint16_t ts_t;		// Trap on task switch
 	uint16_t ts_iomb;	// I/O map base address
-} Taskstate;
+} Tss;
+
+typedef struct {
+	uint32_t link;         // old ts selector
+	uint32_t esp0;         // Ring 0 Stack pointer and segment selector
+	uint32_t ss0;          // after an increase in privilege level
+	char dontcare[88];
+}TSS;
 
 // Gate descriptors for interrupts and traps
 typedef struct GateDescriptor {
