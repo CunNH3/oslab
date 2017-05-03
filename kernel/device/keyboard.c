@@ -1,6 +1,9 @@
 #include "../include/common.h"
 #include "../include/x86.h"
 #include "../include/device/scan_code.h"
+#include "../include/irq.h"
+#include "../include/assert.h"
+#include "../include/mmu.h"
 
 #define NR_KEYS 6
 
