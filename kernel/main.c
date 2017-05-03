@@ -120,8 +120,8 @@ int kernel_main()
 		     "movl %eax, %fs\n\t"
 	             "movl %eax, %gs\n\t");
 	asm volatile("iret");
-	outw(0x8A00, 0x8A00);
-	outw(0x8A00, 0x8E00);
+	//outw(0x8A00, 0x8A00);
+	//outw(0x8A00, 0x8E00);
 	while(1);
 	return 0;
 }
