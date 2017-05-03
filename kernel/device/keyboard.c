@@ -50,14 +50,14 @@ int pro_keyboard()
 	int i;
 	for(i = 0; i < NR_KEYS; ++i)
 	{
-		if(state[i] == STATE_PRESS)
+		if (state[i] == STATE_PRESS)
 		{
 			state[i] = STATE_WAIT_RELEASE;
 			sti(); 
 			return keycode_array[i];
 		}
 		else
-		if(state[i] == STATE_RELEASE)
+		if (state[i] == STATE_RELEASE)
 		{
 			state[i] = STATE_EMPTY;
 			sti();

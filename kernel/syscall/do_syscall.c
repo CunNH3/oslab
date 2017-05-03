@@ -7,8 +7,8 @@ enum {SYS_time, SYS_keyboard, SYS_write, SYS_video};
 extern uint32_t time_tick;
 
 int pro_keyboard();
-int fs_write(int, void*, int);
-int display(uint8_t*);
+int fs_write(int, void *, int);
+int display(uint8_t *);
 
 void do_syscall(TrapFrame *tf)
 {
