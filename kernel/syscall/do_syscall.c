@@ -1,7 +1,7 @@
 #include "../include/irq.h"
 #include "../include/common.h"
 #include "../include/device/keyboard.h"
-
+#include "../include/mmu.h"
 enum {SYS_time, SYS_keyboard, SYS_write, SYS_video};
 
 extern uint32_t time_tick;
@@ -9,6 +9,7 @@ extern uint32_t time_tick;
 int pro_keyboard();
 int fs_write(int, void *, int);
 int display(uint8_t *);
+uint32_t Get_seg_off();
 
 void do_syscall(TrapFrame *tf)
 {
@@ -24,7 +25,7 @@ void do_syscall(TrapFrame *tf)
 			tf->eax = fs_write(tf->ebx, (void *)tf->ecx, tf->edx); 
 			break;
 		case SYS_video: 
-			tf->eax = display((uint8_t *)tf->ebx); 
+			tf->eax = display((uint8_t *)(tf->ebx + Get_seg_off())); 
 			break;
 		default: panic("Unhandled system call: id = %d", tf->eax);
 	}
