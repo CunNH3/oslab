@@ -10,7 +10,7 @@
 #include "include/disk.h"
 
 #define SECTSIZE 512
-#define GAME_OFFSET_IN_DISK (10 * 1024 * 1024)
+#define GAME_OFFSET_IN_DISK (0x19000)
 
 SegMan *mm_malloc(uint32_t, uint32_t, uint32_t);
 void set_tss_esp0(int);
@@ -24,6 +24,8 @@ void init_timer();
 void init_idt();
 void init_segment();
 void init_memory();
+void init_process();
+void init_vmem();
 //void add_irq_handle(int,void (*)(void));
 
 //void timer_event();
@@ -63,22 +65,16 @@ int kernel_main()
 	struct ProgramHeader *ph, *eph;
 	unsigned char *pa, *i;
 
-	//elf = (struct ELFHeader*)0x190000;
-	uint8_t buf[4096];
-	elf = (struct ELFHeader*)buf;
-	printk("the addr of the buf: 0x%x\n",(uint32_t)buf);
+	elf = (struct ELFHeader*)0x19000;
+	//uint8_t buf[4096];
+	//elf = (struct ELFHeader*)buf;
+	//printk("the addr of the buf: 0x%x\n",(uint32_t)buf);
 	
 	readseg((unsigned char*)elf, 4096, GAME_OFFSET_IN_DISK);
 
 
 	ph = (struct ProgramHeader*)((char *)elf + elf->phoff);
 	eph = ph + elf->phnum;
-	/*for(;ph < eph;ph++)
-	{
-		pa = (unsigned char*)ph->paddr; 
-		readseg(pa, ph->filesz,GAME_OFFSET_IN_DISK + ph->off);
-		for (i = pa + ph->filesz;i < pa + ph->memsz;*i ++ = 0);
-	}*/
 	SegMan *tmp[3];
 	int p_flag[2] = {0xa, 0x2};
 	int cnt = -1,_vaddr;
