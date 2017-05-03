@@ -13,6 +13,8 @@
 
 Gatedesc idt[NR_IRQ];
 
+void write_idtr(void *, uint32_t);
+
 static void set_intr(Gatedesc *ptr, uint32_t selector, uint32_t offset, uint32_t dpl)
 {
 	ptr->gd_off_15_0 = offset & 0xFFFF;
