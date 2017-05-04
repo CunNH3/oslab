@@ -108,7 +108,7 @@ int kernel_main()
 	tf->eip = elf->entry;
 	tf->cs = SELECTOR_USER(tmp[SEG_USER_CODE]->gdt);
 	tf->ss = SELECTOR_USER(tmp[SEG_USER_DATA]->gdt);
-	tf->esp = 0x10000000 - tmp[1]->base + _vaddr;
+	tf->esp = 0x8000000 - tmp[1]->base + _vaddr;
 
 	asm volatile("movl %0, %%esp" : :"a"((int)tf));
 	asm volatile("popa");
