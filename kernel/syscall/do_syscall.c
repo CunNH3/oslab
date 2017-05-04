@@ -9,7 +9,7 @@ extern uint32_t time_tick;
 int pro_keyboard();
 int fs_write(int, void *, int);
 int display(uint8_t *);
-//uint32_t Get_seg_off();
+uint32_t Get_seg_off();
 
 void do_syscall(TrapFrame *tf)
 {
@@ -22,10 +22,10 @@ void do_syscall(TrapFrame *tf)
 			tf->eax = pro_keyboard(); 
 			break;
 		case SYS_write: 
-			tf->eax = fs_write(tf->ebx, (void *)tf->ecx, tf->edx); 
+			tf->eax = fs_write(tf->ebx, (void *)(tf->ecx + Get_seg_off()), tf->edx); 
 			break;
 		case SYS_video: 
-			tf->eax = display((uint8_t *)(tf->ebx)); 
+			tf->eax = display((uint8_t *)(tf->ebx + Get_seg_off())); 
 			break;
 		default: panic("Unhandled system call: id = %d", tf->eax);
 	}

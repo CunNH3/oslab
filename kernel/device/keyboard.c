@@ -50,7 +50,7 @@ int pro_keyboard()
 {
 	cli();
 	int i;
-	//int *state = (int *)Get_seg_off();
+	int *state = (int *)Get_seg_off();
 	for(i = 0; i < NR_KEYS; ++i)
 	{
 		if (state[i] == STATE_PRESS)
