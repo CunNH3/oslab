@@ -13,25 +13,29 @@ void readseg(unsigned char*,int,int);
 
 void init_page();
 void init_segment();
+
 void init_vmem_addr();
 void init_serial();
 void init_intr();
 void init_timer();
+
 void init_idt();
-void init_segment();
-void init_memory();
 void add_irq_handle(int,void (*)(void));
+
 void set_trapframe(TrapFrame*, uint32_t);
+
 void timer_event();
 void keyboard_event();
+
 void testprintk();
 void serial_output_test();
-int kernel_main(void);
+int main(void);
+
 void init()
 {
 	init_page();
-	asm volatile("addl %0, %% esp" : : "i"(KOFFSET));
-	asm volatile("jmp *%0" : : "r"(kernel_main));
+	asm volatile("addl %0, %%esp" : : "i"(KOFFSET));
+	asm volatile("jmp *%0" : : "r"(main));
 	panic("Your page is fail!\n");
 }
 void init_kernel()
@@ -49,7 +53,6 @@ void init_kernel()
 	init_idt();
 	init_timer();
 	
-
 	add_irq_handle(0, timer_event);
 	add_irq_handle(1, keyboard_event);
 }
@@ -60,7 +63,10 @@ void test()
 	serial_output_test();
 	printk("\n");
 }
-int kernel_main()
+
+PCB* create_process(uint32_t disk_offset);
+
+int main(void)
 {
 	init_kernel();test();
 	printk("Hello, kernel!\n");
