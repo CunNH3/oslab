@@ -20,8 +20,8 @@ void game_loop()
 	uint32_t target;
 	while(1)
 	{
-		hlt();
-		cli();
+		//hlt();
+		//cli();
 		if(now == get_time())
 		{
 			sti();
@@ -29,7 +29,7 @@ void game_loop()
 		}
 
 		target = get_time();
-		sti();
+		//sti();
 
 		while(keyboard_process());
 

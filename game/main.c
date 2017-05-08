@@ -22,11 +22,11 @@ void game_main()
 {
 	testprintf();
 	printf("Game Start!\n");
-	sti();
+	//sti();
 	restart = false;
 	while(1)
 	{
-		hlt();
+		//hlt();
 		while(keyboard_process());
 		if(restart)
 		{

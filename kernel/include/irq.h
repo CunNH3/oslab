@@ -3,15 +3,23 @@
 
 #include "types.h"
 
-typedef struct TrapFrame
+struct TrapFrame 
 {
-	uint32_t edi, esi, ebp, old_esp, ebx, edx, ecx, eax;
-	int32_t irq;
-	uint32_t error_code;
-	uint32_t eip, cs, eflags;
-	uint32_t esp, ss;
+	uint32_t edi, esi, ebp, esp_;
+	uint32_t ebx, edx, ecx, eax;
 	uint32_t gs, fs, es, ds;
-} TrapFrame;
 
+	int irq;
+	uint32_t err;
+	uint32_t eip;
+	uint16_t cs;
+	uint16_t padding3;
+	uint32_t eflags;
+	uint32_t esp;
+	uint16_t ss;
+	uint16_t padding4;
+}__attribute__((packed));
+
+typedef struct TrapFrame TrapFrame;
 
 #endif

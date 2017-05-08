@@ -3,38 +3,39 @@
 
 #define ELF_MAGIC 0x464C457FU	/* "\x7FELF" in little endian */
 
-struct ELFHeader
+struct Elf
 {
-	unsigned int   magic;
-	unsigned char  elf[12];
-	unsigned short type;
-	unsigned short machine;
-	unsigned int   version;
-	unsigned int   entry;
-	unsigned int   phoff;
-	unsigned int   shoff;
-	unsigned int   flags;
-	unsigned short ehsize;
-	unsigned short phentsize;
-	unsigned short phnum;
-	unsigned short shentsize;
-	unsigned short shnum;
-	unsigned short shstrndx;
+	uint32_t e_magic;	// must equal ELF_MAGIC
+	uint8_t e_elf[12];
+	uint16_t e_type;
+	uint16_t e_machine;
+	uint32_t e_version;
+	uint32_t e_entry;
+	uint32_t e_phoff;
+	uint32_t e_shoff;
+	uint32_t e_flags;
+	uint16_t e_ehsize;
+	uint16_t e_phentsize;
+	uint16_t e_phnum;
+	uint16_t e_shentsize;
+	uint16_t e_shnum;
+	uint16_t e_shstrndx;
 };
 
-struct ProgramHeader
+struct Proghdr
 {
-	unsigned int type;
-	unsigned int off;
-	unsigned int vaddr;
-	unsigned int paddr;
-	unsigned int filesz;
-	unsigned int memsz;
-	unsigned int flags;
-	unsigned int align;
+	uint32_t p_type;
+	uint32_t p_offset;
+	uint32_t p_va;
+	uint32_t p_pa;
+	uint32_t p_filesz;
+	uint32_t p_memsz;
+	uint32_t p_flags;
+	uint32_t p_align;
 };
 
-struct Secthdr {
+struct Secthdr
+{
 	uint32_t sh_name;
 	uint32_t sh_type;
 	uint32_t sh_flags;
@@ -64,4 +65,4 @@ struct Secthdr {
 // Values for Secthdr::sh_name
 #define ELF_SHN_UNDEF		0
 
-#endif 
+#endif

@@ -13,7 +13,6 @@
 
 Gatedesc idt[NR_IRQ];
 
-void write_idtr(void *, uint32_t);
 
 static void set_intr(Gatedesc *ptr, uint32_t selector, uint32_t offset, uint32_t dpl)
 {
@@ -40,7 +39,7 @@ static void set_trap(Gatedesc *ptr, uint32_t selector, uint32_t offset, uint32_t
 	ptr->gd_p = 1;
 	ptr->gd_off_31_16 = (offset >> 16) & 0xFFFF;
 }
-/*
+
 static void write_idtr(void *addr, uint32_t size)
 {
 	static volatile uint16_t data[3];
@@ -49,7 +48,7 @@ static void write_idtr(void *addr, uint32_t size)
 	data[2] = ((uint32_t)addr) >> 16;
 	lidt((void*)data);
 }
-*/
+
 void irq0();
 void irq1();
 //void irq13();

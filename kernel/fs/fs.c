@@ -2,7 +2,6 @@
 #include "../include/mmu.h"
 
 void serial_printc(char);
-uint32_t Get_seg_off();
 
 int fs_write(int fd, void *buf,int len)
 {

@@ -16,9 +16,9 @@ static const int keycode_array[] =
 
 static int state[NR_KEYS];
 
-void keyboard_event(int code)
+void keyboard_event(void)
 {
-	//int code = inb(0x60);
+	int code = inb(0x60);
 	printk("the keycode = 0x%x\n",code);
 	int i;
 	for (i = 0; i < NR_KEYS;i++)
@@ -44,13 +44,10 @@ void keyboard_event(int code)
 	}
 }
 
-uint32_t Get_seg_off();
-
 int pro_keyboard()
 {
 	cli();
 	int i;
-	int *state = (int *)Get_seg_off();
 	for(i = 0; i < NR_KEYS; ++i)
 	{
 		if (state[i] == STATE_PRESS)

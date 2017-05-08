@@ -1,5 +1,5 @@
-#ifndef INC_X86_H
-#define INC_X86_H
+#ifndef __X86_H__
+#define __X86_H__
 
 #include "types.h"
 
@@ -34,6 +34,11 @@ static __inline uint32_t read_ebp(void) __attribute__((always_inline));
 static __inline uint32_t read_esp(void) __attribute__((always_inline));
 static __inline void cpuid(uint32_t info, uint32_t *eaxp, uint32_t *ebxp, uint32_t *ecxp, uint32_t *edxp);
 static __inline uint64_t read_tsc(void) __attribute__((always_inline));
+
+/* sti and cli --ANDSORA */
+static __inline void sti(void) __attribute__((always_inline));
+static __inline void cli(void) __attribute__((always_inline));
+static __inline void hlt(void) __attribute__((always_inline));
 
 static __inline void
 breakpoint(void)
@@ -255,8 +260,6 @@ read_esp(void)
 	return esp;
 }
 
-#define pushl(val) asm volatile("pushl %0" :: "r" (val))
-
 static __inline void
 cpuid(uint32_t info, uint32_t *eaxp, uint32_t *ebxp, uint32_t *ecxp, uint32_t *edxp)
 {
@@ -295,40 +298,23 @@ xchg(volatile uint32_t *addr, uint32_t newval)
 	return result;
 }
 
-static inline void
-sti(void) {
-	asm volatile("sti");
+/* sti and cli --ANDSORA */
+static __inline void
+sti(void)
+{
+	__asm __volatile("sti");
 }
 
-static inline void
-cli(void) {
-	asm volatile("cli");
+static __inline void
+cli(void)
+{
+	__asm __volatile("cli");
 }
 
-static inline void
-wait_intr() {
-	asm volatile("hlt");
+static __inline void
+hlt(void)
+{
+	__asm __volatile("hlt");
 }
 
-#define NR_IRQ    256
-
-static inline void
-write_gdtr(void *addr, uint32_t size) {
-	static volatile uint16_t data[3];
-	data[0] = size - 1;
-	data[1] = (uint32_t)addr;
-	data[2] = ((uint32_t)addr) >> 16;
-	asm volatile("lgdt (%0)" : : "r"(data));
-}
-
-static inline void
-write_idtr(void *addr, uint32_t size) {
-	static volatile uint16_t data[3];
-	data[0] = size - 1;
-	data[1] = (uint32_t)addr;
-	data[2] = ((uint32_t)addr) >> 16;
-	asm volatile("lidt (%0)" : : "r"(data));
-}
-
-
-#endif 
+#endif /* __X86_H__ */
