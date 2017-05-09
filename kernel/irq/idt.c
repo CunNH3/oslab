@@ -7,9 +7,6 @@
 #define TRAP_GATE_32        0xF
 #define NR_IRQ              256
 
-#define SEG_KERNEL_CODE 1
-#define DPL_KERNEL 0
-#define DPL_USER 3
 
 Gatedesc idt[NR_IRQ];
 
