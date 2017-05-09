@@ -7,8 +7,10 @@
 #include "include/device/video.h"
 #include "include/device/video_mode.h"
 #include "include/irq.h"
+
 #define SECTSIZE 512
 #define GAME_OFFSET_IN_DISK (10 * 1024 * 1024)
+
 void readseg(unsigned char*,int,int);
 
 void init_page();
@@ -22,7 +24,7 @@ void init_timer();
 void init_idt();
 void add_irq_handle(int,void (*)(void));
 
-void set_trapframe(TrapFrame*, uint32_t);
+void set_trapframe(TrapFrameA*, uint32_t);
 
 void timer_event();
 void keyboard_event();
@@ -68,7 +70,8 @@ PCB* create_process(uint32_t disk_offset);
 
 int main(void)
 {
-	init_kernel();test();
+	init_kernel();
+	test();
 	printk("Hello, kernel!\n");
 
 	PCB *pcb_p = create_process(GAME_OFFSET_IN_DISK);

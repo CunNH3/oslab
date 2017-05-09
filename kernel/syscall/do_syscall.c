@@ -11,7 +11,7 @@ int pro_keyboard();
 int fs_write(int, void *, int);
 int display(uint8_t *);
 
-void do_syscall(TrapFrame *tf)
+void do_syscall(TrapFrameA *tf)
 {
 	switch(tf->eax)
 	{

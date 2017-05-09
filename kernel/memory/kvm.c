@@ -122,10 +122,10 @@ void write_tss_esp0(uint32_t esp0)
 	tss.ts_esp0 = esp0;
 }
 
-void set_trapframe(TrapFrame *tf, uint32_t entry)
+void set_trapframe(TrapFrameA *tf, uint32_t entry)
 {
 	tss.ts_esp0 = ((uint32_t) tf) + KSTACK_SIZE;
-	printk("\nsizeof TrapFrameA is: 0x%x\n", sizeof(TrapFrame));
+	printk("\nsizeof TrapFrameA is: 0x%x\n", sizeof(TrapFrameA));
 	printk("ss0 = 0x%x,  esp0 = 0x%x\n\n", tss.ts_ss0, tss.ts_esp0);
 
 	tf->ebp = 0;
