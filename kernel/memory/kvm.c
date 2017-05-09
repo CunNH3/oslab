@@ -23,7 +23,8 @@ void init_page(void)
 	memset(pdir, 0, NR_PDE * sizeof(PDE));
 
 	/* fill PDEs */
-	for(pdir_idx = 0; pdir_idx < PHY_MEM / PTSIZE; pdir_idx ++) {
+	for(pdir_idx = 0; pdir_idx < PHY_MEM / PTSIZE; pdir_idx ++)
+	{
 		pdir[pdir_idx].val = PTE_ADDR(ptable) | PTE_P | PTE_W;
 		pdir[pdir_idx + KOFFSET / PTSIZE].val = PTE_ADDR(ptable) | PTE_P | PTE_W;
 		ptable += NR_PTE;
