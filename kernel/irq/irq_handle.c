@@ -67,10 +67,10 @@ void irq_handle(TrapFrame *tf)
 							 else printk("The processor was executing in supervisor mode.\n");
 						 }
 						 break;
-					 }
+			}
 			default: printk("Unhandled exception!\n"); break;
 		}
-		panic("irq==%d, error_code==0x%x\n", irq, tf->err);
+		panic("irq == %d, error_code == 0x%x\n", irq, tf->err);
 		//panic("Unhandled exception! irq==%d\n", irq);
 	}
 	else
