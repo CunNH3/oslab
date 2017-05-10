@@ -48,7 +48,6 @@ static void write_idtr(void *addr, uint32_t size)
 
 void irq0();
 void irq1();
-//void irq13();
 void irq14();
 
 void vec0();
@@ -66,12 +65,12 @@ void vec11();
 void vec12();
 void vec13();
 void vec14();
-
 void vecsys();
 
 void irq_empty();
 
-void init_idt() {
+void init_idt()
+{
 	int i;
 	for (i = 0; i < NR_IRQ; i ++) {
 		set_trap(idt + i, SEG_KERNEL_CODE << 3, (uint32_t)irq_empty, DPL_KERNEL);
@@ -96,8 +95,8 @@ void init_idt() {
 
 	set_intr(idt + 32 + 0, SEG_KERNEL_CODE << 3, (uint32_t)irq0, DPL_KERNEL);
 	set_intr(idt + 32 + 1, SEG_KERNEL_CODE << 3, (uint32_t)irq1, DPL_KERNEL);
-	//set_intr(idt + 32 + 13, SEG_KERNEL_CODE << 3, (uint32_t)irq13, DPL_KERNEL);
 	set_intr(idt + 32 + 14, SEG_KERNEL_CODE << 3, (uint32_t)irq14, DPL_KERNEL);
+
 
 	write_idtr(idt, sizeof(idt));
 }

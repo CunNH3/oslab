@@ -24,7 +24,7 @@ void init_timer();
 void init_idt();
 void add_irq_handle(int,void (*)(void));
 
-void set_trapframe(TrapFrameA*, uint32_t);
+
 
 void timer_event();
 void keyboard_event();
@@ -66,6 +66,7 @@ void test()
 	printk("\n");
 }
 
+void set_trapframe(TrapFrameA*, uint32_t);
 PCB* create_process(uint32_t disk_offset);
 
 int main(void)
@@ -90,6 +91,7 @@ int main(void)
 				  popl %eax;\
 				  addl $0x18, %esp;\
 				  iret");
+
 	panic("You are fail!\n");
 	while (1);
 }
