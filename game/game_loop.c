@@ -24,7 +24,7 @@ void game_loop()
 		//cli();
 		if(now == get_time())
 		{
-			sti();
+			//sti();
 			continue;
 		}
 
