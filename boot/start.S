@@ -1,22 +1,11 @@
-#include "include/mmu.h"
-
-#define GDT_ENTRY(n)	\
-	((n) << 3)
-
-# #define MAKE_NULL_SEG_DESC	\
-# 	.word 0, 0;
-#	.byte 0, 0, 0, 0
-
-# #define MAKE_SEG_DESC(type, base, lim)						\
-#	.word (((lim) >> 12) & 0xffff), ((base) & 0xffff);		\
-#	.byte (((base) >> 16) & 0xff), (0x90 | (type)),			\
-#	(0xc0 | ((lim) >> 28) & 0xff)), (((base) >> 24) &0xff)
-
+#include "asm.h"
+.code16
 .globl start
 start:
-	.code16				# Assemble for 16-bit mode
-	cli					# Disable interrupts
-#	cld					# String operations increment(necessary?)
+	.code16
+	cli                       # 关闭外部中断
+#	cld
+
 
 	# Open graph mode:
 	movw	$0x4f02, %ax
@@ -46,45 +35,41 @@ start:
 		movb	$0xdf, %al
 		outb	%al, $0x60
 
-	# Set up the flat mode:
-	xorw	%ax, %ax
-	movw	%ax, %ds	# Data Segment
-	movw	%ax, %es	# Extra Segment
-	movw	%ax, %ss	# Stack Segment
+	xorw    %ax, %ax          # %AX = 0
+	movw    %ax, %ds          # %DS = AX (data segment)
+	movw    %ax, %es          # %ES = AX (extra segment)
+	movw    %ax, %ss          # %SS = AX (stack segment)
 
-	# Switch from real to protected mode
-	lgdt	gdtdesc		# Set up GDT
-	movl	%cr0, %eax
-	orl		$0x1, %eax
-	movl	%eax, %cr0	# CR0 |= PROTECT_ENABLE_BIT
-	ljmp	$GDT_ENTRY(1), $start32
-						# Set CS to GDT(1) and long jump to start32 in 32-bit mode
+	lgdt    gdtdesc           # 设置GDT(段描述符表地址为$gdt)
+	movl    %cr0, %eax        # %CR0 |= PROTECT_ENABLE_BIT
+	orl     $0x1, %eax
+	movl    %eax, %cr0        # 设置PE bit
+
+	# 长跳转进入保护模式，设置%CS为GDT中的第一项，%EIP为start32所对应地址
+	ljmp    $GDT_ENTRY(1), $start32
 
 
 start32:
-	.code32				# Assemble for 32-bit mode
+	.code32
+	# 设置数据访问所用的段寄存器(%DS, %ES, %SS)
+	movw    $GDT_ENTRY(2), %ax
+	movw    %ax, %ds          # %DS = %AX
+	movw    %ax, %es          # %ES = %AX
+	movw    %ax, %ss          # %SS = %AX
 
-	# Set up the protected-mode data segment registers
-	movw	$GDT_ENTRY(2), %ax
-	movw	%ax, %ds	# Data Segment
-	movw	%ax, %es	# Extra Segment
-#	movw	%ax, %fs	# (unnecessery)
-#	movw	%ax, %gs	# (unnecessery)
-	movw	%ax, %ss	# Stack Segment
+	# 设置栈位置。栈从此没有切换过，请注意栈的大小！
 
-	# Set up the stack pointer and call into C
-	movl	$0x8000000, %esp
-	call	bootmain
-
+	movl    $0x8000000, %esp     # %ESP = $0x8000000
+	call    bootmain          # 跳转到C代码执行，此处不会返回
 
 # GDT
-.p2align 2
+.p2align 2                         # 对齐
 gdt:
-	SEG_NULL							# empty segment
-	SEG(0xA, 0x0, 0xffffffff)			# code
-	SEG(0x2, 0x0, 0xffffffff)			# data
+	SEG_NULLASM                    # GDT第一项必须为空
+	SEG_ASM(0xA, 0x0, 0xffffffff)  # 代码段描述符
+	SEG_ASM(0x2, 0x0, 0xffffffff)  # 数据段描述符
 
-gdtdesc:
-	.word	(gdtdesc - gdt - 1)		# limit = sizeof(gdt) - 1
-	.long	gdt						# address of GDT
+gdtdesc:                           # GDT描述符
+	.word   (gdtdesc - gdt - 1)    # GDT长度，留意地址运算
+	.long   gdt                    # GDT地址
 

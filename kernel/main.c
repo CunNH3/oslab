@@ -7,93 +7,58 @@
 #include "include/device/video.h"
 #include "include/device/video_mode.h"
 #include "include/irq.h"
+#include "include/pmap.h"
 
-#define SECTSIZE 512
-#define GAME_OFFSET_IN_DISK (10 * 1024 * 1024)
-
-void readseg(unsigned char*,int,int);
-
-void init_page();
-void init_segment();
-
-void init_vmem_addr();
-void init_serial();
-void init_intr();
-void init_timer();
-
-void init_idt();
+extern pde_t entry_pgdir[];
+void init_cond();
+void init_mem();
+void* loader();
 void add_irq_handle(int,void (*)(void));
-
-
-
-void timer_event();
-void keyboard_event();
-
+void init_idt();
+void init_intr();
+void init_serial();
+void init_timer();
 void testprintk();
-void serial_output_test();
-int main(void);
-
-void init()
+void timer_event();
+void keyboard_event(); 
+int kernel_main()
 {
-	init_page();
-	asm volatile("addl %0, %%esp" : : "i"(KOFFSET));
-	asm volatile("jmp *%0" : : "r"(main));
-	panic("Your page is fail!\n");
+	printk("before page init\n");
+	page_init();
+	printk("after page init\n");
+	init_cond();
+	printk("after condition init\n");
+	return 0;
 }
-void init_kernel()
+
+void init_cond()
 {
-	init_segment();
-
-	init_vmem_addr();
-	init_vmem();
-
-	init_pcb();
-	init_pte_info();
-
-	init_serial();
-	init_intr();
 	init_idt();
-	init_timer();
 	
-	add_irq_handle(0, timer_event);
-	add_irq_handle(1, keyboard_event);
-}
-
-void test()
-{
+	init_intr();
+	init_serial();
+	init_timer();
+	init_mem();
+	
+	//add_irq_handle(0, timer_event);
+	//add_irq_handle(1, keyboard_event);
+	
 	testprintk();
-	serial_output_test();
-	printk("\n");
-}
+	//asm volatile("sti");
+	//to store kernel pgd
+	struct PageInfo *page = page_alloc(1);
+	uint32_t cr3_game = page2pa(page);
+	pde_t *pgdir_game = page2kva(page);
+	memcpy(pgdir_game,entry_pgdir,4096);
+	//int *p = (int *)0xa0000;
+	//*p = 0;
+	//while(1);
+	void* eip = loader(pgdir_game);
+	lcr3(cr3_game);
+	printk("eip = %x\n",eip);
+	((void(*)(void))eip)();
+	printk("shouldn't reach here");
 
-void set_trapframe(TrapFrameA*, uint32_t);
-PCB* create_process(uint32_t disk_offset);
-
-int main(void)
-{
-	init_kernel();
-	test();
-	printk("Hello, kernel!\n");
-
-	PCB *pcb_p = create_process(GAME_OFFSET_IN_DISK);
-	set_trapframe((void*)pcb_p->kstack, pcb_p->entry);
-
-	printk("Here we go!\n");
-
-	asm volatile("movl %0, %%esp" : :"a"(pcb_p->kstack));
-	asm volatile("popal;\
-				  pushl %eax;\
-				  movw 4(%esp), %ax;\
-				  movw %ax, %gs;\
-				  movw %ax, %fs;\
-				  movw %ax, %es;\
-				  movw %ax, %ds;\
-				  popl %eax;\
-				  addl $0x18, %esp;\
-				  iret");
-
-	panic("You are fail!\n");
-	while (1);
 }
 /*
 void waitdisk(void)

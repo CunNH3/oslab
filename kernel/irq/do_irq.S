@@ -32,40 +32,12 @@
 # You should make yourself understand it clearly.
 
 asm_do_irq:
-	cli
-	pushl	%ds
-	pushl	%es
-	pushl	%fs
-	pushl	%gs
-
-	pushl	%eax
-	movw	$SELECTOR_KERNEL(SEG_KERNEL_DATA), %ax
-	movw	%ax, %ds
-	movw	%ax, %es
-	movw	%ax, %fs
-	movw	%ax, %gs
-	popl	%eax
-
 	pushal
 
-	pushl %esp		# ???
-
-	sti
+	pushl %esp			# ???
 	call irq_handle
-	cli
-	
 	addl $4, %esp
+
 	popal
-
-	pushl	%eax
-	movw	4(%esp), %ax
-	movw	%ax, %gs
-	movw	%ax, %fs
-	movw	%ax, %es
-	movw	%ax, %ds
-	popl	%eax
-
-	addl	$0x18, %esp
-	sti
-
+	addl $8, %esp
 	iret

@@ -2,7 +2,7 @@
 #define __ELF_H__
 
 #define ELF_MAGIC 0x464C457FU	/* "\x7FELF" in little endian */
-
+#include"types.h"
 struct Elf
 {
 	uint32_t e_magic;	// must equal ELF_MAGIC
