@@ -6,7 +6,7 @@
 #include "include/keyboard.h"
 #include "include/timer.h"
 #include "include/system.h"
-
+#include "include/stdio.h"
 volatile int tick = 0;
 
 void timer_event(void)

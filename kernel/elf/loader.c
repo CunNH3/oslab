@@ -61,7 +61,7 @@ void waitdisk(void)
 
 void readsect(void *dst, int offset)
 {
-	//int i;
+	int i;
 	waitdisk();
 	outb(0x1F2, 1);
 	outb(0x1F3, offset);
@@ -71,7 +71,8 @@ void readsect(void *dst, int offset)
 	outb(0x1F7, 0x20);
 
 	waitdisk();
-	insl(0x1F0, dst, SECTSIZE/4);
+	for (i = 0; i < SECTSIZE / 4; i ++) 
+		((int *)dst)[i] = inl(0x1F0);
 }
 
 
@@ -80,7 +81,7 @@ void readseg(unsigned char *pa, int count, int offset)
 	unsigned char *epa;
 	epa = pa + count;
 	pa -= offset % SECTSIZE;
-	offset = (offset / SECTSIZE) + 1;
+	offset = (offset / SECTSIZE) + 201;
 	for(; pa < epa; pa += SECTSIZE, offset ++)
 		readsect(pa, offset);
 }
