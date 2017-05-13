@@ -33,7 +33,7 @@ bool empty_list(struct PageInfo*pt)
 void page_init(void)
 {
 	unsigned long i;
-	for (i = npages - 1; i >= 0x8000; i--)
+	for (i = npages - 1; i > 0x150; i--)
 	{
 		pages[i].pp_ref = 0;
 		pages[i].pp_link = page_free_list;
@@ -209,18 +209,13 @@ void tlb_invalidate(pde_t *pgdir, void *va)
 	// For now, there is only one address space, so always invalidate.
 	invlpg(va);
 }
-#define SCR_WIDTH		800
-#define SCR_HEIGHT		600
-#define SCR_DEPTH		3
-#define SCR_WIDTH_SIZE	(SCR_WIDTH * SCR_DEPTH)
-#define SCR_SIZE		((SCR_WIDTH) * (SCR_HEIGHT) * (SCR_DEPTH))
-#define VMEM_ADDR		0xFD000000
+
 void init_mem()
 {
 	//tm create a mappting
 	//uint32_t VMEM_ADDR = 0xfd000000;
 	boot_map_region(entry_pgdir,KERNBASE,npages * PGSIZE,0,PTE_W);
-	boot_map_region(entry_pgdir,VMEM_ADDR,800 * 600 * 3,VMEM_ADDR,PTE_W | PTE_U);
+	boot_map_region(entry_pgdir,0xa0000,320 * 200,0xa0000,PTE_W | PTE_U);
 	//memcpy((uint32_t)VMEM_ADDR,gImage_PARK,800 * 600 * 3);
 	return ;
 }
