@@ -36,7 +36,7 @@ void display(void)
 		if (buf[i] != ref[i])
 		{
 			system_draw_pixel_off(i,buf[i]);
-			ref[i]=buf[i];
+			ref[i] = buf[i];
 		}
 	}
 #else

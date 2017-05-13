@@ -4,7 +4,7 @@
 #include "include/string.h"
 #include "include/mmu.h"
 #include "include/memory.h"
-#include "include/device/video.h"
+#include "include/video.h"
 #include "include/system.h"
 #include "include/memlayout.h"
 #include "include/process/env.h"
