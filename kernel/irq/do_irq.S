@@ -32,6 +32,8 @@
 # You should make yourself understand it clearly.
 
 asm_do_irq:
+	pushl %ds
+	pushl %es
 	pushal
 
 	pushl %esp			# ???
