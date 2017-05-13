@@ -12,7 +12,7 @@ PDE* get_kpdir();
 void init_vmem()
 {
 	uint32_t VMEM_ADDR = (uint32_t)vmem;
-
+	printk("vmem_addr = 0x%08x\n",vmem);
 	PDE *pdir = (PDE*)( (uint32_t)get_kpdir() + 4 * ((VMEM_ADDR >> 22) & 0x3ff) );
 	PTE *ptable = (PTE*)( (uint32_t)uptable + 4 * ((VMEM_ADDR >> 12) & 0x3ff) );
 
