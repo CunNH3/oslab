@@ -4,9 +4,6 @@
 #include"../include/string.h"
 #include"../include/stdio.h"
 #include"../include/mmu.h"
-#include "../include/device/video.h"
-#include "../include/device/video_mode.h"
-#include "../include/logo.h"
 
 enum {
 	// Kernel error codes -- keep in sync with list in lib/printfmt.c.
@@ -100,35 +97,8 @@ static void boot_map_region(pde_t *pgdir, uint32_t va, unsigned long size,uint32
 	}
 }
 
-//
-// Map the physical page 'pp' at virtual address 'va'.
-// The permissions (the low 12 bits) of the page table entry
-// should be set to 'perm|PTE_P'.
-//
-// Requirements
-//   - If there is already a page mapped at 'va', it should be page_remove()d.
-//   - If necessary, on demand, a page table should be allocated and inserted
-//     into 'pgdir'.
-//   - pp->pp_ref should be incremented if the insertion succeeds.
-//   - The TLB must be invalidated if a page was formerly present at 'va'.
-//
-// Corner-case hint: Make sure to consider what happens when the same
-// pp is re-inserted at the same virtual address in the same pgdir.
-// However, try not to distinguish this case in your code, as this
-// frequently leads to subtle bugs; there's an elegant way to handle
-// everything in one code path.
-//
-// RETURNS:
-//   0 on success
-//   -E_NO_MEM, if page table couldn't be allocated
-//
-// Hint: The TA solution is implemented using pgdir_walk, page_remove,
-// and page2pa.
-//
 int page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 {
-	// Fill this function in
-	//pte_t *pte=pgdir_walk(pgdir,va,1);
 	struct PageInfo* pg = page_lookup(pgdir,va,NULL);
 	if (pg == pp)
 	{
@@ -151,17 +121,6 @@ int page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 	return 0;
 }
 
-//
-// Return the page mapped at virtual address 'va'.
-// If pte_store is not zero, then we store in it the address
-// of the pte for this page.  This is used by page_remove and
-// can be used to verify page permissions for syscall arguments,
-// but should not be used by most callers.
-//
-// Return NULL if there is no page mapped at va.
-//
-// Hint: the TA solution uses pgdir_walk and pa2page.
-//
 struct PageInfo *page_lookup(pde_t *pgdir, void *va, pte_t **pte_store)
 {
 	// Fill this function in
@@ -174,21 +133,6 @@ struct PageInfo *page_lookup(pde_t *pgdir, void *va, pte_t **pte_store)
 	return result;
 }
 
-//
-// Unmaps the physical page at virtual address 'va'.
-// If there is no physical page at that address, silently does nothing.
-//
-// Details:
-//   - The ref count on the physical page should decrement.
-//   - The physical page should be freed if the refcount reaches 0.
-//   - The pg table entry corresponding to 'va' should be set to 0.
-//     (if such a PTE exists)
-//   - The TLB must be invalidated if you remove an entry from
-//     the page table.
-//
-// Hint: The TA solution is implemented using page_lookup,
-// 	tlb_invalidate, and page_decref.
-//
 void page_remove(pde_t *pgdir, void *va)
 {
 	// Fill this function in
@@ -199,14 +143,8 @@ void page_remove(pde_t *pgdir, void *va)
 	tlb_invalidate(pgdir,va);
 }
 
-//
-// Invalidate a TLB entry, but only if the page tables being
-// edited are the ones currently in use by the processor.
-//
 void tlb_invalidate(pde_t *pgdir, void *va)
 {
-	// Flush the entry only if we're modifying the current address space.
-	// For now, there is only one address space, so always invalidate.
 	invlpg(va);
 }
 

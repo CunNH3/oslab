@@ -1,45 +1,30 @@
 #ifndef __VIDEO_H__
 #define __VIDEO_H__
 
-#include "common.h"
+#include "types.h"
+#include "assert.h"
 
-#define SCR_WIDTH		800
-#define SCR_HEIGHT		600
-#define SCR_DEPTH		3
-#define SCR_WIDTH_SIZE	(SCR_WIDTH * SCR_DEPTH)
-#define SCR_SIZE		((SCR_WIDTH) * (SCR_HEIGHT) * (SCR_DEPTH))
+#define SCR_WIDTH  320
+#define SCR_HEIGHT 200
+#define SCR_SIZE ((SCR_WIDTH) * (SCR_HEIGHT))
+#define VMEM_ADDR  ((uint8_t*)0xA0000)
 
-#define LS_WIDTH		80
-#define LS_HEIGHT		80
-#define LS_WIDTH_SIZE	(LS_WIDTH * SCR_DEPTH)
-#define FF_WIDTH		80
-#define FF_HEIGHT		80
-#define FF_WIDTH_SIZE	(FF_WIDTH * SCR_DEPTH)
-#define BT_WIDTH		4
-#define BT_HEIGHT		20
-#define BT_WIDTH_SIZE	(BT_WIDTH * SCR_DEPTH)
+extern uint8_t *vmem;
 
-union Pixels
+static inline void draw_pixel(int x, int y, int color)
 {
-	struct
-	{
-		uint8_t blue;
-		uint8_t green;
-		uint8_t red;
-	};
-	uint8_t RGB_array[3];
-	uint32_t RGB_value : 24;
-};
+	assert(x >= 0 && y >= 0 && x < SCR_HEIGHT && y < SCR_WIDTH);
+	vmem[(x << 8) + (x << 6) + y] = color;
+}
 
-struct Surface
-{
-	int x, y;
-	int w, h;
-	uint8_t *pixels;
-};
-
-void clear_buffer();
-void display_buffer();
-void draw_buffer(const uint8_t*,int,int,int,int);
+void prepare_buffer();
+void display();
+void blue_screen();
+void yellow_screen();
+void white_screen();
+void black_screen();
+void draw_border();
+void draw_squares(int ,uint8_t);
+void draw_string(const char*, int, int, int);
 
 #endif

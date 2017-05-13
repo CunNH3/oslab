@@ -1,16 +1,38 @@
-#include "../include/common.h"
+#include "../include/x86.h"
+#include "../include/stdarg.h"
 #include "../include/stdio.h"
 
+/*
+ * You may refer to lib/printfmt.c
+ * to implement the printk() and vprintk().
+ * You can also implement a simplier version
+ * by yourself.
+ */
+/*void cputchar(int c){
+	cons_putc(c);
+}*/
 void serial_printc(char);
 
-int __attribute__((__noinline__))
-printk(const char *ctl, ...)
+static void putch(int ch, int *cnt)
 {
-	static char buf[256];
-	void *args = (void **)&ctl + 1;
-	int len = vsnprintf(buf, 256, ctl, args);
-	int i;
-	for(i = 0; i < len; ++ i)
-		serial_printc(buf[i]);
-	return len;
+	serial_printc(ch);
+	(*cnt)++;
+}
+
+
+int vprintk(const char *fmt,va_list ap)
+{
+	int cnt = 0;
+	vprintfmt((void*)putch,&cnt,fmt,ap);
+	return cnt;
+}
+
+int	printk(const char *fmt, ...)
+{
+	va_list ap;
+	int cnt;
+	va_start(ap,fmt);
+	cnt = vprintk(fmt,ap);
+	va_end(ap);
+	return cnt;
 }

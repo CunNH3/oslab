@@ -1,32 +1,65 @@
-#include "../include/common.h"
+#include "../include/system.h"
 
-enum {SYS_time, SYS_keyboard,SYS_write, SYS_video};
+int printk(const char*fmt,...);
 
-static inline int //__attribute__((__noinline__))
-syscall(int id, ...)
+int __attribute__((__noinline__)) syscall(int id,...)
 {
 	int ret;
 	int *args = &id;
-	asm volatile("int $0x80": "=a"(ret) : "a"(args[0]), "b"(args[1]), "c"(args[2]), "d"(args[3]));
+	asm volatile("int $0x80": "=a"(ret) :"a"(args[0]),"b"(args[1]),"c"(args[2]),"d"(args[3]));
 	return ret;
 }
 
-int get_time()
+
+void system_draw_pixel(int x,int y,int color)
 {
-	return syscall(SYS_time);
+	syscall(drawpixel,x,y,color);
 }
 
-int get_keyboard()
+void system_serial_print(char ch)
 {
-	return syscall(SYS_keyboard);
+	syscall(serialprint,ch);
 }
 
-int write(int fd, char *buf,int len)
+void system_init_serial()
 {
-	return syscall(SYS_write,fd,buf,len);
+	syscall(initserial);
+}
+void system_init_timer()
+{
+	syscall(inittimer);
 }
 
-int display_video(uint8_t *buffer)
+void system_draw_pixel_off(int off,int color)
 {
-	return syscall(SYS_video, buffer);
-} 
+	syscall(drawpixeloff,off,color);
+}
+
+void system_clear_screen(int color)
+{
+	syscall(clearscreen,color);
+}
+
+void system_enable_interrupt()
+{
+	syscall(enableinterrupt);
+}
+void system_disenable_interrupt()
+{
+	syscall(disenableinterrupt);
+}
+
+int system_env_fork()
+{
+	return syscall(env_fork);
+}
+
+void system_env_sleep(uint32_t time)
+{
+	syscall(env_sleep,time);
+}
+
+void system_env_exit()
+{
+	syscall(env_exit);
+}

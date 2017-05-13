@@ -1,62 +1,50 @@
-#include "../include/common.h"
-#include "../include/x86.h"
-#include "../include/scan_code.h"
-#include "../include/syscall.h"
+#include "../include/assert.h"
+#include "../include/types.h"
+#include "../include/string.h"
 
-#define NR_KEYS 6
-
-enum {STATE_EMPTY, STATE_WAIT_RELEASE, STATE_RELEASE, STATE_PRESS};
-
-void get_press_key(uint8_t);
-void get_release_key(uint8_t);
-void enable_restart();
-void close_restart();
-
-bool keyboard_process()
+static int letter_code[] =
 {
-	uint8_t keycode = get_keyboard();
-	if(keycode == 0xff) return false;
-	if(keycode < 0x80) 
-	{
-		get_press_key(keycode);
-		return true;
-	}
-	else
-	{
-		get_release_key(keycode - 0x80);
-		return true;
-	}
+	30, 48, 46, 32, 18, 33, 34, 35, 23, 36,
+	37, 38, 50, 49, 24, 25, 16, 19, 31, 20,
+	22, 47, 17, 45, 21, 44
+};
+/* 对应键按下的标志位 */
+static bool letter_pressed[26];
+
+void press_key(int scan_code)
+{
+	int i;
+	for (i = 0;i < 26;i++)
+		if (letter_code[i] == scan_code) letter_pressed[i] = true;
 }
 
-
-extern int inc_player;
-extern int des_player;
-extern bool enable_bullet;
-
-void get_press_key(uint8_t keycode)
+void release_key(int index)
 {
-	switch (keycode)
-	{
-		case K_A: inc_player--; break;
-		case K_D: inc_player++; break;
-		case K_SPACE: enable_bullet = true; break;
-		case K_ENTER: enable_restart(); break;
-		case K_W: des_player--;break;
-		case K_S: des_player++;break;
-		default: break;
-	}
+	letter_pressed[index] = false;
 }
 
-void get_release_key(uint8_t keycode)
+bool query_key(int index)
 {
-	switch (keycode)
-	{
-		case K_A: inc_player++; break;
-		case K_D: inc_player--; break;
-		case K_SPACE: enable_bullet = false; break;
-		case K_ENTER: close_restart(); break;
-		case K_W:des_player--;break;
-		case K_S:des_player++;break;
-		default: break;
-	}
+	return letter_pressed[index];
 }
+
+static volatile int key_code = 0;
+
+int last_key_code(void)
+{
+	return key_code;
+}
+
+void keyboard_event(int code)
+{
+	key_code = code;
+	press_key(code);
+}
+
+void clear_letter_pressed()
+{
+	int i;
+	for (i = 0;i < 26;i++)
+		letter_pressed[i] = false;
+}
+

@@ -1,32 +1,114 @@
-#include "../include/video.h"
-#include "../include/pic.h"
+#include "../include/types.h"
 #include "../include/string.h"
-#include "../include/syscall.h"
+#include "../include/video.h"
+#include "../include/system.h"
 
-uint8_t v_buffer[SCR_SIZE];
+#define SLOW
 
-inline void clear_buffer()
+#ifdef SLOW
+	#define PARTIAL_UPDATE
+#endif
+
+uint8_t *vmem = VMEM_ADDR;
+static uint8_t vbuf[SCR_SIZE];
+#ifdef PARTIAL_UPDATE
+static uint8_t vref[SCR_SIZE];
+#endif
+
+void prepare_buffer(void)
 {
-	memset(v_buffer, 0x00, SCR_SIZE);
+#ifdef PARTIAL_UPDATE
+	memset(vbuf,0,SCR_SIZE);
+	memcpy(vref, vbuf, SCR_SIZE);
+#endif
+	vmem = vbuf;
+	memset(vmem, 0, SCR_SIZE);
 }
 
-inline void display_buffer()
+void display(void)
 {
-	display_video(v_buffer);
-}
-
-inline void draw_buffer(const uint8_t *src, int x, int y, int w, int h)
-{
+#ifdef PARTIAL_UPDATE
 	int i;
-	int v_idx = (x + y * SCR_WIDTH) * SCR_DEPTH;
-	int s_idx = 0;
-	for(i = 0;i < h;i++)
+	uint32_t *buf = (uint32_t*)vbuf;
+	uint32_t *ref = (uint32_t*)vref;
+	for (i = 0; i < SCR_SIZE/4 ; i ++)
 	{
-		memcpy(v_buffer + v_idx, src + s_idx, w * SCR_DEPTH);
-		v_idx += SCR_WIDTH_SIZE;
-		s_idx += w * SCR_DEPTH;
+		if (buf[i] != ref[i])
+		{
+			system_draw_pixel_off(i,buf[i]);
+			ref[i]=buf[i];
+		}
 	}
+#else
+
+	for (i = 0;i < SCR_SIZE / 4;i++)
+		system_draw_pixel_off(i,buf[i]);
+#endif
 }
 
+void blue_screen()
+{
+	system_clear_screen(1);
+}
 
+void white_screen()
+{
+	system_clear_screen(15);
+}
 
+void black_screen()
+{
+	system_clear_screen(0);
+}
+
+void yellow_screen()
+{
+	system_clear_screen(14);
+}
+
+int quater_width = SCR_HEIGHT / 4;
+int quater_height = SCR_HEIGHT / 4;
+int last_row = SCR_HEIGHT * 4 / 5;
+int last_line = SCR_HEIGHT * 4 / 5;
+int line_width = 4;
+int line_num = 4;
+int row_width = 4;
+int row_num = 4;
+
+void draw_border(void)
+{
+	int i,j,k;
+	for (i = 0;i < row_num;i++)
+	{
+		for (j = 0;j < row_width;j++)
+		{
+			for (k = 0;k < last_line;k++)
+				vbuf[i * quater_height * SCR_WIDTH + j * SCR_WIDTH + k] = 1;
+		}
+	}
+	for (i = 0;i < last_row;i++)
+	{
+		for (j = 0;j < line_num;j++)
+		{
+			for (k = 0;k < line_width;k++)
+				vbuf[i * SCR_WIDTH + j * quater_width + k] = 1;
+		}
+	}
+
+}
+
+void draw_squares(int index,uint8_t color)
+{
+	int row = (index - 1) / 3;
+	int line = index % 3;
+	if (line == 0) line+=3;
+	line -= 1;
+	int start_place = row * (quater_height) * SCR_WIDTH + row_width * SCR_WIDTH + line_width + line * quater_width;
+	int i,j;
+	for (i = 0;i < quater_height - 4;i++)
+	{
+		for (j = start_place + i * SCR_WIDTH;j < start_place + i * SCR_WIDTH + quater_width - line_width;j++)
+		vbuf[j] = color;
+	}
+
+}

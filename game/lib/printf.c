@@ -1,12 +1,27 @@
-#include "../include/common.h"
-#include "../include/syscall.h"
+#include "../include/x86.h"
+#include "../include/stdarg.h"
 #include "../include/stdio.h"
+#include "../include/system.h"
 
-int __attribute__((__noinline__))
-printf(const char *ctl, ...)
+static void putch_f(int ch,int *cnt)
 {
-	static char buf[256];
-	void *args = (void **)&ctl + 1;
-	int len = vsnprintf(buf, 256, ctl, args);
-	return write(1, buf, len);
+	system_serial_print(ch);
+	(*cnt)++;
+}
+
+int vprintf(const char *fmt,va_list ap)
+{
+	int cnt = 0;
+	vprintfmt((void*)putch_f,&cnt,fmt,ap);
+	return cnt;
+}
+
+int printf(const char *fmt,...)
+{
+	va_list ap;
+	int cnt;
+	va_start(ap,fmt);
+	cnt = vprintf(fmt,ap);
+	va_end(ap);
+	return cnt;
 }

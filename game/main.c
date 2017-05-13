@@ -1,39 +1,48 @@
 #include "include/common.h"
 #include "include/x86.h"
 #include "include/video.h"
+#include "include/string.h"
+#include "include/game.h"
+#include "include/keyboard.h"
+#include "include/timer.h"
+#include "include/system.h"
 
-bool keyboard_process();
-void init_effect();
-void game_loop();
+volatile int tick = 0;
+
+void timer_event(void)
+{
+	tick++;
+}
+
+void init_game()
+{
+	syscall(0, timer_event);
+	syscall(1, keyboard_event);
+}
+
 void testprintf();
 
-static bool restart;
-void enable_restart()
+void sleep(int time)
 {
-	restart = true;
+	int pretime = tick;
+	while (tick - pretime < time * 100);
 }
-void close_restart()
+int game_main()
 {
-	restart = false;
-}
-
-
-void game_main()
-{
+	init_game();
 	testprintf();
-	printf("Game Start!\n");
-	//sti();
-	restart = false;
-	while(1)
+	while (1)
 	{
-		//hlt();
-		while(keyboard_process());
-		if(restart)
-		{
-			clear_buffer();
-			display_buffer();
-			init_effect();
-			game_loop();
-		}
+		printf("Game init!\n");
+		clear_letter_pressed();
+		black_screen();
+		prepare_buffer();
+		draw_border();
+		display();
+		init_squares();
+		printf("Game start!\n");
+		game_loop();
+		sleep(2);
 	}
+	return 0;
 }

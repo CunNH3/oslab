@@ -3,18 +3,27 @@
 #include "../include/assert.h"
 #include "../include/mmu.h"
 #include "../include/x86.h"
+#include "../include/env.h"
 #include "../include/types.h"
 
-#define NR_IRQ_HANDLE 32
-#define NR_HARD_INTR 16 /* At most 16 kinds of hardware interrupts. */
+static void (*do_timer)(void);
+static void (*do_keyboard)(int);
+void do_syscall(TrapFrame *tf);
 
-void do_syscall(TrapFrame* tf);
-void timer_event(void);
-void keyboard_event(uint32_t);
-/* TrapFrame的定义在include/memory.h
- * 请仔细理解这段程序的含义，这些内容将在后续的实验中被反复使用。 */
+void
+set_timer_intr_handler(void (*ptr)(void))
+{
+	do_timer = ptr;
+}
+
+void set_keyboard_intr_handler( void (*ptr)(int) )
+{
+	do_keyboard = ptr;
+}
+
 void irq_handle(struct TrapFrame *tf)
 {
+	curenv->env_tf = *tf;
 	if (tf->irq == 0x80)
 		do_syscall(tf);
 	else 
@@ -34,15 +43,16 @@ void irq_handle(struct TrapFrame *tf)
 	else 
 	if (tf->irq == 1000)
 	{
-		timer_event();
+		if (do_timer) do_timer();
 	} 
-	else if (tf->irq == 1001) {
+	else if (tf->irq == 1001)
+	{
 		uint32_t code = inb(0x60);
 		uint32_t val = inb(0x61);
 		outb(0x61, val | 0x80);
 		outb(0x61, val);
 		printk("%s, %d: key code = %x\n", __FUNCTION__, __LINE__, code);
-		keyboard_event(code);
+		if (do_keyboard) do_keyboard(code);
 	}
 	else if(tf->irq== 1014){
 		

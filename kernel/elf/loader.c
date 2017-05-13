@@ -7,6 +7,8 @@
 #include "../include/common.h"
 #include "../include/string.h"
 #include "../include/pmap.h"
+#include "../include/irq.h"
+#include "../include/trap.h"
 
 #define SECTSIZE 512
 
@@ -20,10 +22,8 @@ void* loader(pde_t *entry_pgdir)
 	unsigned char pagebuffer[4096];
 
 	elf = (struct Elf*)buffer;
-	/* 读入ELF文件头 */
 	readseg((unsigned char*)elf,4096,0);
 	printk("elfentry=%x\n",elf->e_entry);
-	/* 把每个program segement依次读入内存 */
 	ph = (struct Proghdr*)((char*)elf+elf->e_phoff);
 	eph = ph + elf->e_phnum;
 	for (;ph < eph;ph++)
