@@ -24,6 +24,7 @@ void init_vmem()
 		ptable->val = PTE_ADDR(pframe_addr) | PTE_P | PTE_W | PTE_U;
 		ptable ++;
 	}
-
+printk("vmem_addr = 0x%08x\n",vmem);
+	printk("SCR_SIZE = %d\n",SCR_SIZE);
 	memcpy(vmem,gImage_PARK,SCR_SIZE);
 }
