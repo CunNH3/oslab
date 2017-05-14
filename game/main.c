@@ -35,7 +35,7 @@ int game_main()
 	{
 		printf("Game init!\n");
 		clear_letter_pressed();
-		black_screen();
+		draw_black_screen();
 		prepare_buffer();
 		draw_border();
 		display();

@@ -19,10 +19,10 @@ static inline void draw_pixel(int x, int y, int color)
 
 void prepare_buffer();
 void display();
-void blue_screen();
-void yellow_screen();
-void white_screen();
-void black_screen();
+void draw_grey_screen();
+void draw_pink_screen();
+void draw_white_screen();
+void draw_black_screen();
 void draw_border();
 void draw_squares(int ,uint8_t);
 void draw_string(const char*, int, int, int);

@@ -18,6 +18,12 @@ typedef struct
 
 SQUARE squares[3][3];
 
+bool judge(int a,int b,int c,int d)
+{
+	if (squares[a][b].item == squares[c][d].item) return 1; else return 0;
+}
+
+
 void init_squares()
 {
 	int i,j;
@@ -49,10 +55,6 @@ void init_squares()
 	}	
 }
 
-bool judge(int a,int b,int c,int d)
-{
-	if (squares[a][b].item == squares[c][d].item) return 1; else return 0;
-}
 
 END judge_end()
 {
@@ -170,19 +172,19 @@ void game_loop()
 		END judge = judge_end();
 		if ((judge.ifend == true) && ((judge.item - 1) == 0))
 		{
-			white_screen();
+			draw_white_screen();
 			break;
 		}
 		else 
 		if ((judge.ifend == true) && ((judge.item - 2) == 0))
 		{
-			blue_screen();
+			draw_grey_screen();
 			break;
 		}
 		else 
 		if ((judge.ifend == true) && (judge.item - 3) == 0)
 		{
-			yellow_screen();
+			draw_pink_screen();
 			break;
 		}
 	}
