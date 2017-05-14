@@ -1,7 +1,6 @@
 #include "../include/mmu.h"
 #include "../include/string.h"
 #include "../include/x86.h"
-//#include "../include/mmu2.h"
 #include "../include/stdio.h"
 
 static TSS tss; 

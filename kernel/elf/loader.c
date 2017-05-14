@@ -13,8 +13,11 @@
 #define SECTSIZE 512
 
 void readseg(unsigned char *, int, int);
+void waitdisk(void);
+void readsect(void *, int);
 extern struct PageInfo* page_free_list; 
 unsigned char buffer[4096];
+
 void* loader(pde_t *entry_pgdir)
 {
 	struct Elf *elf;
@@ -23,7 +26,9 @@ void* loader(pde_t *entry_pgdir)
 
 	elf = (struct Elf*)buffer;
 	readseg((unsigned char*)elf,4096,0);
-	printk("elfentry=%x\n",elf->e_entry);
+
+	printk("the entry of elf = 0x%08x\n",elf->e_entry);
+
 	ph = (struct Proghdr*)((char*)elf+elf->e_phoff);
 	eph = ph + elf->e_phnum;
 	for (;ph < eph;ph++)
@@ -47,42 +52,8 @@ void* loader(pde_t *entry_pgdir)
 			}	
 		}
 	}
-	/*跳转到程序中*/
-	//asm volatile("hlt");
-	//boot_map_region(entry_pgdir,0xa0000,320*200,0xa0000,PTE_W|PTE_U);
 	return (void*)elf->e_entry;
 
 }
 
-void waitdisk(void)
-{
-	while((inb(0x1F7) & 0xC0) != 0x40); 
-}
-
-void readsect(void *dst, int offset)
-{
-	int i;
-	waitdisk();
-	outb(0x1F2, 1);
-	outb(0x1F3, offset);
-	outb(0x1F4, offset >> 8);
-	outb(0x1F5, offset >> 16);
-	outb(0x1F6, (offset >> 24) | 0xE0);
-	outb(0x1F7, 0x20);
-
-	waitdisk();
-	for (i = 0; i < SECTSIZE / 4; i ++) 
-		((int *)dst)[i] = inl(0x1F0);
-}
-
-
-void readseg(unsigned char *pa, int count, int offset)
-{
-	unsigned char *epa;
-	epa = pa + count;
-	pa -= offset % SECTSIZE;
-	offset = (offset / SECTSIZE) + 201;
-	for(; pa < epa; pa += SECTSIZE, offset ++)
-		readsect(pa, offset);
-}
 
