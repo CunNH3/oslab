@@ -112,7 +112,7 @@ int page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 		page_remove(pgdir,va);	
 	}
 	pte_t *pte = pgdir_walk(pgdir,va,1);
-	if (pte==NULL) return -E_NO_MEM;
+	if (pte == NULL) return -E_NO_MEM;
 	else
 	{
 		(*pte) = page2pa(pp) | perm | PTE_P;
@@ -150,10 +150,7 @@ void tlb_invalidate(pde_t *pgdir, void *va)
 
 void init_mem()
 {
-	//tm create a mappting
-	//uint32_t VMEM_ADDR = 0xfd000000;
 	boot_map_region(entry_pgdir,KERNBASE,npages * PGSIZE,0,PTE_W);
 	boot_map_region(entry_pgdir,0xa0000,320 * 200,0xa0000,PTE_W | PTE_U);
-	//memcpy((uint32_t)VMEM_ADDR,gImage_PARK,800 * 600 * 3);
 	return ;
 }

@@ -152,7 +152,7 @@ void game_loop()
 						{
 							if (count % 2 == 0)
 							{
-								draw_squares(squares[j][k].Number,17);
+								draw_squares(squares[j][k].Number,1);
 								squares[j][k].item = 1;
 								display();
 							}
@@ -178,7 +178,7 @@ void game_loop()
 		else 
 		if ((judge.ifend == true) && ((judge.item - 2) == 0))
 		{
-			draw_grey_screen();
+			draw_blue_screen();
 			break;
 		}
 		else 

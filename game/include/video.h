@@ -19,7 +19,7 @@ static inline void draw_pixel(int x, int y, int color)
 
 void prepare_buffer();
 void display();
-void draw_grey_screen();
+void draw_blue_screen();
 void draw_pink_screen();
 void draw_white_screen();
 void draw_black_screen();

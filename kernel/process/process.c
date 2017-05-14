@@ -122,7 +122,7 @@ static void load_icode(struct Env*e,pde_t *entry_pgdir)
 	
 	elf = (struct Elf*)env_buffer;
 	readseg((unsigned char *)elf,4096,0);
-	printk("the entry of the elf = 0x%08x\n",elf->e_entry);
+	printk("the entry of the elf2 = 0x%08x\n",elf->e_entry);
 
 	ph = (struct Proghdr*)((char*)elf + elf->e_phoff);
 	eph = ph + elf->e_phnum;
@@ -135,7 +135,7 @@ static void load_icode(struct Env*e,pde_t *entry_pgdir)
 			while (va < ph->p_va + ph->p_memsz)
 			{
 				memset(pagebuffer,0,4096);
-				uint32_t offset = va&0xfff;
+				uint32_t offset = va & 0xfff;
 				va = va & 0xfffff000;
 				struct PageInfo* page = page_alloc(1);
 				page_insert(entry_pgdir,page,(void*)va,PTE_U | PTE_W);

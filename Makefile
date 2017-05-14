@@ -110,7 +110,7 @@ DEPS := $(shell find -name "*.d")
 
 qemu: $(IMAGE)
 	$(QEMU) $(QEMU_OPTIONS) $(IMAGE)
-	$(call git_commit, "run qemu", $(GITFLAGS))
+#	$(call git_commit, "run qemu", $(GITFLAGS))
 
 # Faster, but not suitable for debugging
 qemu-kvm: $(IMAGE)
@@ -118,11 +118,11 @@ qemu-kvm: $(IMAGE)
 
 debug: $(IMAGE)
 	$(QEMU) $(QEMU_DEBUG_OPTIONS) $(QEMU_OPTIONS) $(IMAGE)
-	$(call git_commit, "debug", $(GITFLAGS))
+#	$(call git_commit, "debug", $(GITFLAGS))
 
 gdb:
 	$(GDB) $(GDB_OPTIONS)
-	$(call git_commit, "run gdb", $(GITFLAGS))
+#	$(call git_commit, "run gdb", $(GITFLAGS))
 
 clean:
 	@rm -rf $(OBJ_DIR) 2> /dev/null

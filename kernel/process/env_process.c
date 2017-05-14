@@ -16,8 +16,10 @@ struct Env*seek_next_runnable()
 	int i;
 	for (i = 0;i <= NENV + 1;i++)
 	{
-		if (env == &envs[NENV - 1]) env=envs;
-		else env++;
+		if (env == &envs[NENV - 1]) 
+			env = envs;
+		else
+			env++;
 		if (env->env_status == ENV_RUNNABLE) return env;
 	}
 	printk("no process\n");

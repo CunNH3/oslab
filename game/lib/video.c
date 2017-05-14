@@ -46,9 +46,9 @@ void display(void)
 #endif
 }
 
-void draw_grey_screen()
+void draw_blue_screen()
 {
-	system_clear_screen(13);
+	system_clear_screen(1);
 }
 
 void draw_white_screen()
@@ -63,7 +63,7 @@ void draw_black_screen()
 
 void draw_pink_screen()
 {
-	system_clear_screen(17);
+	system_clear_screen(13);
 }
 
 int quarter_width = SCR_HEIGHT / 4;
