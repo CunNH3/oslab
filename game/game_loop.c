@@ -5,15 +5,15 @@
 
 typedef struct
 {
-	int num;
-	int isempty;//0,1,2
-	int num_aph;
+	int Number;
+	int item;//0,1,2
+	int Number_aph;
 }SQUARE;
 
 typedef struct 
 {
 	bool ifend;
-	int isempty;
+	int item;
 }END;
 
 SQUARE squares[3][3];
@@ -25,28 +25,33 @@ void init_squares()
 	{
 		for (j = 0;j < 3;j++)
 		{
-			squares[i][j].isempty = 0;
-			squares[i][j].num = i * 3 + j + 1;
-			if (squares[i][j].num == 1) squares[i][j].num_aph = 16;
+			squares[i][j].item = 0;
+			squares[i][j].Number = i * 3 + j + 1;
+			if (squares[i][j].Number == 1) squares[i][j].Number_aph = 16;
 			else 
-			if (squares[i][j].num == 2) squares[i][j].num_aph = 22;
+			if (squares[i][j].Number == 2) squares[i][j].Number_aph = 22;
 			else 
-			if (squares[i][j].num == 3) squares[i][j].num_aph = 4;
+			if (squares[i][j].Number == 3) squares[i][j].Number_aph = 4;
 			else 
-			if (squares[i][j].num == 4) squares[i][j].num_aph = 0;
+			if (squares[i][j].Number == 4) squares[i][j].Number_aph = 0;
 			else 
-			if (squares[i][j].num == 5) squares[i][j].num_aph = 18;
+			if (squares[i][j].Number == 5) squares[i][j].Number_aph = 18;
 			else 
-			if (squares[i][j].num == 6) squares[i][j].num_aph = 3;
+			if (squares[i][j].Number == 6) squares[i][j].Number_aph = 3;
 			else 
-			if (squares[i][j].num == 7) squares[i][j].num_aph = 25;
+			if (squares[i][j].Number == 7) squares[i][j].Number_aph = 25;
 			else 
-			if (squares[i][j].num == 8) squares[i][j].num_aph = 23;
+			if (squares[i][j].Number == 8) squares[i][j].Number_aph = 23;
 			else 
-			if (squares[i][j].num == 9) squares[i][j].num_aph = 2;
-			else squares[i][j].num_aph = 30;
+			if (squares[i][j].Number == 9) squares[i][j].Number_aph = 2;
+			else squares[i][j].Number_aph = 30;
 		}
 	}	
+}
+
+bool judge(int a,int b,int c,int d)
+{
+	if (squares[a][b].item == squares[c][d].item) return 1; else return 0;
 }
 
 END judge_end()
@@ -55,73 +60,73 @@ END judge_end()
 	bool flag = true;
 	END temp;
 	temp.ifend = false;
-	if ((squares[0][0].isempty != 0) && (squares[0][0].isempty == squares[0][1].isempty) && (squares[0][1].isempty == squares[0][2].isempty))
+	if ((squares[0][0].item != 0) && (judge(0,0,0,1)) && (judge(0,1,0,2)))
 	{
 		temp.ifend = true;
-		temp.isempty = squares[0][0].isempty;
+		temp.item = squares[0][0].item;
 		flag = false;
 	}
 	else
-	if ((squares[0][0].isempty != 0) && (squares[0][0].isempty == squares[1][0].isempty) && (squares[0][0].isempty == squares[2][0].isempty))
+	if ((squares[0][0].item != 0) && (judge(0,0,1,0)) && (judge(0,0,2,0)))
 	{
 		temp.ifend = true;
-		temp.isempty = squares[0][0].isempty;
+		temp.item = squares[0][0].item;
 		flag = false;
 	}
 	else
-	if ((squares[2][0].isempty != 0) && (squares[2][0].isempty == squares[2][1].isempty) && (squares[2][0].isempty == squares[2][2].isempty))
+	if ((squares[2][0].item != 0) && (judge(2,0,2,1)) && (judge(2,0,2,2)))
 	{
 		temp.ifend = true;
-		temp.isempty = squares[2][0].isempty;
+		temp.item = squares[2][0].item;
 		flag = false;
 	}
 	else 
-	if ((squares[0][2].isempty != 0) && (squares[0][2].isempty == squares[1][2].isempty) && (squares[0][2].isempty == squares[2][2].isempty))
+	if ((squares[0][2].item != 0) && (judge(0,2,1,2)) && (judge(0,2,2,2)))
 	{
 		temp.ifend = true;
-		temp.isempty = squares[0][2].isempty;
+		temp.item = squares[0][2].item;
 		flag = false;
 	}
 	else 
-	if ((squares[1][0].isempty != 0) && (squares[1][0].isempty == squares[1][1].isempty) && (squares[1][0].isempty == squares[1][2].isempty))
+	if ((squares[1][0].item != 0) && (judge(1,0,1,1)) && (judge(1,0,1,2)))
 	{
 		temp.ifend = true;
-		temp.isempty = squares[1][0].isempty;
+		temp.item = squares[1][0].item;
 		flag = false;
 	}
 	else 
-	if ((squares[0][1].isempty != 0) && (squares[0][1].isempty == squares[1][1].isempty) && (squares[0][1].isempty == squares[2][1].isempty))
+	if ((squares[0][1].item != 0) && (judge(0,1,1,1)) && (judge(0,1,2,1)))
 	{
 		temp.ifend = true;
-		temp.isempty = squares[0][1].isempty;
+		temp.item = squares[0][1].item;
 		flag = false;
 	}
 	else 
-	if ((squares[0][0].isempty != 0) && (squares[0][0].isempty == squares[1][1].isempty) && (squares[0][0].isempty == squares[2][2].isempty))
+	if ((squares[0][0].item != 0) && (judge(0,0,1,1)) && (judge(0,0,2,2)))
 	{
 		temp.ifend = true;
-		temp.isempty = squares[0][0].isempty;
+		temp.item = squares[0][0].item;
 		flag = false;
 	}
 	else 
-	if ((squares[0][2].isempty != 0) && (squares[0][2].isempty == squares[1][1].isempty) && (squares[0][2].isempty == squares[2][0].isempty))
+	if ((squares[0][2].item != 0) && (judge(0,2,1,1)) && (judge(0,2,2,0)))
 	{
 		temp.ifend = true;
-		temp.isempty = squares[0][2].isempty;
+		temp.item = squares[0][2].item;
 		flag = false;
 	}
 	else 
 	{
 		temp.ifend = false;
-		temp.isempty = 0;
+		temp.item = 0;
 		for (i = 0;i < 3;i++)
 			for (j = 0;j < 3;j++)
-				if (squares[i][j].isempty == 0) flag = false;
+				if (squares[i][j].item == 0) flag = false;
 	}
 	if (flag == true)
 	{
 		temp.ifend = true;
-		temp.isempty = 3;
+		temp.item = 3;
 	}
 	return temp;
 
@@ -141,18 +146,18 @@ void game_loop()
 				{
 					for (k = 0;k < 3;k++)
 					{
-						if ((squares[j][k].num_aph == i) && (squares[j][k].isempty == 0))
+						if ((squares[j][k].Number_aph == i) && (squares[j][k].item == 0))
 						{
 							if (count % 2 == 0)
 							{
-								draw_squares(squares[j][k].num,15);
-								squares[j][k].isempty = 1;
+								draw_squares(squares[j][k].Number,15);
+								squares[j][k].item = 1;
 								display();
 							}
 							else
 							{
-								draw_squares(squares[j][k].num,1);
-								squares[j][k].isempty = 2;
+								draw_squares(squares[j][k].Number,1);
+								squares[j][k].item = 2;
 								display();
 							}
 							count++;
@@ -163,19 +168,19 @@ void game_loop()
 			}
 		}
 		END judge = judge_end();
-		if ((judge.ifend == true) && ((judge.isempty - 1) == 0))
+		if ((judge.ifend == true) && ((judge.item - 1) == 0))
 		{
 			white_screen();
 			break;
 		}
 		else 
-		if ((judge.ifend == true) && ((judge.isempty - 2) == 0))
+		if ((judge.ifend == true) && ((judge.item - 2) == 0))
 		{
 			blue_screen();
 			break;
 		}
 		else 
-		if ((judge.ifend == true) && (judge.isempty - 3) == 0)
+		if ((judge.ifend == true) && (judge.item - 3) == 0)
 		{
 			yellow_screen();
 			break;
