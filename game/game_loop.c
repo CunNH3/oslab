@@ -150,13 +150,13 @@ void game_loop()
 						{
 							if (count % 2 == 0)
 							{
-								draw_squares(squares[j][k].Number,15);
+								draw_squares(squares[j][k].Number,17);
 								squares[j][k].item = 1;
 								display();
 							}
 							else
 							{
-								draw_squares(squares[j][k].Number,1);
+								draw_squares(squares[j][k].Number,13);
 								squares[j][k].item = 2;
 								display();
 							}
