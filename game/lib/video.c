@@ -48,7 +48,7 @@ void display(void)
 
 void draw_grey_screen()
 {
-	system_clear_screen(17);
+	system_clear_screen(13);
 }
 
 void draw_white_screen()
@@ -63,11 +63,11 @@ void draw_black_screen()
 
 void draw_pink_screen()
 {
-	system_clear_screen(13);
+	system_clear_screen(17);
 }
 
-int quater_width = SCR_HEIGHT / 4;
-int quater_height = SCR_HEIGHT / 4;
+int quarter_width = SCR_HEIGHT / 4;
+int quarter_height = SCR_HEIGHT / 4;
 int last_row = SCR_HEIGHT * 4 / 5;
 int last_line = SCR_HEIGHT * 4 / 5;
 int line_width = 4;
@@ -83,7 +83,7 @@ void draw_border(void)
 		for (j = 0;j < row_width;j++)
 		{
 			for (k = 0;k < last_line;k++)
-				vbuf[i * quater_height * SCR_WIDTH + j * SCR_WIDTH + k] = 1;
+				vbuf[i * quarter_height * SCR_WIDTH + j * SCR_WIDTH + k] = 1;
 		}
 	}
 	for (i = 0;i < last_row;i++)
@@ -91,7 +91,7 @@ void draw_border(void)
 		for (j = 0;j < line_num;j++)
 		{
 			for (k = 0;k < line_width;k++)
-				vbuf[i * SCR_WIDTH + j * quater_width + k] = 1;
+				vbuf[i * SCR_WIDTH + j * quarter_width + k] = 1;
 		}
 	}
 
@@ -103,11 +103,11 @@ void draw_squares(int index,uint8_t color)
 	int line = index % 3;
 	if (line == 0) line+=3;
 	line -= 1;
-	int start_place = row * (quater_height) * SCR_WIDTH + row_width * SCR_WIDTH + line_width + line * quater_width;
+	int start_place = row * (quarter_height) * SCR_WIDTH + row_width * SCR_WIDTH + line_width + line * quarter_width;
 	int i,j;
-	for (i = 0;i < quater_height - 4;i++)
+	for (i = 0;i < quarter_height - 4;i++)
 	{
-		for (j = start_place + i * SCR_WIDTH;j < start_place + i * SCR_WIDTH + quater_width - line_width;j++)
+		for (j = start_place + i * SCR_WIDTH;j < start_place + i * SCR_WIDTH + quarter_width - line_width;j++)
 		vbuf[j] = color;
 	}
 
