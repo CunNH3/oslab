@@ -122,7 +122,7 @@ static void load_icode(struct Env*e,pde_t *entry_pgdir)
 	
 	elf = (struct Elf*)env_buffer;
 	readseg((unsigned char *)elf,4096,0);
-	printk("elfentry=%x\n",elf->e_entry);
+	printk("the entry of the elf = 0x%08x\n",elf->e_entry);
 
 	ph = (struct Proghdr*)((char*)elf + elf->e_phoff);
 	eph = ph + elf->e_phnum;
@@ -169,19 +169,19 @@ void env_create()
 void env_free(struct Env* e)
 {
 	pte_t *pt;
-	uint32_t pdeno,pteno;
+	uint32_t no_pde,no_pte;
 	physaddr_t pa;
 	if (e == curenv) lcr3(PADDR(entry_pgdir));
-	for (pdeno = 0;pdeno < PDX(UTOP);pdeno++)
+	for (no_pde = 0;no_pde < PDX(UTOP);no_pde++)
 	{
-		if (!((e->env_pgdir[pdeno]) & PTE_P) || (entry_pgdir[pdeno] & PTE_P)) continue;
-		pa = PTE_ADDR(e->env_pgdir[pdeno]);
+		if (!((e->env_pgdir[no_pde]) & PTE_P) || (entry_pgdir[no_pde] & PTE_P)) continue;
+		pa = PTE_ADDR(e->env_pgdir[no_pde]);
 		pt = (pte_t*)KADDR(pa);
-		for (pteno = 0;pteno <= PTX(~0);pteno++)
+		for (no_pte = 0;no_pte <= PTX(~0);no_pte++)
 		{
-			if (pt[pteno] & PTE_P) page_remove(e->env_pgdir,PGADDR(pdeno,pteno,0));
+			if (pt[no_pte] & PTE_P) page_remove(e->env_pgdir,PGADDR(no_pde,no_pte,0));
 		}
-		e->env_pgdir[pdeno] = 0;
+		e->env_pgdir[no_pde] = 0;
 		page_decref(pa2page(pa));
 	}
 	pa = PADDR(e->env_pgdir);

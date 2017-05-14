@@ -29,7 +29,7 @@ void* loader(pde_t *entry_pgdir)
 
 	printk("the entry of elf = 0x%08x\n",elf->e_entry);
 
-	ph = (struct Proghdr*)((char*)elf+elf->e_phoff);
+	ph = (struct Proghdr*)((char*)elf + elf->e_phoff);
 	eph = ph + elf->e_phnum;
 	for (;ph < eph;ph++)
 	{

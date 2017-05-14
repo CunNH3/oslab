@@ -18,6 +18,22 @@ void do_syscall(TrapFrame* tf)
 {
 	switch (tf->eax)
 	{
+		case env_fork:
+			system_env_fork();
+			break;
+		case env_sleep:
+			printk("sleep!!\n");
+			system_env_sleep((uint32_t)tf->ebx);
+			break;
+		case env_exit:
+			system_env_exit();
+			break;
+		case 0:
+			set_timer_intr_handler((void*)tf->ebx);
+			break;
+		case 1:
+			set_keyboard_intr_handler((void*)tf->ebx);
+			break;
 		case drawpixel:
 		{
 			int offset = tf->ebx + tf->ecx * SCR_WIDTH;
@@ -38,12 +54,6 @@ void do_syscall(TrapFrame* tf)
 		case clearscreen:
 			memset((void*)vmembase,tf->ebx,SCR_SIZE);
 			break;
-		case 0:
-			set_timer_intr_handler((void*)tf->ebx);
-			break;
-		case 1:
-			set_keyboard_intr_handler((void*)tf->ebx);
-			break;
 		case initserial:
 			init_serial();
 			break;
@@ -55,16 +65,6 @@ void do_syscall(TrapFrame* tf)
 			break;
 		case disenableinterrupt:
 			asm volatile("cli");
-			break;
-		case env_fork:
-			system_env_fork();
-			break;
-		case env_sleep:
-			printk("sleep!!\n");
-			system_env_sleep((uint32_t)tf->ebx);
-			break;
-		case env_exit:
-			system_env_exit();
 			break;
  	}
 }
