@@ -288,17 +288,16 @@ typedef struct {
 	char dontcare[88];
 }TSS;
 // Gate descriptors for interrupts and traps
-typedef struct GateDescriptor {
-	unsigned gd_off_15_0 : 16;   // low 16 bits of offset in segment
-	unsigned gd_sel : 16;        // segment selector
-	unsigned gd_args : 5;        // # args, 0 for interrupt/trap gates
-	unsigned gd_rsv1 : 3;        // reserved(should be zero I guess)
-	unsigned gd_type : 4;        // type(STS_{TG,IG32,TG32})
-	unsigned gd_s : 1;           // must be 0 (system)
-	unsigned gd_dpl : 2;         // descriptor(meaning new) privilege level
-	unsigned gd_p : 1;           // Present
-	unsigned gd_off_31_16 : 16;  // high bits of offset in segment
-} Gatedesc;
+struct GateDescriptor {
+	uint32_t offset_15_0      : 16;//low 16bit of offset in segment
+	uint32_t segment          : 16;//segment selector
+	uint32_t pad0             : 8;//low 5#args, 0 for interrupt/trap gates high 3bit:reserved(should be 0 I guess)
+	uint32_t type             : 4;//type(STS_{TG,IG32,TG32})
+	uint32_t system           : 1;//must be 0(system)
+	uint32_t privilege_level  : 2;//descriptor(meaning new)privilege
+	uint32_t present          : 1;//Present
+	uint32_t offset_31_16     : 16;//high bits of offset in segment
+};
 
 // Set up a normal interrupt/trap gate descriptor.
 // - istrap: 1 for a trap (= exception) gate, 0 for an interrupt gate.

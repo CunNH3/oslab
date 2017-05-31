@@ -104,7 +104,7 @@ static void region_alloc(struct Env*e, void *va, size_t len)
 		struct PageInfo *pg = page_alloc(0);
 		if (!pg)
 		{ 
-			printk("region alloc failed!");
+			printk("region alloc failed!\n");
 			return;
 		}
 		page_insert(e->env_pgdir,pg,begin,PTE_W | PTE_U);
@@ -148,7 +148,7 @@ static void load_icode(struct Env*e,pde_t *entry_pgdir)
 			}
 		}
 	}
-	//lcr3(PADDR(kern_pgdir));
+
 	e->env_pgdir = entry_pgdir;
 	e->env_tf.eip = elf->e_entry;
 	region_alloc(e,(void*)(USTACKTOP - PGSIZE),PGSIZE);

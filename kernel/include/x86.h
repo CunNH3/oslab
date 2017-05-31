@@ -97,6 +97,18 @@ insl(int port, void *addr, int cnt)
 			 "memory", "cc");
 }
 
+static inline int in_long(short port)
+{
+	int data;
+	__asm__ __volatile__(
+	"in %1, %0"
+	:"=a"(data)
+	:"d"(port)
+	:"memory"
+	);
+	return data;
+}
+
 static __inline void
 outb(int port, uint8_t data)
 {

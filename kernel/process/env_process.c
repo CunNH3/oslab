@@ -49,7 +49,7 @@ int system_env_fork()
 	int judge = env_alloc(&env,p_id);
 	if (judge != 0)
 	{
-		printk("env_alloc error!");
+		printk("env_alloc error!\n");
 		return judge;
 	}
 	for (i = 0;i < 1024;i++)

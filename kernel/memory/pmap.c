@@ -70,7 +70,7 @@ pte_t *pgdir_walk(pde_t *pgdir, const void *va, int create)
 	{
 		if (create == false) return NULL;
 		else 
-		if (!(newpage = page_alloc(ALLOC_ZERO))) return NULL;
+		if (!(newpage = page_alloc(ALLOC_ZERO))) {printk("no free page!\n");return NULL;}
 		else
 		{
 			newpage->pp_ref++;
@@ -109,7 +109,7 @@ int page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 	else 
 	if(pg)
 	{
-		page_remove(pgdir,va);	
+		page_remove(pgdir,va);
 	}
 	pte_t *pte = pgdir_walk(pgdir,va,1);
 	if (pte == NULL) return -E_NO_MEM;

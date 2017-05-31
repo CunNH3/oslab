@@ -23,6 +23,7 @@ void set_keyboard_intr_handler( void (*ptr)(int) )
 
 void irq_handle(struct TrapFrame *tf)
 {
+	curenv->env_tf = *tf;
 	if (tf->irq == 0x80)
 		do_syscall(tf);
 	else 

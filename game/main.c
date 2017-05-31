@@ -47,3 +47,41 @@ int game_main()
 	return 0;
 }
 
+void fork_test()
+{
+	int i;
+	for (i = 0;i < 2;i++)
+	{
+		printf("We start to test fork.\n");
+		system_env_fork();
+		printf("We fork a process to test.\n");
+	}
+	while(1);
+}
+
+void sleep_test()
+{
+	if (system_env_fork())
+	{
+		printf("We start to test sleep.\n");
+		system_env_sleep(100);
+		printf("The sleep test succeed.\n");
+	}
+	while(1);
+	system_env_exit();
+	printf("We exit this process.\n");
+}
+
+void exit_test()
+{
+	int i;
+	for (i = 0;i < 2;i++)
+	{
+		system_env_fork();
+		printf("We fork a process to test exit then.\n");
+	}
+	system_env_exit();
+	while(1);
+}
+
+
