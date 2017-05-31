@@ -83,11 +83,31 @@ void system_env_sleep(uint32_t time)
 	env_run(env);
 }
 
+int thread_create(void *p)
+{
+	envid_t p_id = curenv->env_id;
+	struct Env *env = NULL;
+	int judge = env_alloc(&env,p_id);
+	if (judge != 0)
+	{
+		printk("env_alloc error!");
+		return judge;
+	}
+	env->env_pgdir = curenv->env_pgdir;
+	curenv->threadnum++;
+	env->env_tf = curenv->env_tf;
+	env->env_tf.esp = curenv->env_tf.esp - curenv->threadnum * PGSIZE;
+	env->env_tf.eip = (uint32_t)p;
+	env->env_tf.eax = 0;
+	return env->env_id;
+}
+
 void system_env_exit()
 {
 	curenv->env_status = ENV_DYING;
-	env_destroy(curenv);
+	//env_destroy(curenv);
 	struct Env* env = seek_next_runnable();
 	env_run(env);
 }
+
 

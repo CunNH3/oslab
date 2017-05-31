@@ -11,7 +11,7 @@
 #define  env_fork (68)
 #define  env_sleep (69)
 #define  env_exit (70)
-
+#define  create_thread (71)
 int __attribute__((__noinline__)) syscall(int id,...);
 void system_draw_pixel( int, int, int);
 void system_serial_print(char);
@@ -26,3 +26,4 @@ void system_env_sleep(uint32_t);
 void system_env_exit();
 struct Env*seek_next_runnable();
 void kernel_timer_event();
+int thread_create(void *);

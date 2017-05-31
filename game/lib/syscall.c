@@ -64,3 +64,7 @@ void system_env_exit()
 	syscall(env_exit);
 }
 
+int thread_create(void *func)
+{
+	return syscall(create_thread,func);
+}

@@ -87,7 +87,7 @@ $(KERNEL): $(KERNEL_O) $(LIB_O)
 $(GAME): $(GAME_O) $(LIB_O)
 	#echo $(GAME_O)
 	#ehco "*************"
-	$(LD) -m elf_i386 -e sleep_test -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
+	$(LD) -m elf_i386 -e game_main -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
 
 

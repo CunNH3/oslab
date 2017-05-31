@@ -49,6 +49,7 @@ void env_init(void)
 	{
 		envs[i].env_status = ENV_FREE;
 		envs[i].env_id = 0;
+		envs[i].threadnum = 0;
 		envs[i].env_link = env_free_list;
 		env_free_list = envs + i; 
 	}
@@ -226,6 +227,7 @@ void env_run(struct Env* e)
 		e->env_runs++;
 		lcr3(PADDR(e->env_pgdir));
 	}
+	
 	env_pop_tf(&e->env_tf);
 }
 
