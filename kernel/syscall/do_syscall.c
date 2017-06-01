@@ -8,7 +8,7 @@
 #include "../include/keyboard.h"
 #include "../include/game.h"
 #include "../include/irq.h"
-
+#include "../include/semaphore.h"
 #ifndef SERIAL_PORT
 #define SERIAL_PORT 0x3F8
 
@@ -67,6 +67,18 @@ void do_syscall(TrapFrame* tf)
 			break;
 		case env_exit:
 			system_env_exit();
+			break;
+		case semopen:
+			sem_open((int)tf->ebx,(bool)tf->ecx,(int)tf->edx);
+			break;
+		case semclose:
+			sem_close((int)tf->ebx);
+			break;
+		case semwait:
+			sem_wait((int)tf->ebx);
+			break;
+ 		case sempost:
+			sem_post((int)tf->ebx);
 			break;
  	}
 }

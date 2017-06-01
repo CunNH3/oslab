@@ -68,3 +68,23 @@ int thread_create(void *func)
 {
 	return syscall(create_thread,func);
 }
+
+void sem_open(int index,bool binary,int value)
+{
+	syscall(semopen,index,binary,value);
+}
+
+void sem_close(int index)
+{
+	syscall(semclose,index);
+}
+
+int sem_wait(int index)
+{
+	return syscall(semwait,index);
+}
+
+void sem_post(int index)
+{
+	syscall(sempost,index);
+}
