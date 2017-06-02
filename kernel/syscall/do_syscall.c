@@ -68,11 +68,17 @@ void do_syscall(TrapFrame* tf)
 		case env_exit:
 			system_env_exit();
 			break;
+		case create_thread:
+			thread_create((void *)tf->ebx);
+			break;
+		case seminit:
+			sem_init();
+			break;
 		case semopen:
 			sem_open((int)tf->ebx,(bool)tf->ecx,(int)tf->edx);
 			break;
-		case semclose:
-			sem_close((int)tf->ebx);
+		case semdestroy:
+			sem_destroy((int)tf->ebx);
 			break;
 		case semwait:
 			sem_wait((int)tf->ebx);

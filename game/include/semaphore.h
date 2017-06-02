@@ -13,8 +13,9 @@ typedef struct
 	bool binary_num;
 	int num;
 	struct Env* wait_list;
-} semaphore_t
+} semaphore_t;
 
+extern semaphore_t semaphore[];
 void sem_init();
 void  sem_open(int ,bool,int);
 void sem_destroy(int);

@@ -13,7 +13,7 @@
 struct Env ENVS[NENV];
 struct Env* envs = ENVS;
 struct Env* curenv = NULL;
-static struct Env* env_free_list;
+struct Env* env_free_list;
 extern pde_t entry_pgdir[];  
 pde_t *kern_pgdir = entry_pgdir;
 
@@ -96,7 +96,7 @@ int env_alloc(struct Env**newenv_store,envid_t parent_id)
 	return 0;
 }
 
-static void region_alloc(struct Env*e, void *va, size_t len)
+void region_alloc(struct Env*e, void *va, size_t len)
 {
 	void *begin = ROUNDDOWN(va,PGSIZE);
 	void *end = ROUNDUP(va + len,PGSIZE);
@@ -152,7 +152,7 @@ static void load_icode(struct Env*e,pde_t *entry_pgdir)
 
 	e->env_pgdir = entry_pgdir;
 	e->env_tf.eip = elf->e_entry;
-	region_alloc(e,(void*)(USTACKTOP - PGSIZE),PGSIZE);
+	region_alloc(e,(void*)(USTACKTOP - 1024 * PGSIZE),1024 * PGSIZE);
 }
 
 void env_create()

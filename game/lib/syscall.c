@@ -68,15 +68,18 @@ int thread_create(void *func)
 {
 	return syscall(create_thread,func);
 }
-
+void sem_init()
+{
+	syscall(seminit);
+}
 void sem_open(int index,bool binary,int value)
 {
 	syscall(semopen,index,binary,value);
 }
 
-void sem_close(int index)
+void sem_destroy(int index)
 {
-	syscall(semclose,index);
+	syscall(semdestroy,index);
 }
 
 int sem_wait(int index)

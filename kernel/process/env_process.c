@@ -6,6 +6,7 @@
 #include "../include/error.h"
 #include "../include/string.h"
 #include "../include/common.h"
+extern struct Env*env_free_list;
 
 struct Env*seek_next_runnable()
 {
@@ -95,11 +96,23 @@ int thread_create(void *p)
 	}
 	env->env_pgdir = curenv->env_pgdir;
 	curenv->threadnum++;
-	env->env_tf = curenv->env_tf;
-	env->env_tf.esp = curenv->env_tf.esp - curenv->threadnum * PGSIZE;
+	//env->env_tf = curenv->env_tf;
+	env->env_tf.esp = USTACKTOP - curenv->threadnum * 2 * PGSIZE + PGSIZE + 0x60;
 	env->env_tf.eip = (uint32_t)p;
 	env->env_tf.eax = 0;
 	return env->env_id;
+}
+
+
+void thread_free()
+{
+	uint32_t pa = PADDR(curenv->env_pgdir);
+	curenv->env_pgdir = 0;
+	page_decref(pa2page(pa));
+	curenv->env_status = ENV_FREE;
+	envs[curenv->env_parent_id].threadnum--;
+	curenv->env_link = env_free_list;
+	env_free_list = curenv;
 }
 
 void system_env_exit()
