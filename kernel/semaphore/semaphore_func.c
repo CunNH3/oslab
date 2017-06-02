@@ -8,6 +8,7 @@
 void sem_open(int index,bool binary,int value)
 {
 	semaphore[index].effective = true;
+	semaphore[index].binary = binary;
 	if (binary) semaphore[index].binary_num = (bool)value;
 	else semaphore[index].num = value;
 }
@@ -24,6 +25,7 @@ int sem_wait(int index)
 		printk("The semaphore is ineffective!\n");
 		return -1;
 	}
+	//else printk("The semaphore is effective!\n");
 	if (!semaphore[index].binary)
 	{
 		int temp = semaphore[index].num;
@@ -70,6 +72,7 @@ void sem_post(int index)
 		printk("The semaphore is ineffective!\n");
 		return;
 	}
+	//else printk("The semaphore is effective!\n");
 	if (!semaphore[index].binary)
 	{
 		if (!semaphore[index].wait_list)

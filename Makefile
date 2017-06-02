@@ -85,8 +85,6 @@ $(KERNEL): $(KERNEL_O) $(LIB_O)
 	$(LD) -m elf_i386 -T $(LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
 $(GAME): $(GAME_O) $(LIB_O)
-	#echo $(GAME_O)
-	#ehco "*************"
 	$(LD) -m elf_i386 -e test_main -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
 

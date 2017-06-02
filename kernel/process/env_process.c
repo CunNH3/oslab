@@ -96,7 +96,6 @@ int thread_create(void *p)
 	}
 	env->env_pgdir = curenv->env_pgdir;
 	curenv->threadnum++;
-	//env->env_tf = curenv->env_tf;
 	env->env_tf.esp = USTACKTOP - curenv->threadnum * 2 * PGSIZE + PGSIZE + 0x60;
 	env->env_tf.eip = (uint32_t)p;
 	env->env_tf.eax = 0;
