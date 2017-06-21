@@ -1,17 +1,19 @@
 #ifndef ENV_H
 #define ENV_H
 
-#include"types.h"
-#include"trap.h"
-#include"memlayout.h"
-#include"irq.h"
+#include "types.h"
+#include "trap.h"
+#include "memlayout.h"
+#include "irq.h"
+#include "fs.h"
 
 typedef int32_t envid_t;
 #define LOG2NENV	10
 #define NENV		(1<<LOG2NENV)
 #define ENVX(envid)	((envid)&(NENV))
-enum{
-	ENV_FREE=0,
+enum
+{
+	ENV_FREE = 0,
 	ENV_DYING,
 	ENV_RUNNABLE,
 	ENV_RUNNING,
@@ -19,11 +21,13 @@ enum{
 	ENV_SLEEP
 };
 
-enum EnvType{
-	ENV_TYPE_USER=0
+enum EnvType
+{
+	ENV_TYPE_USER = 0
 };
 
-struct Env{
+struct Env
+{
 	struct TrapFrame env_tf;
 	struct Env*env_link;
 	envid_t env_id;
@@ -33,6 +37,7 @@ struct Env{
 	uint32_t env_runs;
 	uint32_t sleep_time;
 	uint32_t threadnum;
+	Fstate file[NR_FILES];
 	//int env_cpunum;
 	pde_t *env_pgdir;//kernel virtual address of page dir 
 	//void *env_pgfault_upcall;

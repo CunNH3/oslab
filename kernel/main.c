@@ -12,6 +12,8 @@
 #include "include/pmap.h"
 #include "include/game.h"
 #include "include/semaphore.h"
+#include "include/disk.h"
+#include "include/fs.h"
 
 extern pde_t entry_pgdir[];
 void init_cond();
@@ -36,6 +38,7 @@ void init_cond()
 	init_timer();
 	init_mem();
 	sem_init();
+	readsect((void *)directory_d.entries, 201 + 256);
 	set_timer_intr_handler(kernel_timer_event);
 	asm volatile("cli");
 	env_init();

@@ -63,3 +63,7 @@ out_byte(short port, char data) {
 	);
 
 }
+static inline void out_long(short port,unsigned int data)
+{
+	asm volatile("out %0,%1"::"a"(data),"d"(port));
+}

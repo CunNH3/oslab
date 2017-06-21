@@ -154,6 +154,13 @@ outl(int port, uint32_t data)
 	__asm __volatile("outl %0,%w1" : : "a" (data), "d" (port));
 }
 
+
+static inline void out_long(short port,unsigned int data)
+{
+	asm volatile("out %0,%1"::"a"(data),"d"(port));
+}
+
+
 static __inline void
 invlpg(void *addr)
 {
