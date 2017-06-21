@@ -17,6 +17,13 @@
 #define  semdestroy (74)
 #define  semwait (75)
 #define  sempost (76)
+#define  f_open (77)
+#define  f_read (78)
+#define  f_write (79)
+#define  f_lseek (80)
+#define  f_close (81)
+#define  f_rewind (82)
+
 int __attribute__((__noinline__)) syscall(int id,...);
 void system_draw_pixel( int, int, int);
 void system_serial_print(char);
@@ -37,3 +44,9 @@ void sem_open(int,bool,int);
 void sem_destroy(int);
 int sem_wait(int);
 void sem_post(int);
+int file_open(const char *filename,int flag);
+int file_read(int fd,void* buf,int len);
+int file_write(int fd,void* buf,int len);
+int file_lseek(int fd,int offset,int whence);
+int file_close(int fd);
+void file_rewind(int fd);

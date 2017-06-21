@@ -91,3 +91,33 @@ void sem_post(int index)
 {
 	syscall(sempost,index);
 }
+
+int file_open(const char *filename,int f)
+{
+	return syscall(f_open,filename,f);
+}
+
+int file_read(int fd,void *buf,int len)
+{
+	return syscall(f_read,fd,buf,len);
+}
+
+int file_write(int fd,void *buf,int len)
+{
+	return syscall(f_write,fd,buf,len);
+}
+
+int file_lseek(int fd,int offset,int whence)
+{
+	return syscall(f_lseek,fd,offset,whence);
+}
+
+int file_close(int fd)
+{
+	return syscall(f_close,fd);
+}
+
+void file_rewind(int fd)
+{
+	syscall(f_rewind,fd);
+}

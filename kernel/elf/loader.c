@@ -11,16 +11,17 @@
 #include "../include/trap.h"
 #include "../include/fs.h"
 #include "../include/disk.h"
+#include "../include/env.h"
 
 #define SECTSIZE 512
 
-void readseg(unsigned char *, int, int);
+//void readseg(unsigned char *, int, int);
 void waitdisk(void);
 void readsect(void *, int);
 extern struct PageInfo* page_free_list; 
 unsigned char buffer[4096];
 
-void* loader(pde_t *entry_pgdir)
+void* loader(struct Env *p_env,int diskoff)
 {
 	struct Elf *elf;
 	struct Proghdr *ph, *eph;
@@ -32,6 +33,8 @@ void* loader(pde_t *entry_pgdir)
 	int fd = 0;
 	fs_read(fd,(void *)elf,4096);
 	fs_rewind(fd);
+	printk("directory_d.entries[0] = %s\n",directory_d.entries[0].filename);
+	printk("The magic number of elf = 0x%08x\n",elf->e_magic);
 	printk("the entry of elf = 0x%08x\n",elf->e_entry);
 
 	ph = (struct Proghdr*)((char*)elf + elf->e_phoff);
@@ -48,13 +51,14 @@ void* loader(pde_t *entry_pgdir)
 				uint32_t offset = va & 0xfff;
 				va = va & 0xfffff000;
 				struct PageInfo *page = page_alloc(1);
-				page_insert(entry_pgdir,page,(void *)va,PTE_U | PTE_W);
+				page_insert(p_env->env_pgdir,page,(void *)va,PTE_U | PTE_W);
 				int n = (4096 - offset) > ph->p_memsz ? ph->p_memsz : (4096 - offset);
 				//readseg((unsigned char*)(pagebuffer + offset),n,ph->p_offset + data_loaded);
 				if (n != 0)
 				{
-					fs_lseek(fd,ph->p_offset + data_loaded,SEEK_SET);
-					fs_read(fd,(void*)(pagebuffer + offset),n);
+					//fs_lseek(fd,ph->p_offset + data_loaded,SEEK_SET);
+					//fs_read(fd,(void*)(pagebuffer + offset),n);
+					readseg((unsigned char*)(pagebuffer + offset),n,ph->p_offset + data_loaded,diskoff);
 				}
 				memcpy((void *)page2kva(page),pagebuffer,4096);
 				va += 4096;
@@ -102,12 +106,12 @@ void writesect(void *src, int offset)
 		out_long(0x1F0,((unsigned int *)src)[i]);
 }
 
-void readseg(unsigned char *pa, int count, int offset)
+void readseg(unsigned char *pa, int count, int offset,int diskoff)
 {
 	unsigned char *epa;
 	epa = pa + count;
 	pa -= offset % SECTSIZE;
-	offset = (offset / SECTSIZE) + 201;
+	offset = (offset / SECTSIZE) + diskoff + 1;
 	for(; pa < epa; pa += SECTSIZE, offset ++)
 		readsect(pa, offset);
 }

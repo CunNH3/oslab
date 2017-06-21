@@ -86,7 +86,25 @@ void do_syscall(TrapFrame* tf)
  		case sempost:
 			sem_post((int)tf->ebx);
 			break;
- 	}
+		case f_open:
+			fs_open((const char*)tf->ebx,(int)tf->ecx);
+			break;
+		case f_read:
+			fs_read((int)tf->ebx,(void*)tf->ecx,(int)tf->edx);
+			break;
+		case f_write:
+			fs_write((int)tf->ebx,(void*)tf->ecx,(int)tf->edx);
+			break;
+		case f_lseek:
+			fs_lseek((int)tf->ebx,(int)tf->ecx,(int)tf->edx);
+			break;
+		case f_rewind:
+			fs_rewind((int)tf->ebx);
+			break;
+		case f_close:
+			fs_close((int)tf->ebx);
+			break;
+	}
 }
 
 #endif

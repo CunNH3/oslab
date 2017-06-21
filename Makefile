@@ -20,7 +20,7 @@ CFLAGS += -fno-builtin #禁止内置函数
 CFLAGS += -ggdb3 #GDB调试信息
 
 QEMU_OPTIONS := -serial stdio #以标准输入输为串口(COM1)
-#QEMU_OPTIONS += -d int #输出中断信息
+QEMU_OPTIONS += -d int #输出中断信息
 QEMU_OPTIONS += -monitor telnet:127.0.0.1:1111,server,nowait #telnet monitor
 
 QEMU_DEBUG_OPTIONS := -S #启动不执行
@@ -66,7 +66,7 @@ $(IMAGE): $(BOOT) $(KERNEL) $(GAME)
 	@$(DD) if=$(BOOT) of=$(IMAGE) conv=notrunc          > /dev/null # 填充 boot loader
 	@$(DD) if=$(KERNEL) of=$(IMAGE) seek=1 conv=notrunc > /dev/null # 填充 kernel, 跨过 mbr
 	echo "Hello!"
-	./format $(GAME) readpoem.dat
+	./format $(GAME) readpoem.txt
 	echo "Hello!"
 	@$(DD) if=$(GAME) of=$(IMAGE) seek=201 conv=notrunc > /dev/null # 填充 kernel, 跨过 mbr
 $(BOOT): $(BOOT_O)
@@ -88,7 +88,7 @@ $(KERNEL): $(KERNEL_O) $(LIB_O)
 	$(LD) -m elf_i386 -T $(LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
 $(GAME): $(GAME_O) $(LIB_O)
-	$(LD) -m elf_i386 -e test_main -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
+	$(LD) -m elf_i386 -e fs_test -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
 
 

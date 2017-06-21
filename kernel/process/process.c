@@ -9,6 +9,7 @@
 #include "../include/x86.h"
 #include "../include/string.h"
 #include "../include/process/env.h"
+#include "../include/disk.h"
 
 struct Env ENVS[NENV];
 struct Env* envs = ENVS;
@@ -111,9 +112,8 @@ void region_alloc(struct Env*e, void *va, size_t len)
 		page_insert(e->env_pgdir,pg,begin,PTE_W | PTE_U);
 	}
 }
-
+/*
 unsigned char env_buffer[4096];
-void readseg(unsigned char *, int, int);
 static void load_icode(struct Env*e,pde_t *entry_pgdir)
 {
 
@@ -122,7 +122,7 @@ static void load_icode(struct Env*e,pde_t *entry_pgdir)
 	unsigned char pagebuffer[4096];
 	
 	elf = (struct Elf*)env_buffer;
-	readseg((unsigned char *)elf,4096,0);
+	readseg((unsigned char *)elf,4096,0,200);
 	printk("the entry of the elf2 = 0x%08x\n",elf->e_entry);
 
 	ph = (struct Proghdr*)((char*)elf + elf->e_phoff);
@@ -141,7 +141,7 @@ static void load_icode(struct Env*e,pde_t *entry_pgdir)
 				struct PageInfo* page = page_alloc(1);
 				page_insert(entry_pgdir,page,(void*)va,PTE_U | PTE_W);
 				int n = (4096 - offset) > ph->p_memsz ? ph->p_memsz : (4096 - offset);
-				readseg((unsigned char*)(pagebuffer + offset),n,ph->p_offset + data_loaded);
+				readseg((unsigned char*)(pagebuffer + offset),n,ph->p_offset + data_loaded,200);
 				memcpy((void *)page2kva(page),pagebuffer,4096);
 				va += 4096;
 				data_loaded += n;
@@ -154,17 +154,18 @@ static void load_icode(struct Env*e,pde_t *entry_pgdir)
 	e->env_tf.eip = elf->e_entry;
 	region_alloc(e,(void*)(USTACKTOP - 1024 * PGSIZE),1024 * PGSIZE);
 }
-
-void env_create()
+*/
+void env_create(int diskoff,size_t size,enum EnvType type)
 {
-	struct Env *penv;
-	env_alloc(&penv,0);
-	struct PageInfo *page = page_alloc(1);
-	uint32_t cr3_game = page2pa(page);
-	pde_t *pgdir_game = page2kva(page);
-	memcpy(pgdir_game,entry_pgdir,4096);
-	load_icode(penv,pgdir_game);
-	lcr3(cr3_game);
+	struct Env *p_env;
+	env_alloc(&p_env,0);
+	//struct PageInfo *page = page_alloc(1);
+	loader(p_env,diskoff);
+	//uint32_t cr3_game = page2pa(page);
+	//pde_t *pgdir_game = page2kva(page);
+	//memcpy(pgdir_game,entry_pgdir,4096);
+	//load_icode(penv,pgdir_game);
+	//lcr3(cr3_game);
 }
 
 void env_free(struct Env* e)

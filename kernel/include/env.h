@@ -23,7 +23,8 @@ enum
 
 enum EnvType
 {
-	ENV_TYPE_USER = 0
+	ENV_TYPE_USER = 0,
+	ENV_TYPE_THREAD
 };
 
 struct Env
@@ -45,7 +46,7 @@ struct Env
 };
 extern struct Env*envs;
 extern struct Env*curenv;
-
+struct Env kernel_env;
 
 #endif
 
