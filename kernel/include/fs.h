@@ -1,6 +1,6 @@
 #ifndef FS_H
 #define FS_H
-#define NR_FILES (512/sizeof(struct dirent))
+#define NR_FILES 32
 #pragma pack(0)
 
 struct bitmap

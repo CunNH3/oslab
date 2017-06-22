@@ -42,12 +42,13 @@ void init_cond()
 	sem_init();
 	readsect((void *)directory_d.entries, 201 + 256);
 	printk("Filename = %s\n",directory_d.entries[0].filename);
+	env_init();
 	kernel_env.file[0].opened = true;
 	kernel_env.file[0].offset = 0;
 	curenv = &kernel_env;
 	set_timer_intr_handler(kernel_timer_event);
 	asm volatile("cli");
-	env_init();
+	
 	env_create(200,0,ENV_TYPE_USER);
 	env_run(&envs[0]);
 }

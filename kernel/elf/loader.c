@@ -12,6 +12,7 @@
 #include "../include/fs.h"
 #include "../include/disk.h"
 #include "../include/env.h"
+#include "../include/process/env.h"
 
 #define SECTSIZE 512
 
@@ -52,13 +53,13 @@ void* loader(struct Env *p_env,int diskoff)
 				va = va & 0xfffff000;
 				struct PageInfo *page = page_alloc(1);
 				page_insert(p_env->env_pgdir,page,(void *)va,PTE_U | PTE_W);
-				int n = (4096 - offset) > ph->p_memsz ? ph->p_memsz : (4096 - offset);
+				int n = (4096 - offset) > ph->p_memsz - data_loaded ? ph->p_memsz + data_loaded : (4096 - offset);
 				//readseg((unsigned char*)(pagebuffer + offset),n,ph->p_offset + data_loaded);
 				if (n != 0)
 				{
-					//fs_lseek(fd,ph->p_offset + data_loaded,SEEK_SET);
-					//fs_read(fd,(void*)(pagebuffer + offset),n);
-					readseg((unsigned char*)(pagebuffer + offset),n,ph->p_offset + data_loaded,diskoff);
+					fs_lseek(fd,ph->p_offset + data_loaded,SEEK_SET);
+					fs_read(fd,(void*)(pagebuffer + offset),n);
+					//readseg((unsigned char*)(pagebuffer + offset),n,ph->p_offset + data_loaded,diskoff);
 				}
 				memcpy((void *)page2kva(page),pagebuffer,4096);
 				va += 4096;
@@ -66,8 +67,9 @@ void* loader(struct Env *p_env,int diskoff)
 			}	
 		}
 	}
+	region_alloc(p_env,(void *)(USTACKTOP - 1024 * PGSIZE),1024 * PGSIZE);
+	p_env->env_tf.eip = elf->e_entry;
 	return (void*)elf->e_entry;
-
 }
 
 void waitdisk(void)

@@ -23,7 +23,7 @@ int fs_open(const char *pathname, int flags)
 		}
 	}
 	printk("The file doesn't exist'!\n");
-	return -1;
+	return 100;
 }
 
 
