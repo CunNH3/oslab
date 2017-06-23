@@ -75,7 +75,7 @@ int fs_read(int fd, void *buf, int len)
 	}
 	else	
 	{
-		printk("fs_read,fd is not valid\n");
+		printk("fs_read fails!\n");
 		return -1;
 	}
 }
@@ -131,7 +131,7 @@ int fs_write(int fd, void *buf, int len)
 	}
 	else	
 	{
-		printk("fs_read,fd is not valid\n");
+		printk("fs_write fails!\n");
 		return -1;
 	}
 }
@@ -156,7 +156,7 @@ int fs_lseek(int fd, int offset, int whence)
 				temp_offset = directory_d.entries[fd].file_size + offset;
 				break;
 			default:
-				printk("fs_lseek,default");
+				printk("fs_lseek fails!");
 				break;
 		}
 		if ((temp_offset >= 0) && (temp_offset <= directory_d.entries[fd].file_size))
@@ -166,13 +166,13 @@ int fs_lseek(int fd, int offset, int whence)
 		}
 		else
 		{
-			printk("offset overstep the boundary\n");
+			printk("offset over the boundary\n");
 			return -1;
 		}
 	}
 	else
 	{
-		printk("fs_lseek,fd error\n");
+		printk("fs_lseek fails!\n");
 		return -1;
 	}
 
@@ -190,7 +190,7 @@ int fs_close(int fd)
 	}
 	else
 	{
-		printk("cannot close because this file is not opened\n");
+		printk("We can't close this file because this file is not opened!\n");
 		return -1;
 	}
 }

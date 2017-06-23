@@ -61,6 +61,9 @@ KERNEL_S := $(wildcard $(KERNEL_DIR)/*.S)
 GAME_O := $(GAME_C:%.c=$(OBJ_DIR)/%.o)
 GAME_O += $(GAME_S:%.S=$(OBJ_DIR)/%.o)
 
+include config/Makefile.build
+include config/Makefile.git
+
 $(IMAGE): $(BOOT) $(KERNEL) $(GAME)
 	@$(DD) if=/dev/zero of=$(IMAGE) count=10000         > /dev/null # 准备磁盘文件
 	@$(DD) if=$(BOOT) of=$(IMAGE) conv=notrunc          > /dev/null # 填充 boot loader
