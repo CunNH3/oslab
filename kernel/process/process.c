@@ -112,7 +112,7 @@ void region_alloc(struct Env*e, void *va, size_t len)
 		page_insert(e->env_pgdir,pg,begin,PTE_W | PTE_U);
 	}
 }
-/*
+
 unsigned char env_buffer[4096];
 static void load_icode(struct Env*e,pde_t *entry_pgdir)
 {
@@ -154,7 +154,7 @@ static void load_icode(struct Env*e,pde_t *entry_pgdir)
 	e->env_tf.eip = elf->e_entry;
 	region_alloc(e,(void*)(USTACKTOP - 1024 * PGSIZE),1024 * PGSIZE);
 }
-*/
+
 void env_create(int diskoff,size_t size,enum EnvType type)
 {
 	struct Env *p_env;

@@ -17,8 +17,6 @@
 #define SECTSIZE 512
 
 //void readseg(unsigned char *, int, int);
-void waitdisk(void);
-void readsect(void *, int);
 extern struct PageInfo* page_free_list; 
 unsigned char buffer[4096];
 
@@ -30,7 +28,7 @@ void* loader(struct Env *p_env,int diskoff)
 
 	elf = (struct Elf*)buffer;
 	//readseg((unsigned char*)elf,4096,0);
-	
+	printk("Hello loader!\n");
 	int fd = 0;
 	fs_read(fd,(void *)elf,4096);
 	fs_rewind(fd);
@@ -53,7 +51,7 @@ void* loader(struct Env *p_env,int diskoff)
 				va = va & 0xfffff000;
 				struct PageInfo *page = page_alloc(1);
 				page_insert(p_env->env_pgdir,page,(void *)va,PTE_U | PTE_W);
-				int n = (4096 - offset) > ph->p_memsz - data_loaded ? ph->p_memsz + data_loaded : (4096 - offset);
+				int n = (4096 - offset) > (ph->p_filesz - data_loaded) ? (ph->p_filesz - data_loaded) : (4096 - offset);
 				//readseg((unsigned char*)(pagebuffer + offset),n,ph->p_offset + data_loaded);
 				if (n != 0)
 				{
@@ -102,7 +100,7 @@ void writesect(void *src, int offset)
 	outb(0x1F4, offset >> 8);
 	outb(0x1F5, offset >> 16);
 	outb(0x1F6, (offset >> 24) | 0xE0);
-	outb(0x1F7, 0x20);
+	outb(0x1F7, 0x30);
 	waitdisk();
 	for (i = 0; i < SECTSIZE / 4; i ++) 
 		out_long(0x1F0,((unsigned int *)src)[i]);

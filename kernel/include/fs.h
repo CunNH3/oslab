@@ -1,28 +1,24 @@
 #ifndef FS_H
 #define FS_H
 #define NR_FILES 32
-#pragma pack(0)
 
+#pragma pack(0)
 struct bitmap
 {
 	char mask[512 * 256];
 };
-
 #pragma pack()
 
 #pragma pack(0)
-
 struct dirent
 {
 	char filename[24];
 	unsigned int file_size;
 	unsigned int inode_offset;
 };//32byte
-
 #pragma pack()
 
 #pragma pack(0)
-
 struct dir
 {
 	struct dirent entries[512 / sizeof(struct dirent)];
@@ -30,9 +26,7 @@ struct dir
 #pragma pack()
 
 #pragma pack(0)
-
-struct inode
-{
+struct inode{
 	unsigned int data_block_offsets[512 / sizeof(unsigned int)];
 };
 

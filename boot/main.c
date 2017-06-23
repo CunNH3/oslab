@@ -35,7 +35,7 @@ bootmain(void) {
 	/*跳转到程序中*/
 	//asm volatile("hlt");
 	((void(*)(void))elf->entry)();
-
+	
 }
 
 void
@@ -61,8 +61,9 @@ readsect(void *dst, int offset) {
 	}
 }
 
-void writesect(void *src, int offset)
-{
+//write disk
+void
+writesect(void *src, int offset) {
 	int i;
 	waitdisk();
 	out_byte(0x1F2, 1);
@@ -71,9 +72,9 @@ void writesect(void *src, int offset)
 	out_byte(0x1F5, offset >> 16);
 	out_byte(0x1F6, (offset >> 24) | 0xE0);
 	out_byte(0x1F7, 0x20);
+
 	waitdisk();
-	for (i = 0;i < SECTSIZE / 4;i++)
-	{
+	for (i = 0; i < SECTSIZE / 4; i ++) {
 		//((int *)dst)[i] = in_long(0x1F0);
 		out_long(0x1F0,((unsigned int*)src)[i]);
 	}

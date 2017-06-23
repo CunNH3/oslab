@@ -3,25 +3,20 @@
 #include <stdlib.h>
 #include <assert.h>
 #pragma pack(0)
-
 struct bitmap
 {
 	char mask[512 * 256];
 };
-
 #pragma pack()
 
 #pragma pack(0)
-
 struct dirent
 {
 	char filename[24];
 	unsigned int file_size;
 	unsigned int inode_offset;
 };//32byte
-
 #pragma pack()
-
 
 #pragma pack(0)
 struct dir
@@ -31,7 +26,6 @@ struct dir
 #pragma pack()
 
 #pragma pack(0)
-
 struct inode
 {
 	unsigned int data_block_offsets[512 / sizeof(unsigned int)];
@@ -43,9 +37,9 @@ struct bitmap bitmap_d;
 struct dir directory_d;
 struct inode inode_d;
 
-#define SET_BIT(n) (bitmap_d.mask[n / 8] |= (0x1 << (n % 8)))
-#define CLEAR_BIT(n) (bitmap_d.mask[n / 8] &= (~(0x1 << (n % 8))))
-#define USED(n) (bitmap_d.mask[n / 8] & (0x1 << (n % 8)))
+#define SET_BIT(n) (bitmap_d.mask[n/8]|=(0x1<<(n%8)))
+#define CLEAR_BIT(n) (bitmap_d.mask[n/8]&=(~(0x1<<(n%8))))
+#define USED(n) (bitmap_d.mask[n/8]&(0x1<<(n%8)))
 
 unsigned int alloc_block()
 {
@@ -65,14 +59,16 @@ unsigned int alloc_block()
 int main(int argc,char *argv[])
 {
 	int i;
- 	FILE * disk = fopen("data.disk","wb");
+ 	FILE * disk = fopen("disk.img","wb");	
 	memset(bitmap_d.mask,0,sizeof(bitmap_d.mask));
 	memset(directory_d.entries,0,sizeof(directory_d.entries));
-	for (i = 0;i < 257;i++) SET_BIT(i);
+	for (i = 0;i < 257;i++)
+		SET_BIT(i);
 	for (i = 1;i < argc;i++)
 	{
 		FILE *fp = fopen(argv[i],"rb");
-		printf("argv[%d]=%s\n",i,argv[i]);
+		printf("argv[%d] = %s\n",i,argv[i]);
+
 		assert(fp);
 		fseek(fp,0,SEEK_END);
 		unsigned int filesz = ftell(fp);
@@ -94,7 +90,6 @@ int main(int argc,char *argv[])
 			rewind(disk);
 			count++;
 		}
-		//write in inode
 		fseek(disk,inode_index * 512,SEEK_SET);
 		fwrite(&node,1,512,disk);
 		rewind(disk);

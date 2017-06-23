@@ -22,14 +22,14 @@ int fs_open(const char *pathname, int flags)
 			return i;
 		}
 	}
-	printk("The file doesn't exist'!\n");
+	printk("The file doesn't exist!\n");
 	return 100;
 }
 
 
 int fs_read(int fd, void *buf, int len) 
 {
-	if ((fd >= 0) && (fd < NR_FILES) && (curenv->file[fd].opened))
+	if ((fd >= 0) && (fd < NR_FILES) && (curenv->file[fd].opened == true))
 	{
 		int i;
 		struct inode node;
@@ -46,14 +46,18 @@ int fs_read(int fd, void *buf, int len)
 			char sect[512];
 			readsect((void*)sect,node.data_block_offsets[begin] + 201);
 			for (i = 0;i < len;i++)
+			{
 				((char*)buf)[i] = sect[begin_off + i];
+			}
 		}
 		else
 		{
 			char sect[512];
 			readsect((void*)sect,node.data_block_offsets[begin] + 201);
 			for (i = 0;i < 512 - begin_off;i++)
+			{
 				((char*)buf)[i] = sect[begin_off + i];
+			}
 			buf = ((char*)buf) + 512 - begin_off;
 			for (i = begin + 1;i < end;i++)
 			{
@@ -62,64 +66,72 @@ int fs_read(int fd, void *buf, int len)
 			}
 			readsect((void*)sect,node.data_block_offsets[end] + 201);
 			for (i = 0;i < end_off;i++)
+			{
 				((char*)buf)[i] = sect[i];
+			}
 		}
 		curenv->file[fd].offset += length;
 		return length;
 	}
-	else
+	else	
 	{
-		printk("fs_read fails!\n");
+		printk("fs_read,fd is not valid\n");
 		return -1;
 	}
 }
 
 int fs_write(int fd, void *buf, int len) 
 {
-	if ((fd >= 0) && (fd < NR_FILES) && (curenv->file[fd].opened))
+	if ((fd >= 0) && (fd < NR_FILES) && (curenv->file[fd].opened == true))
 	{
 		int i;
 		struct inode node;
 		unsigned int ioff = directory_d.entries[fd].inode_offset;
 		readsect((void*)node.data_block_offsets,ioff + 201);
-		int length = len;
+		int length = min(len,directory_d.entries[fd].file_size-curenv->file[fd].offset);
 		unsigned int begin = curenv->file[fd].offset / 512;
 		unsigned int begin_off = curenv->file[fd].offset % 512;
-		unsigned int end = (curenv->file[fd].offset + len) / 512;
-		unsigned int end_off = (curenv->file[fd].offset+len) % 512;
+		unsigned int end = (curenv->file[fd].offset + length) / 512;
+		unsigned int end_off = (curenv->file[fd].offset + length) % 512;
 		
 		if (begin == end)
 		{
 			char sect[512];
 			readsect((void*)sect,node.data_block_offsets[begin] + 201);
 			for (i = 0;i < len;i++)
+			{
 				sect[begin_off + i] = ((char*)buf)[i];
-			writesect((void*)sect,node.data_block_offsets[begin]);
+			}
+			writesect((void*)sect,node.data_block_offsets[begin] + 201);
 		}
 		else
 		{
 			char sect[512];
 			readsect((void*)sect,node.data_block_offsets[begin] + 201);
 			for (i = 0;i < 512 - begin_off;i++)
+			{
 				sect[begin_off + i] = ((char*)buf)[i];
+			}
 			writesect((void*)sect,node.data_block_offsets[begin]);
 			buf = ((char*)buf) + 512 - begin_off;
 			for (i = begin + 1;i < end;i++)
 			{
-				writesect(buf,node.data_block_offsets[i] + 201);
-				buf = ((char*)buf) + 512;
+				writesect(buf,node.data_block_offsets[i] + 201); 
+				buf = ((char*)buf)+512;
 			}
 			readsect((void*)sect,node.data_block_offsets[end] + 201);
 			for (i = 0;i < end_off;i++)
+			{
 				sect[i] = ((char*)buf)[i];
+			}
 			writesect((void*)sect,node.data_block_offsets[end] + 201);
 		}
 		curenv->file[fd].offset += length;
 		return length;
 	}
-	else
+	else	
 	{
-		printk("fs_write fails!\n");
+		printk("fs_read,fd is not valid\n");
 		return -1;
 	}
 }
@@ -129,10 +141,10 @@ int fs_write(int fd, void *buf, int len)
 
 int fs_lseek(int fd, int offset, int whence) 
 {
-	if ((fd >= 0) && (fd < NR_FILES) && (curenv->file[fd].opened))
+	if ((fd >= 0) && (fd < NR_FILES) && (curenv->file[fd].opened == true))
 	{
 		int temp_offset = 0;
-		switch(whence)
+		switch (whence)
 		{
 			case SEEK_SET:
 				temp_offset = offset;
@@ -144,7 +156,7 @@ int fs_lseek(int fd, int offset, int whence)
 				temp_offset = directory_d.entries[fd].file_size + offset;
 				break;
 			default:
-				printk("fs_lseek default");
+				printk("fs_lseek,default");
 				break;
 		}
 		if ((temp_offset >= 0) && (temp_offset <= directory_d.entries[fd].file_size))
@@ -154,15 +166,16 @@ int fs_lseek(int fd, int offset, int whence)
 		}
 		else
 		{
-			printk("offset over the boundary\n");
+			printk("offset overstep the boundary\n");
 			return -1;
 		}
 	}
 	else
 	{
-		printk("fs_lseek fails\n");
+		printk("fs_lseek,fd error\n");
 		return -1;
 	}
+
 }
 
 
@@ -177,7 +190,7 @@ int fs_close(int fd)
 	}
 	else
 	{
-		printk("We can't close this file because this file is not opened!\n");
+		printk("cannot close because this file is not opened\n");
 		return -1;
 	}
 }

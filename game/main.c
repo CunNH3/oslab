@@ -7,7 +7,8 @@
 #include "include/timer.h"
 #include "include/system.h"
 #include "include/stdio.h"
-
+#include "include/fs.h"
+#include "include/disk.h"
 volatile int tick = 0;
 
 void timer_event(void)
@@ -87,26 +88,29 @@ void exit_test()
 
 int fs_test()
 {
-	char poem[50][50];
+	char poem[10][30];
 	int i;
 	printf("Let us read poem and continue 1 second!\n");
 	int fp1 = file_open("readpoem.txt",0);
 	printf("fp1 = %d\n",fp1);
 	for (i = 0;i < 4;i++)
 	{
-		file_read(fp1,(void *)poem[i],50);
+		file_read(fp1,(void *)poem[i],30);
 		printf("%s\n",poem[i]);
 	}
 	file_close(fp1);
 	int fp2 = file_open("writepoem.txt",0);
 	printf("fp2 = %d\n",fp2);
 	for (i = 0;i < 4;i++)
-		file_write(fp2,(void *)poem[i],50);
+	{
+		file_write(fp2,(void *)poem[i],30);
+		printf("%s\n",poem[i]);
+	}
 	memset(poem,0,sizeof(poem));
 	file_rewind(fp2);
 	for (i = 0;i < 4;i++)
 	{
-		file_read(fp2,(void *)poem[i],50);
+		file_read(fp2,(void *)poem[i],30);
 		printf("%s\n",poem[i]);
 	}
 	file_close(fp2);
